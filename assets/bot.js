@@ -1173,10 +1173,27 @@
 
   function questionBankMatchInQuery(query) {
     const normalizedQuery = ` ${normalize(query)} `;
-    return (knowledge.questionBank?.items || [])
+    const matches = (knowledge.questionBank?.items || [])
       .map((question) => ({ question, normalized: normalize(question.text) }))
       .filter((item) => item.normalized.length >= 8 && normalizedQuery.includes(` ${item.normalized} `))
-      .sort((left, right) => right.normalized.length - left.normalized.length)[0]?.question || null;
+      .sort((left, right) => right.normalized.length - left.normalized.length);
+    if (!matches.length) return null;
+
+    const longestLength = matches[0].normalized.length;
+    const longestMatches = matches.filter((item) => item.normalized.length === longestLength);
+    const explicitUnit = unitNumberFromQuery(query);
+    if (explicitUnit) {
+      const unitMatch = longestMatches.find((item) => Number(item.question.unit) === explicitUnit);
+      if (unitMatch) return unitMatch.question;
+    }
+    const selectedMatch = longestMatches.find((item) => item.question.id === activeQuestionContext?.id);
+    if (selectedMatch) return selectedMatch.question;
+
+    const currentUnitHint = activeQuestionSet?.unit || currentUnit || Number(scope.value);
+    const unitMatch = currentUnitHint
+      ? longestMatches.find((item) => Number(item.question.unit) === Number(currentUnitHint))
+      : null;
+    return (unitMatch || longestMatches[0]).question;
   }
 
   function shouldAnswerMatchedQuestion(query, question) {
