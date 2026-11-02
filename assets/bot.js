@@ -1171,6 +1171,23 @@
     return /\b(exam focus|important questions?|exam questions?|what should i study|what to study)\b/i.test(query);
   }
 
+  function questionBankMatchInQuery(query) {
+    const normalizedQuery = ` ${normalize(query)} `;
+    return (knowledge.questionBank?.items || [])
+      .map((question) => ({ question, normalized: normalize(question.text) }))
+      .filter((item) => item.normalized.length >= 8 && normalizedQuery.includes(` ${item.normalized} `))
+      .sort((left, right) => right.normalized.length - left.normalized.length)[0]?.question || null;
+  }
+
+  function shouldAnswerMatchedQuestion(query, question) {
+    const normalizedQuestion = normalize(question.text);
+    const wrapper = normalize(query).replace(normalizedQuestion, " ").trim();
+    if (!wrapper) return true;
+    const asksForAnswer = /\b(explain|answer|solve|walk|describe|define|what is|what are|how|tell me)\b/.test(wrapper);
+    const asksForList = /\b(all|list|show|give|fetch|find|important|imp|repeated|part a|part b|previous|past|question bank)\b/.test(wrapper);
+    return asksForAnswer || !asksForList;
+  }
+
   function isQuestionListRequest(query) {
     const text = normalize(query);
     const hasUnit = Boolean(unitNumberFromQuery(query)) || Boolean(activeQuestionSet?.unit) || Boolean(currentUnit) || Boolean(Number(scope.value)) || /\bunit\s*(i|ii|iii|iv|v|vi)\b/i.test(query);
@@ -1300,6 +1317,13 @@
         ? `${greeting.greeting.replace(/\b\w/g, (letter) => letter.toUpperCase())}! `
         : "Hi! ";
       query = greeting.rest.replace(/^qno\b[\s,!?.-]*/i, "");
+    }
+    const exactQuestion = questionBankMatchInQuery(query);
+    if (exactQuestion && shouldAnswerMatchedQuestion(query, exactQuestion)) {
+      activeQuestionContext = exactQuestion;
+      activeQuestionSet = null;
+      await askGemini(query, [], false);
+      return;
     }
     const questionListRequest = isQuestionListRequest(query);
     if (questionListRequest) {
