@@ -409,61 +409,223 @@
     return unit?.lessons.find((item) => item.number === topic.lessonNo);
   }
 
+  function normalizeMathNotation(source, trim = true) {
+    const subscript = (value) => [...value].map((character) => ({
+      0: "₀", 1: "₁", 2: "₂", 3: "₃", 4: "₄", 5: "₅", 6: "₆", 7: "₇", 8: "₈", 9: "₉",
+      "+": "₊", "-": "₋", "=": "₌", "(": "₍", ")": "₎", a: "ₐ", e: "ₑ", h: "ₕ", i: "ᵢ", k: "ₖ", l: "ₗ", m: "ₘ", n: "ₙ", o: "ₒ", p: "ₚ", r: "ᵣ", s: "ₛ", t: "ₜ", u: "ᵤ", v: "ᵥ", x: "ₓ",
+    })[character] || character).join("");
+    const superscript = (value) => [...value].map((character) => ({
+      0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹",
+      "+": "⁺", "-": "⁻", "=": "⁼", "(": "⁽", ")": "⁾", i: "ⁱ", n: "ⁿ",
+    })[character] || character).join("");
+    const symbols = {
+      alpha: "α", beta: "β", gamma: "γ", delta: "δ", theta: "θ", lambda: "λ", mu: "μ", pi: "π", sigma: "σ", omega: "ω",
+      Alpha: "Α", Beta: "Β", Gamma: "Γ", Delta: "Δ", Theta: "Θ", Lambda: "Λ", Pi: "Π", Sigma: "Σ", Omega: "Ω",
+      forall: "∀", exists: "∃", in: "∈", notin: "∉", subset: "⊂", subseteq: "⊆", supset: "⊃", supseteq: "⊇",
+      cup: "∪", cap: "∩", land: "∧", lor: "∨", neg: "¬", mid: " | ", vert: " | ", lvert: "|", rvert: "|",
+      to: "→", rightarrow: "→", leftarrow: "←", Rightarrow: "⇒", Leftrightarrow: "⇔", le: "≤", leq: "≤", ge: "≥", geq: "≥",
+      ne: "≠", neq: "≠", approx: "≈", equiv: "≡", times: "×", cdot: "·", div: "÷", pm: "±", infty: "∞",
+      dots: "…", dotsb: "…", ldots: "…", cdots: "…", langle: "⟨", rangle: "⟩", emptyset: "∅",
+    };
+    const normalized = String(source || "")
+      .replace(/\\(?:left|right)\b\s*/g, "")
+      .replace(/\\(?:text|textrm|textbf|mathrm|mathbf|mathit|operatorname)\s*\{([^{}]*)\}/g, "$1")
+      .replace(/\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/g, "$1 / $2")
+      .replace(/\\sqrt\s*\{([^{}]+)\}/g, "√($1)")
+      .replace(/\\\{/g, "{").replace(/\\\}/g, "}")
+      .replace(/\\([#$%&_])/g, "$1")
+      .replace(/\\[,;:!]/g, " ")
+      .replace(/\\([A-Za-z]+)\b/g, (command, name) => symbols[name] || name)
+      .replace(/([A-Za-z][A-Za-z0-9]*)_\{([A-Za-z0-9+\-=()]+)\}/g, (_, base, index) => `${base}${subscript(index)}`)
+      .replace(/([A-Za-z][A-Za-z0-9]*)_([A-Za-z0-9+\-=()])\b/g, (_, base, index) => `${base}${subscript(index)}`)
+      .replace(/([A-Za-z][A-Za-z0-9]*)\^\{([A-Za-z0-9+\-=()]+)\}/g, (_, base, power) => `${base}${superscript(power)}`)
+      .replace(/([A-Za-z][A-Za-z0-9]*)\^([A-Za-z0-9+\-=()])\b/g, (_, base, power) => `${base}${superscript(power)}`)
+      .replace(/\\[A-Za-z]+\b/g, "")
+      .replace(/\s+/g, " ");
+    return trim ? normalized.trim() : normalized;
+  }
+
+  function addMathNotation(parent, source, display = false) {
+    const notation = normalizeMathNotation(source);
+    const element = document.createElement(display ? "div" : "span");
+    element.className = display ? "qno-math-display" : "qno-math";
+    element.setAttribute("role", "math");
+    element.setAttribute("aria-label", `Math notation: ${notation}`);
+    const code = document.createElement("code");
+    code.textContent = notation;
+    element.append(code);
+    parent.append(element);
+  }
+
+  function appendAnswerText(parent, text) {
+    parent.append(document.createTextNode(normalizeMathNotation(text, false).replace(/\\+\$/g, "$").replace(/\\([#*_`|])/g, "$1")));
+  }
+
   function addInlineFormatting(parent, text) {
-    const pattern = /\*\*([^*]+)\*\*|`([^`]+)`|\*([^*]+)\*/g;
+    const pattern = /`([^`]+)`|\*\*([^*]+)\*\*|\*([^*]+)\*|\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]|\\\((.+?)\\\)|\\\$([\s\S]+?)\\\$|\$((?:\\.|[^$\n])+?)\$|(<br\s*\/?>)/gi;
     let cursor = 0;
     let match;
     while ((match = pattern.exec(text))) {
-      parent.append(document.createTextNode(text.slice(cursor, match.index)));
-      const element = document.createElement(match[1] ? "strong" : match[2] ? "code" : "em");
-      element.textContent = match[1] || match[2] || match[3];
-      parent.append(element);
+      appendAnswerText(parent, text.slice(cursor, match.index));
+      if (match[1] !== undefined) {
+        const code = document.createElement("code");
+        code.textContent = match[1];
+        parent.append(code);
+      } else if (match[2] !== undefined || match[3] !== undefined) {
+        const element = document.createElement(match[2] !== undefined ? "strong" : "em");
+        addInlineFormatting(element, match[2] ?? match[3]);
+        parent.append(element);
+      } else if (match[4] !== undefined || match[5] !== undefined || match[6] !== undefined || match[7] !== undefined || match[8] !== undefined) {
+        addMathNotation(parent, match[4] ?? match[5] ?? match[6] ?? match[7] ?? match[8]);
+      } else if (match[9] !== undefined) {
+        parent.append(document.createElement("br"));
+      }
       cursor = pattern.lastIndex;
     }
-    parent.append(document.createTextNode(text.slice(cursor)));
+    appendAnswerText(parent, text.slice(cursor));
+  }
+
+  function splitMarkdownTableRow(rawLine) {
+    let line = String(rawLine || "").trim();
+    if (line.startsWith("|")) line = line.slice(1);
+    if (line.endsWith("|") && !line.endsWith("\\|")) line = line.slice(0, -1);
+    const cells = [];
+    let cell = "";
+    let inCode = false;
+    for (let index = 0; index < line.length; index += 1) {
+      const character = line[index];
+      if (character === "\\" && line[index + 1] === "|") {
+        cell += "|";
+        index += 1;
+      } else if (character === "`") {
+        inCode = !inCode;
+        cell += character;
+      } else if (character === "|" && !inCode) {
+        cells.push(cell.trim());
+        cell = "";
+      } else {
+        cell += character;
+      }
+    }
+    cells.push(cell.trim());
+    return cells;
+  }
+
+  function isMarkdownTableSeparator(line) {
+    const cells = splitMarkdownTableRow(line);
+    return cells.length > 1 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+  }
+
+  function appendMarkdownTable(article, lines) {
+    const rows = lines.map(splitMarkdownTableRow);
+    const wrapper = document.createElement("div");
+    wrapper.className = "qno-table-scroll";
+    wrapper.tabIndex = 0;
+    wrapper.setAttribute("role", "region");
+    wrapper.setAttribute("aria-label", "Answer table. Scroll horizontally to see every column.");
+    const table = document.createElement("table");
+    table.className = "qno-answer-table";
+    const head = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    rows[0].forEach((value) => {
+      const cell = document.createElement("th");
+      cell.scope = "col";
+      addInlineFormatting(cell, value);
+      headerRow.append(cell);
+    });
+    head.append(headerRow);
+    table.append(head);
+    const body = document.createElement("tbody");
+    rows.slice(1).filter((row) => !row.every((cell) => /^:?-{3,}:?$/.test(cell))).forEach((row) => {
+      const tableRow = document.createElement("tr");
+      for (let index = 0; index < Math.max(rows[0].length, row.length); index += 1) {
+        const cell = document.createElement("td");
+        addInlineFormatting(cell, row[index] || "");
+        tableRow.append(cell);
+      }
+      body.append(tableRow);
+    });
+    table.append(body);
+    wrapper.append(table);
+    article.append(wrapper);
   }
 
   function geminiAnswerContent(text) {
     const article = document.createElement("article");
     article.className = "qno-gemini-answer";
+    const lines = String(text || "").split(/\r?\n/);
     let activeList = null;
     let activeListType = "";
-    let codeNode = null;
-    let codeText = "";
-    String(text || "").split(/\r?\n/).forEach((rawLine) => {
+    for (let index = 0; index < lines.length;) {
+      const rawLine = lines[index];
       if (/^\s*```/.test(rawLine)) {
-        if (!codeNode) {
-          activeList = null;
-          codeNode = document.createElement("code");
-          codeText = "";
-          return;
-        }
+        index += 1;
+        const codeLines = [];
+        while (index < lines.length && !/^\s*```/.test(lines[index])) codeLines.push(lines[index++]);
+        if (index < lines.length) index += 1;
         const pre = document.createElement("pre");
         pre.className = "qno-code-block";
-        codeNode.textContent = codeText.replace(/\n$/, "");
-        pre.append(codeNode);
+        const code = document.createElement("code");
+        code.textContent = codeLines.join("\n");
+        pre.append(code);
         article.append(pre);
-        codeNode = null;
-        codeText = "";
-        return;
-      }
-      if (codeNode) {
-        codeText += `${rawLine}\n`;
-        return;
+        activeList = null;
+        continue;
       }
       const line = rawLine.trim();
       if (!line) {
         activeList = null;
         activeListType = "";
-        return;
+        index += 1;
+        continue;
       }
-      const headingMatch = line.match(/^#{1,3}\s+(.+)$/);
+      if (index + 1 < lines.length && line.includes("|") && isMarkdownTableSeparator(lines[index + 1])) {
+        const tableLines = [rawLine];
+        index += 2;
+        while (index < lines.length && lines[index].includes("|")) tableLines.push(lines[index++]);
+        appendMarkdownTable(article, tableLines);
+        activeList = null;
+        activeListType = "";
+        continue;
+      }
+      const displayStart = line.startsWith("$$") ? "$$" : line.startsWith("\\[") ? "\\[" : "";
+      if (displayStart) {
+        const close = displayStart === "$$" ? "$$" : "\\]";
+        let expression = line.slice(displayStart.length);
+        const inlineClose = expression.indexOf(close);
+        if (inlineClose >= 0) {
+          expression = expression.slice(0, inlineClose);
+          index += 1;
+        } else {
+          const mathLines = [expression];
+          index += 1;
+          while (index < lines.length && !lines[index].includes(close)) mathLines.push(lines[index++]);
+          if (index < lines.length) {
+            mathLines.push(lines[index].slice(0, lines[index].indexOf(close)));
+            index += 1;
+          }
+          expression = mathLines.join(" ");
+        }
+        const block = document.createElement("div");
+        addMathNotation(block, expression, true);
+        article.append(block);
+        activeList = null;
+        activeListType = "";
+        continue;
+      }
+      if (/^(?:---+|\*\*\*+|___+)$/.test(line)) {
+        article.append(document.createElement("hr"));
+        index += 1;
+        continue;
+      }
+      const headingMatch = line.match(/^#{1,6}\s+(.+)$/);
       if (headingMatch) {
         activeList = null;
         const heading = document.createElement("h4");
         addInlineFormatting(heading, headingMatch[1]);
         article.append(heading);
-        return;
+        index += 1;
+        continue;
       }
       const bulletMatch = line.match(/^(?:[-*•])\s+(.+)$/);
       const numberMatch = line.match(/^\d+[.)]\s+(.+)$/);
@@ -478,20 +640,15 @@
         const item = document.createElement("li");
         addInlineFormatting(item, listText);
         activeList.append(item);
-        return;
+        index += 1;
+        continue;
       }
       activeList = null;
       activeListType = "";
       const paragraph = document.createElement("p");
-      addInlineFormatting(paragraph, line);
+      addInlineFormatting(paragraph, line.replace(/^>\s?/, ""));
       article.append(paragraph);
-    });
-    if (codeNode) {
-      const pre = document.createElement("pre");
-      pre.className = "qno-code-block";
-      codeNode.textContent = codeText.replace(/\n$/, "");
-      pre.append(codeNode);
-      article.append(pre);
+      index += 1;
     }
     return article;
   }
