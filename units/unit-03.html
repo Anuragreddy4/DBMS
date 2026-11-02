@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="Use dependencies to reveal redundancy, choose normal forms, and decompose relations without losing meaning."><title>Unit 03: Refining a schema | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="unit-page" style="--unit-accent:var(--sage)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../index.html#units">All units</a><a href="../index.html#exam-map">Exam map</a></nav></header>
+<main class="wrap unit-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><span>Unit 03</span></div>
+  <section class="unit-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 03 · FOUR LESSONS · 14 TOPICS</div><h1>Refining a schema</h1><p>Use dependencies to reveal redundancy, choose normal forms, and decompose relations without losing meaning.</p><div class="unit-promise"><strong>Start anywhere.</strong> Each lesson has its own page, and the complete topic map below links every concept directly to its explanation.</div></section>
+  <section class="unit-motion" aria-hidden="true"><div class="motion-heading"><span class="section-label">A SIMPLE LEARNING FLOW</span><span class="motion-live"><i></i> LIVE PREVIEW</span></div><div class="motion-steps"><div class="motion-step motion-step-one"><span>01</span><strong>Choose a topic</strong><small>Open one lesson</small></div><div class="motion-step motion-step-two"><span>02</span><strong>Understand the idea</strong><small>Start with the meaning</small></div><div class="motion-step motion-step-three"><span>03</span><strong>Follow an example</strong><small>See each step unfold</small></div><div class="motion-cursor motion-cursor-one"><i></i></div><div class="motion-cursor motion-cursor-two"><i></i></div><div class="motion-type"><span>NOW EXPLORING</span><strong style="--type-width:39ch">Functional dependencies, closure &amp; keys</strong><i></i></div></div></section>
+  <section class="lesson-choices" aria-label="Lessons in this unit">
+        <a class="lesson-choice" href="../lessons/unit-03-lesson-01.html" style="--unit-accent:var(--sage)">
+          <div class="choice-top"><span>LESSON 01</span><span class="choice-number">01</span></div>
+          <h2>Functional dependencies, closure &amp; keys</h2>
+          <p>A functional dependency is a promise about the data: once you know the values on the left, the values on the right are fixed. Closure helps test keys and consequences.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-03-lesson-02.html" style="--unit-accent:var(--sage)">
+          <div class="choice-top"><span>LESSON 02</span><span class="choice-number">02</span></div>
+          <h2>Schema refinement, redundancy &amp; 1NF–3NF</h2>
+          <p>Schema refinement uses keys and functional dependencies to reduce repeated facts and anomalies. Normal forms guide the design, while decomposition checks protect meaning and rules.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-03-lesson-03.html" style="--unit-accent:var(--sage)">
+          <div class="choice-top"><span>LESSON 03</span><span class="choice-number">03</span></div>
+          <h2>BCNF, multivalued dependencies &amp; 4NF</h2>
+          <p>BCNF checks every functional dependency: its left side must be a key. 4NF goes further and separates independent multi-valued facts.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-03-lesson-04.html" style="--unit-accent:var(--sage)">
+          <div class="choice-top"><span>LESSON 04</span><span class="choice-number">04</span></div>
+          <h2>Lossless &amp; dependency-preserving decomposition</h2>
+          <p>Decomposition splits one relation into smaller relations. A good split lets us join the pieces back without inventing rows and keeps important rules checkable.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a></section>
+  <section class="syllabus-map" id="syllabus-map"><div class="eyebrow"><span class="eyebrow-line"></span>COMPLETE SYLLABUS TOPIC MAP</div><div class="syllabus-map-intro"><h2>All 14 topics in Unit 3, linked to their lessons.</h2><p>Each card opens the exact explanation. The unit is organized into four lessons, with all syllabus concepts listed below.</p></div><div class="syllabus-topic-groups"><section class="syllabus-topic-group" aria-label="Lesson 1: Functional dependencies, closure &amp; keys">
+          <div class="syllabus-topic-heading"><span>LESSON 01</span><h3>Functional dependencies, closure &amp; keys</h3><a href="../lessons/unit-03-lesson-01.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-01.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Functional dependency</strong><small>X → Y means that any two rows with the same X values must also have the same Y values.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-01.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Attribute closure</strong><small>X⁺ is the set of all attributes that the dependency rules can determine from X.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-01.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Armstrong rules and minimal cover</strong><small>Armstrong&#x27;s reflexivity, augmentation, and transitivity rules derive dependencies that logically follow from the original rules.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 2: Schema refinement, redundancy &amp; 1NF–3NF">
+          <div class="syllabus-topic-heading"><span>LESSON 02</span><h3>Schema refinement, redundancy &amp; 1NF–3NF</h3><a href="../lessons/unit-03-lesson-02.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-02.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Why redundancy causes anomalies</strong><small>Redundancy is storing the same fact repeatedly. An anomaly is an error or awkwardness caused by that repetition.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-02.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Schema refinement in database design</strong><small>Schema refinement improves a table design so each fact is stored in an appropriate place and common changes do not cause anomalies.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-02.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>First and second normal form</strong><small>1NF requires each cell to hold one value for its chosen domain. 2NF requires 1NF and no non-key attribute to depend on only part of a composite candidate key.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-02.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Third normal form</strong><small>A relation is in 3NF when for every nontrivial X → A, X is a superkey or A is a prime attribute (part of some candidate key).</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 3: BCNF, multivalued dependencies &amp; 4NF">
+          <div class="syllabus-topic-heading"><span>LESSON 03</span><h3>BCNF, multivalued dependencies &amp; 4NF</h3><a href="../lessons/unit-03-lesson-03.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-03.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Boyce–Codd normal form (BCNF)</strong><small>A relation is in BCNF if, for every nontrivial functional dependency X → Y, X is a superkey.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-03.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Multivalued dependency</strong><small>X ↠ Y means that for one X value, the set of Y values is independent of the remaining attributes.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-03.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Fourth normal form (4NF)</strong><small>A relation is in 4NF when every nontrivial multivalued dependency has a superkey determinant.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 4: Lossless &amp; dependency-preserving decomposition">
+          <div class="syllabus-topic-heading"><span>LESSON 04</span><h3>Lossless &amp; dependency-preserving decomposition</h3><a href="../lessons/unit-03-lesson-04.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-04.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Lossless-join decomposition</strong><small>A decomposition is lossless if joining its pieces recreates exactly the valid rows of the original relation.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-04.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Dependency preservation</strong><small>A decomposition is dependency-preserving if the rules projected onto the smaller relations still imply all the original dependencies.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-04.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Chase / tableau test</strong><small>The chase is a table-based procedure that applies dependencies to rows of symbols to test whether a decomposition is lossless.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-03-lesson-04.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Problems caused by a poor decomposition</strong><small>A decomposition can be harmful if joining the pieces invents rows or if important dependencies can no longer be checked locally.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section></div></section>
+  <div class="unit-return"><a class="button-secondary" href="../index.html#units">Return to all units</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Unit 03 · 4 lesson pages · 14 topic explanations</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script>
+</body></html>

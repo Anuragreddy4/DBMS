@@ -1,0 +1,20 @@
+{
+  "n": 5,
+  "accent": "blue",
+  "title": "Concurrency & recovery",
+  "deck": "Compare the protocols that coordinate transactions, then trace how logs and buffers support restart.",
+  "lessons": [
+    {
+      "title": "Locks, 2PL & deadlocks"
+    },
+    {
+      "title": "Timestamp ordering & Thomas write rule"
+    },
+    {
+      "title": "Validation-based concurrency control"
+    },
+    {
+      "title": "WAL, checkpoints, recovery & buffers"
+    }
+  ]
+}

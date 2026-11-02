@@ -1,0 +1,20 @@
+{
+  "n": 6,
+  "accent": "coral",
+  "title": "Storage & indexing",
+  "deck": "See how records live on pages, how files are organized, and how indexes shorten the search path.",
+  "lessons": [
+    {
+      "title": "External storage & file organization"
+    },
+    {
+      "title": "Index types & multilevel access"
+    },
+    {
+      "title": "B+ trees: search, insert & range scan"
+    },
+    {
+      "title": "Static & dynamic hashing"
+    }
+  ]
+}

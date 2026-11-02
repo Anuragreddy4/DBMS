@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="A schedule is the order in which transactions&amp;#x27; reads and writes happen. Interleaving can save time, but conflicting operations need a safe order."><title>Schedules, concurrency &amp; conflicts | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--gold)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-04.html">Unit 04</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-04.html">Unit 04: Transactions &amp; schedules</a><span>›</span><span>Lesson 02</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 04 · LESSON 02</div><h1>Schedules, concurrency &amp; conflicts</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>A schedule is the order in which transactions&#x27; reads and writes happen. Interleaving can save time, but conflicting operations need a safe order.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Read a schedule while preserving transaction order</li><li>Identify read-write, write-read, and write-write conflicts</li><li>Explain why concurrent execution needs control</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Serial and concurrent schedules</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>When do operations conflict?</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Problems caused by uncontrolled overlap</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Serial and concurrent schedules</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A schedule lists operations from one or more transactions. A serial schedule runs one whole transaction before another; a concurrent schedule interleaves their operations.</p></div>
+          <figure class="concept-diagram">
+      <figcaption><strong>Two transactions touch the same value</strong><span>The overlapping writes can overwrite a change unless the DBMS controls their order.</span></figcaption>
+      <div class="diagram-scroll"><svg viewBox="0 0 1000 360" role="img" aria-label="Two transactions touch the same value. The overlapping writes can overwrite a change unless the DBMS controls their order." xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60757b"/></marker></defs>
+        <path class="diagram-edge" d="M 205.0 137.6 C 305.0 137.6, 305.0 166.4, 405.0 166.4" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 205.0 222.4 C 305.0 222.4, 305.0 193.6, 405.0 193.6" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 595.0 180.0 C 695.0 180.0, 695.0 180.0, 795.0 180.0" marker-end="url(#arrow)"/><g class="diagram-node">
+          <rect x="15.0" y="86.0" width="190" height="76" rx="14" fill="#246f84"/>
+          <path d="M 29.0 88.0 H 191.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="110.0" y="121.0" class="diagram-title"><tspan x="110.0" dy="0">T1 reads A=100</tspan></text>
+          <text x="110.0" y="145.0" class="diagram-detail">plans +20</text>
+        </g><g class="diagram-node">
+          <rect x="15.0" y="198.0" width="190" height="76" rx="14" fill="#d66f4d"/>
+          <path d="M 29.0 200.0 H 191.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="110.0" y="233.0" class="diagram-title"><tspan x="110.0" dy="0">T2 reads A=100</tspan></text>
+          <text x="110.0" y="257.0" class="diagram-detail">plans −5</text>
+        </g><g class="diagram-node">
+          <rect x="405.0" y="142.0" width="190" height="76" rx="14" fill="#c39a42"/>
+          <path d="M 419.0 144.0 H 581.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="500.0" y="177.0" class="diagram-title"><tspan x="500.0" dy="0">Both write A</tspan></text>
+          <text x="500.0" y="201.0" class="diagram-detail">order matters</text>
+        </g><g class="diagram-node">
+          <rect x="795.0" y="142.0" width="190" height="76" rx="14" fill="#718f83"/>
+          <path d="M 809.0 144.0 H 971.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="890.0" y="168.0" class="diagram-title"><tspan x="890.0" dy="0">Controlled</tspan><tspan x="890.0" dy="18">schedule</tspan></text>
+          <text x="890.0" y="207.0" class="diagram-detail">serial result = 115</text>
+        </g>
+      </svg></div>
+    </figure><p>A valid schedule preserves the original order of operations within each transaction.</p><p>Interleaving can keep CPU and storage busy while another transaction waits, improving throughput.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>T1: read A, write A. T2: read B, write B. A schedule may interleave those steps because the transactions use different data.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>When do operations conflict?</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>Two operations conflict if they are from different transactions, access the same item, and at least one is a write.</p></div>
+          <p>Read-read is not a conflict. Read-write, write-read, and write-write on the same item are conflicts.</p><p>The order of a conflicting pair can affect the result, so a scheduler must preserve a correct serial order.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If T1 and T2 both write balance A, changing which write occurs last can change the final balance.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Problems caused by uncontrolled overlap</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>Concurrency anomalies are incorrect results caused by unsafe interleaving.</p></div>
+          <p>A lost update occurs when one write overwrites another. A dirty read uses a value that may later be rolled back. An unrepeatable read gets different values on two reads in one transaction.</p><p>Concurrency-control protocols prevent or manage these effects.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>Two people each see one available seat and both enroll a student. Without coordination, the database may accept two students for the last seat.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Spot the lost update</h2><p>A is 100. T1 adds 20 and T2 subtracts 5. Both read A before either writes.</p><div class="example-table-wrap"><table class="example-table"><thead><tr><th scope="col">Order</th><th scope="col">Final A</th></tr></thead><tbody><tr><td>T1 then T2</td><td>115</td></tr><tr><td>T2 then T1</td><td>115</td></tr><tr><td>Both read 100, T2 writes last</td><td>95 (lost update)</td></tr></tbody></table></div></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Read the same old value</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Compute independently</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Overwrite the shared item</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Read the same old value</h3><p>T1 reads 100. T2 also reads 100 because neither update has been written yet.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Compute independently</h3><p>T1 calculates 120. T2 calculates 95.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Overwrite the shared item</h3><p>If T1 writes 120 and then T2 writes 95, the +20 disappears. The serial result should be 115 in either order.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>The schedule is unsafe because the two transactions perform conflicting writes based on the same old value. A concurrency protocol must order or reject one update.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Define serial and concurrent schedules. Identify conflicting operation pairs and explain the motivation for concurrency control.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-04.html">Return to Unit 04</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Transactions &amp; schedules · 02 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

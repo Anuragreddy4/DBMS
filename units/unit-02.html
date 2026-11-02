@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="Read and shape relational data with keys, constraints, algebra, calculus, views, and SQL."><title>Unit 02: Relations &amp; query logic | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="unit-page" style="--unit-accent:var(--coral)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../index.html#units">All units</a><a href="../index.html#exam-map">Exam map</a></nav></header>
+<main class="wrap unit-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><span>Unit 02</span></div>
+  <section class="unit-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 02 · FOUR LESSONS · 17 TOPICS</div><h1>Relations &amp; query logic</h1><p>Read and shape relational data with keys, constraints, algebra, calculus, views, and SQL.</p><div class="unit-promise"><strong>Start anywhere.</strong> Each lesson has its own page, and the complete topic map below links every concept directly to its explanation.</div></section>
+  <section class="unit-motion" aria-hidden="true"><div class="motion-heading"><span class="section-label">A SIMPLE LEARNING FLOW</span><span class="motion-live"><i></i> LIVE PREVIEW</span></div><div class="motion-steps"><div class="motion-step motion-step-one"><span>01</span><strong>Choose a topic</strong><small>Open one lesson</small></div><div class="motion-step motion-step-two"><span>02</span><strong>Understand the idea</strong><small>Start with the meaning</small></div><div class="motion-step motion-step-three"><span>03</span><strong>Follow an example</strong><small>See each step unfold</small></div><div class="motion-cursor motion-cursor-one"><i></i></div><div class="motion-cursor motion-cursor-two"><i></i></div><div class="motion-type"><span>NOW EXPLORING</span><strong style="--type-width:33ch">Relations, keys &amp; integrity rules</strong><i></i></div></div></section>
+  <section class="lesson-choices" aria-label="Lessons in this unit">
+        <a class="lesson-choice" href="../lessons/unit-02-lesson-01.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 01</span><span class="choice-number">01</span></div>
+          <h2>Relations, keys &amp; integrity rules</h2>
+          <p>A relational database stores data in named tables. Keys identify rows; constraints keep rows valid; logical design maps the ER model into tables and references.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-02-lesson-02.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 02</span><span class="choice-number">02</span></div>
+          <h2>Relational algebra: operators &amp; joins</h2>
+          <p>Relational algebra builds a query from small table operations. Each operation produces another relation, so the operations can be combined step by step.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-02-lesson-03.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 03</span><span class="choice-number">03</span></div>
+          <h2>Relational calculus &amp; safe queries</h2>
+          <p>Relational calculus describes the condition a result row must satisfy. It says what to return, not which sequence of table operations to run.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-02-lesson-04.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 04</span><span class="choice-number">04</span></div>
+          <h2>Logical design, views &amp; SQL schema changes</h2>
+          <p>Logical design turns the data model into tables. SQL can create, query, alter, and remove tables and views; a view is a saved query that can present a useful window onto data.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a></section>
+  <section class="syllabus-map" id="syllabus-map"><div class="eyebrow"><span class="eyebrow-line"></span>COMPLETE SYLLABUS TOPIC MAP</div><div class="syllabus-map-intro"><h2>All 17 topics in Unit 2, linked to their lessons.</h2><p>Each card opens the exact explanation. The unit is organized into four lessons, with all syllabus concepts listed below.</p></div><div class="syllabus-topic-groups"><section class="syllabus-topic-group" aria-label="Lesson 1: Relations, keys &amp; integrity rules">
+          <div class="syllabus-topic-heading"><span>LESSON 01</span><h3>Relations, keys &amp; integrity rules</h3><a href="../lessons/unit-02-lesson-01.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-01.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Relation, tuple, attribute, and domain</strong><small>A relation is a set of rows with named columns. A tuple is one row, an attribute is one column, and a domain is the allowed kind of value for that column.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-01.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Keys</strong><small>A superkey is any set of attributes that uniquely identifies a row. A candidate key is a smallest such set. One candidate is chosen as the primary key.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-01.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Integrity constraints</strong><small>An integrity constraint is a rule every valid database state must obey.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-01.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Logical database design: ER model to relations</strong><small>Logical database design converts a conceptual model into relation schemas with keys and constraints while keeping the real-world meaning clear.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 2: Relational algebra: operators &amp; joins">
+          <div class="syllabus-topic-heading"><span>LESSON 02</span><h3>Relational algebra: operators &amp; joins</h3><a href="../lessons/unit-02-lesson-02.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-02.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Selection and projection</strong><small>Selection σ keeps rows that satisfy a condition. Projection π keeps only the requested columns.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-02.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Set operations and joins</strong><small>Set operations combine compatible relations; joins connect rows whose values satisfy a relationship condition.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-02.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Division: &#x27;for every&#x27;</strong><small>Division returns values on one side that are paired with every required value on the other side.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-02.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Renaming and Cartesian product</strong><small>Renaming ρ gives a relation or its attributes temporary names. Cartesian product pairs every row from one relation with every row from another.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-02.html#topic-5">
+              <span class="syllabus-topic-number">05</span>
+              <span class="syllabus-topic-copy"><strong>Relational algebra: a multi-step query example</strong><small>A relational algebra expression can combine selection, join, and projection to answer one question from several tables.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 3: Relational calculus &amp; safe queries">
+          <div class="syllabus-topic-heading"><span>LESSON 03</span><h3>Relational calculus &amp; safe queries</h3><a href="../lessons/unit-02-lesson-03.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-03.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Tuple relational calculus (TRC)</strong><small>TRC uses a tuple variable to describe each possible result row. Its form is { t | condition about t }.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-03.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Domain relational calculus (DRC)</strong><small>DRC uses one variable per attribute value. Its form is { &lt;x1,…,xn&gt; | condition about those values }.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-03.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Safe queries</strong><small>A safe query has a finite result whose values come from the active database domain.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 4: Logical design, views &amp; SQL schema changes">
+          <div class="syllabus-topic-heading"><span>LESSON 04</span><h3>Logical design, views &amp; SQL schema changes</h3><a href="../lessons/unit-02-lesson-04.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-04.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Ask a question with SELECT</strong><small>SELECT names the output columns; FROM names the input relations; WHERE filters rows.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-04.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Create and modify database structures</strong><small>CREATE TABLE defines columns, types, keys, and constraints. ALTER TABLE changes a table&#x27;s structure.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-04.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Views and updatability</strong><small>A view is a named SELECT statement. It is often updatable when each view row maps clearly to one base-table row.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-04.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Additional SQL forms (extension)</strong><small>These useful SQL features are not named in the official Unit 2 syllabus, so treat them as optional background after the listed topics. Triggers respond to events; embedded or dynamic SQL connects queries with programs; recursive queries follow repeated relationships.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-02-lesson-04.html#topic-5">
+              <span class="syllabus-topic-number">05</span>
+              <span class="syllabus-topic-copy"><strong>Drop and alter tables and views</strong><small>ALTER changes an existing database object. DROP removes an object definition; dropping a table removes its table data as well, while dropping a view removes the saved query definition.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section></div></section>
+  <div class="unit-return"><a class="button-secondary" href="../index.html#units">Return to all units</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Unit 02 · 4 lesson pages · 17 topic explanations</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script>
+</body></html>

@@ -1,0 +1,20 @@
+{
+  "n": 3,
+  "accent": "sage",
+  "title": "Refining a schema",
+  "deck": "Use dependencies to reveal redundancy, choose normal forms, and decompose relations without losing meaning.",
+  "lessons": [
+    {
+      "title": "Functional dependencies, closure & keys"
+    },
+    {
+      "title": "Schema refinement, redundancy & 1NF–3NF"
+    },
+    {
+      "title": "BCNF, multivalued dependencies & 4NF"
+    },
+    {
+      "title": "Lossless & dependency-preserving decomposition"
+    }
+  ]
+}

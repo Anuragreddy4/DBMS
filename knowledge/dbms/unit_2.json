@@ -1,0 +1,499 @@
+{
+  "number": 2,
+  "label": "Unit 2",
+  "text": "Introduction to the Relational Model- Enforcing Integrity constraints, Querying relational data, Logical data base Design, Introduction to Views, Destroying /altering Tables and Views. Relational Algebra - Selection and projection set operations, renaming, Joins, Division, Examples of Algebra overviews, Relational calculus, Tuple relational Calculus, Domain relational calculus.",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 49,
+  "questions": [
+    {
+      "id": "u2-a-1-47",
+      "unit": 2,
+      "part": "A",
+      "number": 1,
+      "text": "Define relation, tuple, attribute, domain.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-2-48",
+      "unit": 2,
+      "part": "A",
+      "number": 2,
+      "text": "What are relational integrity constraints? List domain, key, entity, and referential.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-3-49",
+      "unit": 2,
+      "part": "A",
+      "number": 3,
+      "text": "Distinguish primary key, foreign key, and unique constraint.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-4-50",
+      "unit": 2,
+      "part": "A",
+      "number": 4,
+      "text": "Define view and materialized view; mention one use case each.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-5-51",
+      "unit": 2,
+      "part": "A",
+      "number": 5,
+      "text": "What is an unsafe query? Give a counterexample.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-6-52",
+      "unit": 2,
+      "part": "A",
+      "number": 6,
+      "text": "Give the selection (σ) and projection (π) operators with a brief example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-7-53",
+      "unit": 2,
+      "part": "A",
+      "number": 7,
+      "text": "Write algebraic expressions for: (i) natural join, (ii) theta-join, (iii) division.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-8-54",
+      "unit": 2,
+      "part": "A",
+      "number": 8,
+      "text": "Illustrate the division operator with a small example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-9-55",
+      "unit": 2,
+      "part": "A",
+      "number": 9,
+      "text": "Explain rename (ρ) and why it’s needed.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-10-56",
+      "unit": 2,
+      "part": "A",
+      "number": 10,
+      "text": "Differentiate tuple relational calculus and domain relational calculus.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-11-57",
+      "unit": 2,
+      "part": "A",
+      "number": 11,
+      "text": "Define aggregation in SQL and give two examples (COUNT, AVG with GROUP BY).",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-12-58",
+      "unit": 2,
+      "part": "A",
+      "number": 12,
+      "text": "State two differences between RA and SQL.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-13-59",
+      "unit": 2,
+      "part": "A",
+      "number": 13,
+      "text": "Define relational model.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-14-60",
+      "unit": 2,
+      "part": "A",
+      "number": 14,
+      "text": "What is a relation? Define degree/arity and cardinality.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-15-61",
+      "unit": 2,
+      "part": "A",
+      "number": 15,
+      "text": "What are the various types of keys?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-16-62",
+      "unit": 2,
+      "part": "A",
+      "number": 16,
+      "text": "Define super key, candidate key, primary key, and foreign key.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-17-63",
+      "unit": 2,
+      "part": "A",
+      "number": 17,
+      "text": "What is referential integrity constraint?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-18-64",
+      "unit": 2,
+      "part": "A",
+      "number": 18,
+      "text": "What are integrity constraints?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-19-65",
+      "unit": 2,
+      "part": "A",
+      "number": 19,
+      "text": "What is the purpose of ALTER TABLE? Give example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-20-66",
+      "unit": 2,
+      "part": "A",
+      "number": 20,
+      "text": "What is a view? Why is it needed?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-21-67",
+      "unit": 2,
+      "part": "A",
+      "number": 21,
+      "text": "How do you create and destroy views?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-22-68",
+      "unit": 2,
+      "part": "A",
+      "number": 22,
+      "text": "What is relational algebra?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-23-69",
+      "unit": 2,
+      "part": "A",
+      "number": 23,
+      "text": "Explain selection and projection.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-24-70",
+      "unit": 2,
+      "part": "A",
+      "number": 24,
+      "text": "Explain union, set difference, and Cartesian product.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-25-71",
+      "unit": 2,
+      "part": "A",
+      "number": 25,
+      "text": "What is rename operator?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-26-72",
+      "unit": 2,
+      "part": "A",
+      "number": 26,
+      "text": "Explain join and its variants.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-27-73",
+      "unit": 2,
+      "part": "A",
+      "number": 27,
+      "text": "What is division operator? Give example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u2-a-28-74",
+      "unit": 2,
+      "part": "A",
+      "number": 28,
+      "text": "What is tuple relational calculus?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-a-29-75",
+      "unit": 2,
+      "part": "A",
+      "number": 29,
+      "text": "What is domain relational calculus?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-a-30-76",
+      "unit": 2,
+      "part": "A",
+      "number": 30,
+      "text": "Compare TRC and DRC.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-a-31-77",
+      "unit": 2,
+      "part": "A",
+      "number": 31,
+      "text": "What are the issues in querying relational data?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-1-78",
+      "unit": 2,
+      "part": "B",
+      "number": 1,
+      "text": "Explain integrity constraints; for each type (domain, key, entity, referential) give SQL DDL examples enforcing them and discuss violations.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-2-79",
+      "unit": 2,
+      "part": "B",
+      "number": 2,
+      "text": "Write relational algebra for queries on a schema of Students, Courses, Enrollments: list students who passed all courses offered in 2025; students who never failed any course; students enrolled in at least two CS courses. Show stepwise algebra trees.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-3-80",
+      "unit": 2,
+      "part": "B",
+      "number": 3,
+      "text": "Compare tuple vs domain relational calculus. Define safety; show why {t | ¬(t ∈ R)} is unsafe and how to make it safe.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-4-81",
+      "unit": 2,
+      "part": "B",
+      "number": 4,
+      "text": "Given a set of SQL queries (joins, aggregations, nested subqueries), translate to equivalent relational algebra and discuss optimization opportunities (pushing selections/projections, join reordering).",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-5-82",
+      "unit": 2,
+      "part": "B",
+      "number": 5,
+      "text": "Describe views: creation, updates through views, view updatability conditions, with examples where updates are rejected.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-6-83",
+      "unit": 2,
+      "part": "B",
+      "number": 6,
+      "text": "Explain the relational model in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-7-84",
+      "unit": 2,
+      "part": "B",
+      "number": 7,
+      "text": "Describe integrity constraints and benefits of enforcing them.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-8-85",
+      "unit": 2,
+      "part": "B",
+      "number": 8,
+      "text": "Explain primary key and foreign key constraints with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-9-86",
+      "unit": 2,
+      "part": "B",
+      "number": 9,
+      "text": "Explain views, creation of views, and significance of views.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-10-87",
+      "unit": 2,
+      "part": "B",
+      "number": 10,
+      "text": "Explain logical database design in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-11-88",
+      "unit": 2,
+      "part": "B",
+      "number": 11,
+      "text": "Demonstrate selection, projection, union, difference, Cartesian product, rename with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-12-89",
+      "unit": 2,
+      "part": "B",
+      "number": 12,
+      "text": "Explain join operation and variants of join operations in relational algebra.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-13-90",
+      "unit": 2,
+      "part": "B",
+      "number": 13,
+      "text": "Explain division operator with suitable example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-14-91",
+      "unit": 2,
+      "part": "B",
+      "number": 14,
+      "text": "Discuss set operations in relational algebra in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-15-92",
+      "unit": 2,
+      "part": "B",
+      "number": 15,
+      "text": "Compare tuple relational calculus and domain relational calculus.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-16-93",
+      "unit": 2,
+      "part": "B",
+      "number": 16,
+      "text": "Write notes on expressive power of relational calculus.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-17-94",
+      "unit": 2,
+      "part": "B",
+      "number": 17,
+      "text": "Explain how table constraints are enforced in DBMS/SQL.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u2-b-18-95",
+      "unit": 2,
+      "part": "B",
+      "number": 18,
+      "text": "Explain creating and modifying relations using SQL with examples",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    }
+  ]
+}

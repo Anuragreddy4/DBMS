@@ -1,0 +1,20 @@
+{
+  "n": 1,
+  "accent": "blue",
+  "title": "The database system",
+  "deck": "Understand why a DBMS exists, how it is arranged, and how a real-world design becomes a clear schema.",
+  "lessons": [
+    {
+      "title": "Database System vs. File System"
+    },
+    {
+      "title": "DBMS structure, data views & independence"
+    },
+    {
+      "title": "Models, schema, instance & languages"
+    },
+    {
+      "title": "ER design, EER features & mapping"
+    }
+  ]
+}

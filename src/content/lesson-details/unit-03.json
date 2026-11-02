@@ -1,0 +1,482 @@
+{
+  "lessons": [
+    {
+      "plain": "A functional dependency is a promise about the data: once you know the values on the left, the values on the right are fixed. Closure helps test keys and consequences.",
+      "goals": [
+        "Read X → Y as a rule about rows",
+        "Compute an attribute closure",
+        "Use closure to find keys and check dependency sets"
+      ],
+      "topics": [
+        {
+          "title": "Functional dependency",
+          "definition": "X → Y means that any two rows with the same X values must also have the same Y values.",
+          "details": [
+            "It is a rule the organization promises to follow, not just a pattern noticed in a small sample.",
+            "X is the determinant. Y is determined by X. If a student id identifies a student, sid → name."
+          ],
+          "example": "If course id determines the department, then two rows with the same cid must have the same department."
+        },
+        {
+          "title": "Attribute closure",
+          "definition": "X⁺ is the set of all attributes that the dependency rules can determine from X.",
+          "details": [
+            "Start with X. Whenever the left side of a dependency is already in the set, add its right side. Repeat until no new attribute can be added.",
+            "If X⁺ contains every attribute of the relation, X is a superkey. If no smaller subset works, it is a candidate key."
+          ],
+          "example": "Let R(A,B,C,D) have FDs A→B, B→C, and AC→D. Start A+={A}; A→B adds B; B→C adds C; now AC→D adds D. Thus A+={A,B,C,D}; A is a superkey and is a candidate key if no proper subset determines every column."
+        },
+        {
+          "title": "Armstrong rules and minimal cover",
+          "definition": "Armstrong's reflexivity, augmentation, and transitivity rules derive dependencies that logically follow from the original rules.",
+          "details": [
+            "Reflexivity: if Y is contained in X, then X → Y. Augmentation: if X → Y, then XZ → YZ. Transitivity: if X → Y and Y → Z, then X → Z.",
+            "A minimal (canonical) cover has one attribute on each right side, no unnecessary left-side attributes, and no redundant dependency."
+          ],
+          "example": "If sid → name and name → email, then sid → email by transitivity."
+        }
+      ],
+      "worked": {
+        "title": "Find the key of a course-enrollment relation",
+        "setup": "R(Student, Course, Grade, Instructor, Room). Rules: Student,Course → Grade; Course → Instructor; Instructor → Room.",
+        "steps": [
+          {
+            "title": "Begin with the proposed key",
+            "body": "Start closure of {Student, Course}: it currently contains Student and Course."
+          },
+          {
+            "title": "Apply the matching rules",
+            "body": "Student,Course → Grade adds Grade. Course → Instructor adds Instructor. Instructor → Room adds Room."
+          },
+          {
+            "title": "Check all attributes and minimality",
+            "body": "The closure now contains Student, Course, Grade, Instructor, and Room, so the pair is a superkey. Neither Student alone nor Course alone determines every attribute, so the pair is a candidate key."
+          }
+        ],
+        "answer": "{Student, Course}⁺ contains every attribute. The candidate key is {Student, Course}.",
+        "table": {
+          "headers": [
+            "Round",
+            "New attributes",
+            "Closure"
+          ],
+          "rows": [
+            [
+              "Start",
+              "—",
+              "Student, Course"
+            ],
+            [
+              "Apply first rule",
+              "Grade",
+              "Student, Course, Grade"
+            ],
+            [
+              "Apply next rules",
+              "Instructor, Room",
+              "All five attributes"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "Closure grows as rules are applied",
+        "caption": "Keep applying any rule whose left-hand side is already known.",
+        "nodes": [
+          [
+            "Student + Course",
+            "start"
+          ],
+          [
+            "Grade",
+            "from enrollment rule"
+          ],
+          [
+            "Instructor",
+            "from course rule"
+          ],
+          [
+            "Room",
+            "from instructor rule"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Compute closures and candidate keys. State Armstrong's axioms and find a canonical cover for a small FD set."
+    },
+    {
+      "plain": "Schema refinement uses keys and functional dependencies to reduce repeated facts and anomalies. Normal forms guide the design, while decomposition checks protect meaning and rules.",
+      "goals": [
+        "Find update, insertion, and deletion anomalies",
+        "Follow a refinement workflow using keys and dependencies",
+        "Normalize relations through 1NF, 2NF, and 3NF"
+      ],
+      "topics": [
+        {
+          "title": "Why redundancy causes anomalies",
+          "definition": "Redundancy is storing the same fact repeatedly. An anomaly is an error or awkwardness caused by that repetition.",
+          "details": [
+            "Update anomaly: some copies change and others do not. Insert anomaly: a fact cannot be stored without an unrelated fact. Delete anomaly: removing one row accidentally removes another fact.",
+            "Normalization uses keys and dependencies to decide which facts belong together."
+          ],
+          "example": "If a course title appears on every enrollment row, a title correction must be applied to every student taking that course."
+        },
+        {
+          "title": "Schema refinement in database design",
+          "definition": "Schema refinement improves a table design so each fact is stored in an appropriate place and common changes do not cause anomalies.",
+          "details": [
+            "Start from requirements. Identify candidate keys and functional dependencies; use them to see which attributes depend on which facts.",
+            "Decompose a relation when repeated facts create update, insertion, or deletion anomalies. Select a normal form, then check losslessness and dependency preservation.",
+            "A good refinement preserves meaning. Splitting tables without checking their joins can create false combinations or make rules difficult to enforce."
+          ],
+          "example": "For ENROLLMENT(sid,studentName,cid,courseTitle,grade), sid→studentName, cid→courseTitle, and (sid,cid)→grade. Refine into STUDENT(sid,studentName), COURSE(cid,courseTitle), and ENROLLMENT(sid,cid,grade)."
+        },
+        {
+          "title": "First and second normal form",
+          "definition": "1NF requires each cell to hold one value for its chosen domain. 2NF requires 1NF and no non-key attribute to depend on only part of a composite candidate key.",
+          "details": [
+            "A repeating list of phone numbers in one cell violates the intended atomic layout; store one phone per row or in a separate relation.",
+            "Partial dependency matters only when a candidate key has multiple attributes. A student's name depends on sid, not on the full (sid,cid) enrollment key."
+          ],
+          "example": "For key (sid,cid), sid → sname is a partial dependency. Put the name in STUDENT(sid,sname), not repeated in each enrollment."
+        },
+        {
+          "title": "Third normal form",
+          "definition": "A relation is in 3NF when for every nontrivial X → A, X is a superkey or A is a prime attribute (part of some candidate key).",
+          "details": [
+            "This condition removes problematic transitive dependencies while allowing some dependency-preserving designs that BCNF would split.",
+            "Always state the dependencies and candidate keys before claiming a normal form."
+          ],
+          "example": "If sid → dept and dept → office, then sid → office transitively. Store department office information in DEPARTMENT rather than repeating it for every student."
+        }
+      ],
+      "worked": {
+        "title": "Normalize enrollment records",
+        "setup": "ENROLLMENT(sid, sname, cid, title, grade), with key (sid,cid). Rules: sid→sname, cid→title, and sid,cid→grade.",
+        "steps": [
+          {
+            "title": "Check the values",
+            "body": "If each row has one sid, one cid, and one grade, it is atomic and meets 1NF. If courses were stored as a comma-separated list, first make one course per row."
+          },
+          {
+            "title": "Remove partial dependencies",
+            "body": "sname depends only on sid; title depends only on cid. Split those facts into STUDENT(sid,sname) and COURSE(cid,title)."
+          },
+          {
+            "title": "Keep the full-key fact in enrollment",
+            "body": "grade depends on both sid and cid, so ENROLLMENT(sid,cid,grade) keeps it. The three relations reduce repeated names and titles."
+          }
+        ],
+        "answer": "STUDENT(sid,sname), COURSE(cid,title), and ENROLLMENT(sid,cid,grade) form a cleaner design. The key of ENROLLMENT is (sid,cid).",
+        "table": {
+          "headers": [
+            "sid",
+            "sname",
+            "cid",
+            "title",
+            "grade"
+          ],
+          "rows": [
+            [
+              "11",
+              "Asha",
+              "C1",
+              "DBMS",
+              "A"
+            ],
+            [
+              "11",
+              "Asha",
+              "C2",
+              "Networks",
+              "B"
+            ],
+            [
+              "12",
+              "Bilal",
+              "C1",
+              "DBMS",
+              "A"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "Move each fact to the table it depends on",
+        "caption": "Student facts depend on sid, course facts on cid, and grades on both.",
+        "nodes": [
+          [
+            "Wide table",
+            "repeated names/titles"
+          ],
+          [
+            "STUDENT",
+            "sid → sname"
+          ],
+          [
+            "COURSE",
+            "cid → title"
+          ],
+          [
+            "ENROLLMENT",
+            "sid,cid → grade"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      },
+      "exam": "Explain redundancy and all three anomalies. Normalize a relation step by step through 1NF, 2NF, and 3NF with the dependency removed at each step."
+    },
+    {
+      "plain": "BCNF checks every functional dependency: its left side must be a key. 4NF goes further and separates independent multi-valued facts.",
+      "goals": [
+        "Test a relation for BCNF",
+        "Explain multivalued dependency",
+        "Show why 4NF can remove repeated combinations"
+      ],
+      "topics": [
+        {
+          "title": "Boyce–Codd normal form (BCNF)",
+          "definition": "A relation is in BCNF if, for every nontrivial functional dependency X → Y, X is a superkey.",
+          "details": [
+            "A nontrivial dependency says the right side is not already part of the left side.",
+            "BCNF is stricter than 3NF. A BCNF decomposition is lossless when performed with the standard violating dependency, but it may not preserve every dependency locally."
+          ],
+          "example": "If instructor → course is a rule but instructor is not a key in a teaching-assignment relation, that dependency violates BCNF."
+        },
+        {
+          "title": "Multivalued dependency",
+          "definition": "X ↠ Y means that for one X value, the set of Y values is independent of the remaining attributes.",
+          "details": [
+            "This is different from X → Y: there may be several Y values for one X.",
+            "If hobbies and languages are independent for each student, storing both in one table creates every hobby-language pairing."
+          ],
+          "example": "A student with 2 hobbies and 3 languages can create 6 rows, even though the hobbies and languages are separate facts."
+        },
+        {
+          "title": "Fourth normal form (4NF)",
+          "definition": "A relation is in 4NF when every nontrivial multivalued dependency has a superkey determinant.",
+          "details": [
+            "4NF separates independent sets into different relations so unrelated values are not cross-multiplied.",
+            "After splitting, a join can recreate the possible combinations without storing each combination redundantly."
+          ],
+          "example": "Separate StudentHobby(sid,hobby) and StudentLanguage(sid,language)."
+        }
+      ],
+      "worked": {
+        "title": "Separate hobbies from languages",
+        "setup": "Student 7 has hobbies chess and hiking, and speaks Tamil, English, and Hindi. The two lists are independent.",
+        "steps": [
+          {
+            "title": "Count the repeated combinations",
+            "body": "One combined table needs 2 × 3 = 6 rows: every hobby is paired with every language."
+          },
+          {
+            "title": "Identify the independent facts",
+            "body": "The hobby list depends on the student. The language list also depends on the student, but neither list determines the other."
+          },
+          {
+            "title": "Split the relation",
+            "body": "Store (7,chess), (7,hiking) in StudentHobby and (7,Tamil), (7,English), (7,Hindi) in StudentLanguage."
+          }
+        ],
+        "answer": "The split removes cross-product redundancy. The original combinations can still be generated by joining the two relations on sid.",
+        "table": {
+          "headers": [
+            "Combined row count",
+            "StudentHobby rows",
+            "StudentLanguage rows"
+          ],
+          "rows": [
+            [
+              "6 repeated pairs",
+              "2 facts",
+              "3 facts"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "Separate independent lists",
+        "caption": "Keep each multi-valued fact in its own relation; join only when needed.",
+        "nodes": [
+          [
+            "Student + hobbies + languages",
+            "repeated pairs"
+          ],
+          [
+            "StudentHobby",
+            "one hobby per row"
+          ],
+          [
+            "StudentLanguage",
+            "one language per row"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      },
+      "exam": "Compare 3NF and BCNF. Define MVD and 4NF, then show a relation with independent multi-valued facts and its decomposition."
+    },
+    {
+      "plain": "Decomposition splits one relation into smaller relations. A good split lets us join the pieces back without inventing rows and keeps important rules checkable.",
+      "goals": [
+        "Tell lossless join from dependency preservation",
+        "Apply the binary lossless test",
+        "Explain the purpose of the chase/tableau"
+      ],
+      "topics": [
+        {
+          "title": "Lossless-join decomposition",
+          "definition": "A decomposition is lossless if joining its pieces recreates exactly the valid rows of the original relation.",
+          "details": [
+            "A lossy split can create spurious tuples—combinations that never existed—or lose the original connections.",
+            "For a binary split R1 and R2, a standard sufficient test is that the common attributes functionally determine all of R1 or all of R2."
+          ],
+          "example": "If R(A,B,C) is split into AB and AC, the common attribute A must determine B or determine C for this standard binary test."
+        },
+        {
+          "title": "Dependency preservation",
+          "definition": "A decomposition is dependency-preserving if the rules projected onto the smaller relations still imply all the original dependencies.",
+          "details": [
+            "When dependencies are preserved, each rule can be checked on a local table without joining several tables.",
+            "Losslessness and dependency preservation answer different questions; check both."
+          ],
+          "example": "If A→B remains entirely inside R1(A,B), the DBMS can enforce it there."
+        },
+        {
+          "title": "Chase / tableau test",
+          "definition": "The chase is a table-based procedure that applies dependencies to rows of symbols to test whether a decomposition is lossless.",
+          "details": [
+            "Give each decomposed relation a row with distinguished symbols for included attributes and unique symbols for missing attributes.",
+            "Apply dependencies to make agreeing determinant columns agree on dependent columns. If a row becomes all distinguished symbols, the decomposition is lossless."
+          ],
+          "example": "The chase is useful when there are more than two decomposed relations and the simple binary test is not enough."
+        },
+        {
+          "title": "Problems caused by a poor decomposition",
+          "definition": "A decomposition can be harmful if joining the pieces invents rows or if important dependencies can no longer be checked locally.",
+          "details": [
+            "A lossy decomposition produces spurious tuples: the join contains combinations that were not valid in the original relation.",
+            "A decomposition that is not dependency-preserving may require joins to enforce an original rule. This increases work and can let invalid states pass if checks are not coordinated.",
+            "Test both properties separately: losslessness protects reconstruction meaning; dependency preservation protects local rule checking."
+          ],
+          "example": "Suppose a relation records which student studies which subject with which instructor. A split that keeps only student-subject and student-instructor can recombine an instructor with a subject the student never took. The extra joined row is spurious."
+        }
+      ],
+      "worked": {
+        "title": "Test a binary decomposition",
+        "setup": "R(A,B,C) has dependency A→B. Decompose into R1(A,B) and R2(A,C).",
+        "steps": [
+          {
+            "title": "Find the common attributes",
+            "body": "R1 ∩ R2 = {A}. A is the overlap between the two decomposed relations."
+          },
+          {
+            "title": "Check what the overlap determines",
+            "body": "By A→B, A determines both attributes of R1: A and B. Therefore the overlap determines one complete side."
+          },
+          {
+            "title": "Check the dependency too",
+            "body": "A→B is contained in R1, so it can be enforced directly there. This split is lossless and preserves this dependency."
+          }
+        ],
+        "answer": "The natural join of R1(A,B) and R2(A,C) reconstructs R without spurious tuples, and A→B remains locally checkable.",
+        "table": {
+          "headers": [
+            "Test",
+            "Result"
+          ],
+          "rows": [
+            [
+              "Intersection",
+              "{A}"
+            ],
+            [
+              "Lossless test",
+              "A → R1"
+            ],
+            [
+              "Dependency preservation",
+              "A → B stays in R1"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "Split, then join the pieces",
+        "caption": "The shared key reconnects the two relations without adding false matches.",
+        "nodes": [
+          [
+            "R(A,B,C)",
+            "original"
+          ],
+          [
+            "R1(A,B)",
+            "keeps A → B"
+          ],
+          [
+            "R2(A,C)",
+            "keeps A and C"
+          ],
+          [
+            "R1 ⋈ R2",
+            "reconstructs R"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Define lossless and dependency-preserving decomposition, apply the binary test, and explain what the chase/tableau establishes."
+    }
+  ]
+}

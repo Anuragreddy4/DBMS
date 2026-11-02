@@ -1,0 +1,509 @@
+{
+  "number": 6,
+  "label": "Unit 6",
+  "text": "Overview of Storage and Indexing: Data on External Storage - File Organization and Indexing Hash Based Indexing Tree base Indexing",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 50,
+  "questions": [
+    {
+      "id": "u6-a-1-230",
+      "unit": 6,
+      "part": "A",
+      "number": 1,
+      "text": "Distinguish primary vs secondary storage; why do we use pages/blocks?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-2-231",
+      "unit": 6,
+      "part": "A",
+      "number": 2,
+      "text": "Define heap file, sorted file, and hashed file organizations.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-3-232",
+      "unit": 6,
+      "part": "A",
+      "number": 3,
+      "text": "What is a clustered index vs unclustered index?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-4-233",
+      "unit": 6,
+      "part": "A",
+      "number": 4,
+      "text": "Define dense vs sparse index.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-5-234",
+      "unit": 6,
+      "part": "A",
+      "number": 5,
+      "text": "What is extendible hashing? Name its key idea.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-6-235",
+      "unit": 6,
+      "part": "A",
+      "number": 6,
+      "text": "What is a B+-tree? State properties (order, height bound).",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-7-236",
+      "unit": 6,
+      "part": "A",
+      "number": 7,
+      "text": "Explain search and insertion in a B+-tree briefly.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-8-237",
+      "unit": 6,
+      "part": "A",
+      "number": 8,
+      "text": "What is range query performance on hash vs B+-tree?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-9-238",
+      "unit": 6,
+      "part": "A",
+      "number": 9,
+      "text": "Define fill factor and its impact.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-10-239",
+      "unit": 6,
+      "part": "A",
+      "number": 10,
+      "text": "What is RAID and why striping/mirroring matter?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-11-240",
+      "unit": 6,
+      "part": "A",
+      "number": 11,
+      "text": "What is data on external storage?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-12-241",
+      "unit": 6,
+      "part": "A",
+      "number": 12,
+      "text": "What is a track on disk?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-13-242",
+      "unit": 6,
+      "part": "A",
+      "number": 13,
+      "text": "What is file organization?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-14-243",
+      "unit": 6,
+      "part": "A",
+      "number": 14,
+      "text": "List different file organization techniques.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u6-a-15-244",
+      "unit": 6,
+      "part": "A",
+      "number": 15,
+      "text": "Compare heap file and hash file.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-16-245",
+      "unit": 6,
+      "part": "A",
+      "number": 16,
+      "text": "Compare sorted file and hash file.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-17-246",
+      "unit": 6,
+      "part": "A",
+      "number": 17,
+      "text": "What is the need for indexing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-18-247",
+      "unit": 6,
+      "part": "A",
+      "number": 18,
+      "text": "What is hash-based indexing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-19-248",
+      "unit": 6,
+      "part": "A",
+      "number": 19,
+      "text": "What is tree-based indexing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-20-249",
+      "unit": 6,
+      "part": "A",
+      "number": 20,
+      "text": "What is multilevel indexing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-21-250",
+      "unit": 6,
+      "part": "A",
+      "number": 21,
+      "text": "What is sparse index?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-22-251",
+      "unit": 6,
+      "part": "A",
+      "number": 22,
+      "text": "What is dense index?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-23-252",
+      "unit": 6,
+      "part": "A",
+      "number": 23,
+      "text": "What is ISAM?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-24-253",
+      "unit": 6,
+      "part": "A",
+      "number": 24,
+      "text": "What is B-Tree?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-25-254",
+      "unit": 6,
+      "part": "A",
+      "number": 25,
+      "text": "What is B+ Tree?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-26-255",
+      "unit": 6,
+      "part": "A",
+      "number": 26,
+      "text": "What is the order of B+ Tree?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-27-256",
+      "unit": 6,
+      "part": "A",
+      "number": 27,
+      "text": "What is bulk loading of B+ Tree?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-28-257",
+      "unit": 6,
+      "part": "A",
+      "number": 28,
+      "text": "What is dynamic hashing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-29-258",
+      "unit": 6,
+      "part": "A",
+      "number": 29,
+      "text": "What is static hashing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-a-30-259",
+      "unit": 6,
+      "part": "A",
+      "number": 30,
+      "text": "Differentiate indexing and hashing.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-1-260",
+      "unit": 6,
+      "part": "B",
+      "number": 1,
+      "text": "Compare file organizations (heap, sorted, hashed): insertion, search, range query, space overhead; choose one for a workload and justify.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-2-261",
+      "unit": 6,
+      "part": "B",
+      "number": 2,
+      "text": "Explain B+-tree structure and operations with diagrams; trace insertions that cause node splits and root changes; analyze height and I/O cost.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-3-262",
+      "unit": 6,
+      "part": "B",
+      "number": 3,
+      "text": "Describe static, extendible, and linear hashing; show how bucket splits occur and analyze average lookup cost.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-4-263",
+      "unit": 6,
+      "part": "B",
+      "number": 4,
+      "text": "Design an indexing strategy for a large table with mixed point and range queries plus frequent inserts: choose clustering, composite keys, and maintenance considerations.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-5-264",
+      "unit": 6,
+      "part": "B",
+      "number": 5,
+      "text": "Discuss storage on external media: pages, records, slotted-page structure, free space management, and how this supports variable-length records and record movement.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-6-265",
+      "unit": 6,
+      "part": "B",
+      "number": 6,
+      "text": "Explain data on external storage, disk organization, and retrieval of data from disk.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-7-266",
+      "unit": 6,
+      "part": "B",
+      "number": 7,
+      "text": "Explain file organization techniques in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-8-267",
+      "unit": 6,
+      "part": "B",
+      "number": 8,
+      "text": "Compare hash file organization and heap file organization.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-9-268",
+      "unit": 6,
+      "part": "B",
+      "number": 9,
+      "text": "Compare sorted file organization and hash file organization.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-10-269",
+      "unit": 6,
+      "part": "B",
+      "number": 10,
+      "text": "Explain the need for indexing and advantages of indexing.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-11-270",
+      "unit": 6,
+      "part": "B",
+      "number": 11,
+      "text": "Explain hash-based indexing in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-12-271",
+      "unit": 6,
+      "part": "B",
+      "number": 12,
+      "text": "Explain tree-based indexing techniques.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-13-272",
+      "unit": 6,
+      "part": "B",
+      "number": 13,
+      "text": "Compare tree-based indexing and hash-based indexing.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-14-273",
+      "unit": 6,
+      "part": "B",
+      "number": 14,
+      "text": "Explain B+ Tree structure and operations.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-15-274",
+      "unit": 6,
+      "part": "B",
+      "number": 15,
+      "text": "Compare B+ Trees and B-Trees.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-16-275",
+      "unit": 6,
+      "part": "B",
+      "number": 16,
+      "text": "Explain dynamic hashing and static hashing.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-17-276",
+      "unit": 6,
+      "part": "B",
+      "number": 17,
+      "text": "Explain insertion and deletion in static hash index.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-18-277",
+      "unit": 6,
+      "part": "B",
+      "number": 18,
+      "text": "Explain ISAM insertion and deletion operations.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-19-278",
+      "unit": 6,
+      "part": "B",
+      "number": 19,
+      "text": "Explain multilevel indexing, dense indexing, and sparse indexing.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    },
+    {
+      "id": "u6-b-20-279",
+      "unit": 6,
+      "part": "B",
+      "number": 20,
+      "text": "Discuss buffer management if included along with storage unit preparation. ******************************************************************************",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 8
+    }
+  ]
+}

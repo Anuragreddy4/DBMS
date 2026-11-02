@@ -1,0 +1,439 @@
+{
+  "number": 4,
+  "label": "Unit 4",
+  "text": "Transaction Concept- Transaction State- Implementation of Atomicity and Durability Concurrent Executions Serializability- Recoverability Testing for serializability.",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 43,
+  "questions": [
+    {
+      "id": "u4-a-1-142",
+      "unit": 4,
+      "part": "A",
+      "number": 1,
+      "text": "List transaction states with a state diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-2-143",
+      "unit": 4,
+      "part": "A",
+      "number": 2,
+      "text": "Define schedule, serial schedule, and concurrent schedule.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-3-144",
+      "unit": 4,
+      "part": "A",
+      "number": 3,
+      "text": "What is conflict serializability? Precedence graph rule.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-4-145",
+      "unit": 4,
+      "part": "A",
+      "number": 4,
+      "text": "Define view serializability. How does it differ from conflict serializability?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-5-146",
+      "unit": 4,
+      "part": "A",
+      "number": 5,
+      "text": "Define recoverable, cascadeless, and strict schedules.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-6-147",
+      "unit": 4,
+      "part": "A",
+      "number": 6,
+      "text": "What is dirty read? Give a tiny example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-7-148",
+      "unit": 4,
+      "part": "A",
+      "number": 7,
+      "text": "What is write-ahead logging (WAL)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-8-149",
+      "unit": 4,
+      "part": "A",
+      "number": 8,
+      "text": "What is checkpointing and why is it used?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-9-150",
+      "unit": 4,
+      "part": "A",
+      "number": 9,
+      "text": "Define transaction.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-10-151",
+      "unit": 4,
+      "part": "A",
+      "number": 10,
+      "text": "What are the ACID properties?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-11-152",
+      "unit": 4,
+      "part": "A",
+      "number": 11,
+      "text": "Explain atomicity.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-12-153",
+      "unit": 4,
+      "part": "A",
+      "number": 12,
+      "text": "Explain durability with example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-13-154",
+      "unit": 4,
+      "part": "A",
+      "number": 13,
+      "text": "What is the motivation for concurrent execution of transactions?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-14-155",
+      "unit": 4,
+      "part": "A",
+      "number": 14,
+      "text": "What is a schedule?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-15-156",
+      "unit": 4,
+      "part": "A",
+      "number": 15,
+      "text": "Define serial schedule.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-16-157",
+      "unit": 4,
+      "part": "A",
+      "number": 16,
+      "text": "Define serializable schedule.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-17-158",
+      "unit": 4,
+      "part": "A",
+      "number": 17,
+      "text": "What is recoverability?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-18-159",
+      "unit": 4,
+      "part": "A",
+      "number": 18,
+      "text": "What is a recoverable schedule?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-19-160",
+      "unit": 4,
+      "part": "A",
+      "number": 19,
+      "text": "What is a cascadeless schedule?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-20-161",
+      "unit": 4,
+      "part": "A",
+      "number": 20,
+      "text": "What is precedence graph?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-21-162",
+      "unit": 4,
+      "part": "A",
+      "number": 21,
+      "text": "How do you test serializability of a schedule?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-22-163",
+      "unit": 4,
+      "part": "A",
+      "number": 22,
+      "text": "What is conflict serializability?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-23-164",
+      "unit": 4,
+      "part": "A",
+      "number": 23,
+      "text": "What is view serializability?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-24-165",
+      "unit": 4,
+      "part": "A",
+      "number": 24,
+      "text": "What are the states of a transaction?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-25-166",
+      "unit": 4,
+      "part": "A",
+      "number": 25,
+      "text": "Draw/Explain the transaction state diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-a-26-167",
+      "unit": 4,
+      "part": "A",
+      "number": 26,
+      "text": "What conflicts arise in concurrent transactions?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-b-1-168",
+      "unit": 4,
+      "part": "B",
+      "number": 1,
+      "text": "Given a schedule of reads/writes/commits for T1–T3, test for conflict serializability (build precedence graph), classify as recoverable/cascadeless/strict, and explain implications.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-b-2-169",
+      "unit": 4,
+      "part": "B",
+      "number": 2,
+      "text": "Explain validation-based (optimistic) concurrency control: phases, validation test, and when it outperforms locking; illustrate with a conflict example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-b-3-170",
+      "unit": 4,
+      "part": "B",
+      "number": 3,
+      "text": "Describe transaction recovery: ARIES concepts (log structure, LSN, WAL, checkpoints) and outline Analysis, Redo, Undo phases with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-b-4-171",
+      "unit": 4,
+      "part": "B",
+      "number": 4,
+      "text": "Discuss serializability theory: conflict vs view; provide schedules that are view- serializable but not conflict-serializable.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u4-b-5-172",
+      "unit": 4,
+      "part": "B",
+      "number": 5,
+      "text": "Show how deadlocks arise under locking; detection vs prevention; construct a wait-for graph example and resolve it.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-6-173",
+      "unit": 4,
+      "part": "B",
+      "number": 6,
+      "text": "What is a transaction? Explain its states with diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-7-174",
+      "unit": 4,
+      "part": "B",
+      "number": 7,
+      "text": "Explain the ACID properties and their usefulness.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-8-175",
+      "unit": 4,
+      "part": "B",
+      "number": 8,
+      "text": "Explain transaction concept and desirable properties.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-9-176",
+      "unit": 4,
+      "part": "B",
+      "number": 9,
+      "text": "Explain serial schedule, serializable schedule, and non-serializable schedule with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-10-177",
+      "unit": 4,
+      "part": "B",
+      "number": 10,
+      "text": "Explain conflict serializability with suitable examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-11-178",
+      "unit": 4,
+      "part": "B",
+      "number": 11,
+      "text": "Explain view serializability with suitable examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-12-179",
+      "unit": 4,
+      "part": "B",
+      "number": 12,
+      "text": "Compare conflict serializability and view serializability.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-13-180",
+      "unit": 4,
+      "part": "B",
+      "number": 13,
+      "text": "Explain testing for serializability using precedence graph.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-14-181",
+      "unit": 4,
+      "part": "B",
+      "number": 14,
+      "text": "Explain recoverable and cascadeless schedules with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-15-182",
+      "unit": 4,
+      "part": "B",
+      "number": 15,
+      "text": "Explain the motivation for concurrent execution and associated conflicts.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-16-183",
+      "unit": 4,
+      "part": "B",
+      "number": 16,
+      "text": "Explain recoverability in transactions in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u4-b-17-184",
+      "unit": 4,
+      "part": "B",
+      "number": 17,
+      "text": "Write a detailed note on serializability.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    }
+  ]
+}

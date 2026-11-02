@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="See how records live on pages, how files are organized, and how indexes shorten the search path."><title>Unit 06: Storage &amp; indexing | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="unit-page" style="--unit-accent:var(--coral)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../index.html#units">All units</a><a href="../index.html#exam-map">Exam map</a></nav></header>
+<main class="wrap unit-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><span>Unit 06</span></div>
+  <section class="unit-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 06 · FOUR LESSONS · 13 TOPICS</div><h1>Storage &amp; indexing</h1><p>See how records live on pages, how files are organized, and how indexes shorten the search path.</p><div class="unit-promise"><strong>Start anywhere.</strong> Each lesson has its own page, and the complete topic map below links every concept directly to its explanation.</div></section>
+  <section class="unit-motion" aria-hidden="true"><div class="motion-heading"><span class="section-label">A SIMPLE LEARNING FLOW</span><span class="motion-live"><i></i> LIVE PREVIEW</span></div><div class="motion-steps"><div class="motion-step motion-step-one"><span>01</span><strong>Choose a topic</strong><small>Open one lesson</small></div><div class="motion-step motion-step-two"><span>02</span><strong>Understand the idea</strong><small>Start with the meaning</small></div><div class="motion-step motion-step-three"><span>03</span><strong>Follow an example</strong><small>See each step unfold</small></div><div class="motion-cursor motion-cursor-one"><i></i></div><div class="motion-cursor motion-cursor-two"><i></i></div><div class="motion-type"><span>NOW EXPLORING</span><strong style="--type-width:36ch">External storage &amp; file organization</strong><i></i></div></div></section>
+  <section class="lesson-choices" aria-label="Lessons in this unit">
+        <a class="lesson-choice" href="../lessons/unit-06-lesson-01.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 01</span><span class="choice-number">01</span></div>
+          <h2>External storage &amp; file organization</h2>
+          <p>External storage keeps records after power is off. The DBMS reads pages into memory, and a file organization determines how records are placed for searches and updates.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-06-lesson-02.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 02</span><span class="choice-number">02</span></div>
+          <h2>Index types &amp; multilevel access</h2>
+          <p>An index is a smaller guide that points toward data pages. Its layout trades extra space and update work for faster searches.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-06-lesson-03.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 03</span><span class="choice-number">03</span></div>
+          <h2>B+ trees: search, insert &amp; range scan</h2>
+          <p>A B+ tree is a balanced index whose pages guide a search to a leaf. Its linked leaves make ordered and range searches efficient.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a>
+        <a class="lesson-choice" href="../lessons/unit-06-lesson-04.html" style="--unit-accent:var(--coral)">
+          <div class="choice-top"><span>LESSON 04</span><span class="choice-number">04</span></div>
+          <h2>Static &amp; dynamic hashing</h2>
+          <p>Hashing calculates a bucket from a key. Dynamic hashing splits buckets as data grows; B+ trees are often better when the query needs a range.</p>
+          <span class="choice-link">Open this lesson <b aria-hidden="true">↗</b></span>
+        </a></section>
+  <section class="syllabus-map" id="syllabus-map"><div class="eyebrow"><span class="eyebrow-line"></span>COMPLETE SYLLABUS TOPIC MAP</div><div class="syllabus-map-intro"><h2>All 13 topics in Unit 6, linked to their lessons.</h2><p>Each card opens the exact explanation. The unit is organized into four lessons, with all syllabus concepts listed below.</p></div><div class="syllabus-topic-groups"><section class="syllabus-topic-group" aria-label="Lesson 1: External storage &amp; file organization">
+          <div class="syllabus-topic-heading"><span>LESSON 01</span><h3>External storage &amp; file organization</h3><a href="../lessons/unit-06-lesson-01.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-01.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Data on external storage: pages and records</strong><small>External storage is persistent storage such as an SSD or hard disk. A DBMS moves data between it and memory in page-sized units, so page layout affects query cost.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-01.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Heap, sorted, and hashed files</strong><small>A file organization decides where records are placed and how the DBMS searches for them.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-01.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Buffers and RAID</strong><small>A buffer pool keeps frequently used pages in memory. RAID spreads or mirrors data across disks for performance or availability.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 2: Index types &amp; multilevel access">
+          <div class="syllabus-topic-heading"><span>LESSON 02</span><h3>Index types &amp; multilevel access</h3><a href="../lessons/unit-06-lesson-02.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-02.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>What an index does and when it helps</strong><small>An index is an auxiliary structure that maps search-key values to record or page locations so a query can find selected rows without scanning every data page.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-02.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Dense and sparse indexes</strong><small>A dense index has an entry for every search-key value or record. A sparse index has fewer entries and searches within an ordered data page after locating the nearest index entry.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-02.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Primary, clustered, and secondary indexes</strong><small>A primary index is on the ordering key of an ordered data file. A clustered index follows the physical order of a non-key field. A secondary index is on a field the data file is not ordered by.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-02.html#topic-4">
+              <span class="syllabus-topic-number">04</span>
+              <span class="syllabus-topic-copy"><strong>Multilevel indexes and ISAM</strong><small>A multilevel index places a small index over a larger index so each search narrows the page range.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 3: B+ trees: search, insert &amp; range scan">
+          <div class="syllabus-topic-heading"><span>LESSON 03</span><h3>B+ trees: search, insert &amp; range scan</h3><a href="../lessons/unit-06-lesson-03.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-03.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>B+ tree structure</strong><small>A B+ tree is a balanced, page-based search tree. Internal pages hold separator keys and child pointers; leaf pages hold data entries and are linked in key order.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-03.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Search and insertion</strong><small>Search follows separator ranges to a leaf. Insertion places a key in that leaf and splits a full page.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-03.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Range queries and B-tree comparison</strong><small>After finding the first matching leaf, a range query follows leaf links through the sorted entries.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section><section class="syllabus-topic-group" aria-label="Lesson 4: Static &amp; dynamic hashing">
+          <div class="syllabus-topic-heading"><span>LESSON 04</span><h3>Static &amp; dynamic hashing</h3><a href="../lessons/unit-06-lesson-04.html">Open lesson ↗</a></div>
+          <div class="syllabus-topic-grid"><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-04.html#topic-1">
+              <span class="syllabus-topic-number">01</span>
+              <span class="syllabus-topic-copy"><strong>Static hashing</strong><small>A hash function maps a search key to one of a fixed set of buckets.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-04.html#topic-2">
+              <span class="syllabus-topic-number">02</span>
+              <span class="syllabus-topic-copy"><strong>Extendible hashing</strong><small>Extendible hashing uses a directory of hash-bit prefixes and splits a bucket when it overflows.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a><a class="syllabus-topic-card" href="../lessons/unit-06-lesson-04.html#topic-3">
+              <span class="syllabus-topic-number">03</span>
+              <span class="syllabus-topic-copy"><strong>Linear hashing and range trade-off</strong><small>Linear hashing grows gradually using a split pointer instead of doubling a directory all at once.</small></span>
+              <span class="syllabus-topic-arrow" aria-hidden="true">↗</span>
+            </a></div>
+        </section></div></section>
+  <div class="unit-return"><a class="button-secondary" href="../index.html#units">Return to all units</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Unit 06 · 4 lesson pages · 13 topic explanations</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script>
+</body></html>

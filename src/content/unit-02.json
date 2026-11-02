@@ -1,0 +1,20 @@
+{
+  "n": 2,
+  "accent": "coral",
+  "title": "Relations & query logic",
+  "deck": "Read and shape relational data with keys, constraints, algebra, calculus, views, and SQL.",
+  "lessons": [
+    {
+      "title": "Relations, keys & integrity rules"
+    },
+    {
+      "title": "Relational algebra: operators & joins"
+    },
+    {
+      "title": "Relational calculus & safe queries"
+    },
+    {
+      "title": "Logical design, views & SQL schema changes"
+    }
+  ]
+}

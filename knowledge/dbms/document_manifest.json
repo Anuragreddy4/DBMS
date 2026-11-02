@@ -1,0 +1,23 @@
+{
+  "documents": [
+    {
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "type": "important question bank",
+      "sha256": "5bd490295ce101eb40ea73e085de71dfc1f0b980306f1dadac261fc58b123702",
+      "bytes": 280458,
+      "pages": 8,
+      "textChars": 17917,
+      "processed": true
+    },
+    {
+      "source": "DBMS-1 (1).PNG",
+      "type": "official syllabus image",
+      "sha256": "1f7d4e8541bc1629e671569782c13e3eaa834d4cb6f01d2ec053d44b0fc44b9c",
+      "bytes": 140805,
+      "ocrChars": 2206,
+      "processed": true
+    }
+  ],
+  "documentCount": 2,
+  "generatedFrom": "Only the Important Questions PDF and DBMS-1 syllabus image are indexed. Lecture notes and previous-paper PDFs are excluded."
+}

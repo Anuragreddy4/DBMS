@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="Decomposition splits one relation into smaller relations. A good split lets us join the pieces back without inventing rows and keeps important rules checkable."><title>Lossless &amp; dependency-preserving decomposition | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--sage)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-03.html">Unit 03</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-03.html">Unit 03: Refining a schema</a><span>›</span><span>Lesson 04</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 03 · LESSON 04</div><h1>Lossless &amp; dependency-preserving decomposition</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>Decomposition splits one relation into smaller relations. A good split lets us join the pieces back without inventing rows and keeps important rules checkable.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Tell lossless join from dependency preservation</li><li>Apply the binary lossless test</li><li>Explain the purpose of the chase/tableau</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Lossless-join decomposition</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>Dependency preservation</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Chase / tableau test</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-4"><span class="subtopic-number">04</span><strong>Problems caused by a poor decomposition</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Lossless-join decomposition</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A decomposition is lossless if joining its pieces recreates exactly the valid rows of the original relation.</p></div>
+          <figure class="concept-diagram">
+      <figcaption><strong>Split, then join the pieces</strong><span>The shared key reconnects the two relations without adding false matches.</span></figcaption>
+      <div class="diagram-scroll"><svg viewBox="0 0 1000 360" role="img" aria-label="Split, then join the pieces. The shared key reconnects the two relations without adding false matches." xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60757b"/></marker></defs>
+        <path class="diagram-edge" d="M 205.0 166.4 C 305.0 166.4, 305.0 137.6, 405.0 137.6" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 205.0 193.6 C 305.0 193.6, 305.0 222.4, 405.0 222.4" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 595.0 137.6 C 695.0 137.6, 695.0 166.4, 795.0 166.4" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 595.0 222.4 C 695.0 222.4, 695.0 193.6, 795.0 193.6" marker-end="url(#arrow)"/><g class="diagram-node">
+          <rect x="15.0" y="142.0" width="190" height="76" rx="14" fill="#246f84"/>
+          <path d="M 29.0 144.0 H 191.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="110.0" y="177.0" class="diagram-title"><tspan x="110.0" dy="0">R(A,B,C)</tspan></text>
+          <text x="110.0" y="201.0" class="diagram-detail">original</text>
+        </g><g class="diagram-node">
+          <rect x="405.0" y="86.0" width="190" height="76" rx="14" fill="#d66f4d"/>
+          <path d="M 419.0 88.0 H 581.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="500.0" y="121.0" class="diagram-title"><tspan x="500.0" dy="0">R1(A,B)</tspan></text>
+          <text x="500.0" y="145.0" class="diagram-detail">keeps A → B</text>
+        </g><g class="diagram-node">
+          <rect x="405.0" y="198.0" width="190" height="76" rx="14" fill="#c39a42"/>
+          <path d="M 419.0 200.0 H 581.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="500.0" y="233.0" class="diagram-title"><tspan x="500.0" dy="0">R2(A,C)</tspan></text>
+          <text x="500.0" y="257.0" class="diagram-detail">keeps A and C</text>
+        </g><g class="diagram-node">
+          <rect x="795.0" y="142.0" width="190" height="76" rx="14" fill="#718f83"/>
+          <path d="M 809.0 144.0 H 971.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="890.0" y="177.0" class="diagram-title"><tspan x="890.0" dy="0">R1 ⋈ R2</tspan></text>
+          <text x="890.0" y="201.0" class="diagram-detail">reconstructs R</text>
+        </g>
+      </svg></div>
+    </figure><p>A lossy split can create spurious tuples—combinations that never existed—or lose the original connections.</p><p>For a binary split R1 and R2, a standard sufficient test is that the common attributes functionally determine all of R1 or all of R2.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If R(A,B,C) is split into AB and AC, the common attribute A must determine B or determine C for this standard binary test.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>Dependency preservation</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A decomposition is dependency-preserving if the rules projected onto the smaller relations still imply all the original dependencies.</p></div>
+          <p>When dependencies are preserved, each rule can be checked on a local table without joining several tables.</p><p>Losslessness and dependency preservation answer different questions; check both.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If A→B remains entirely inside R1(A,B), the DBMS can enforce it there.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Chase / tableau test</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>The chase is a table-based procedure that applies dependencies to rows of symbols to test whether a decomposition is lossless.</p></div>
+          <p>Give each decomposed relation a row with distinguished symbols for included attributes and unique symbols for missing attributes.</p><p>Apply dependencies to make agreeing determinant columns agree on dependent columns. If a row becomes all distinguished symbols, the decomposition is lossless.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>The chase is useful when there are more than two decomposed relations and the simple binary test is not enough.</p></div>
+        </section><section class="concept-panel" id="topic-4">
+          <div class="concept-number">TOPIC 04</div><h2>Problems caused by a poor decomposition</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A decomposition can be harmful if joining the pieces invents rows or if important dependencies can no longer be checked locally.</p></div>
+          <p>A lossy decomposition produces spurious tuples: the join contains combinations that were not valid in the original relation.</p><p>A decomposition that is not dependency-preserving may require joins to enforce an original rule. This increases work and can let invalid states pass if checks are not coordinated.</p><p>Test both properties separately: losslessness protects reconstruction meaning; dependency preservation protects local rule checking.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>Suppose a relation records which student studies which subject with which instructor. A split that keeps only student-subject and student-instructor can recombine an instructor with a subject the student never took. The extra joined row is spurious.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Test a binary decomposition</h2><p>R(A,B,C) has dependency A→B. Decompose into R1(A,B) and R2(A,C).</p><div class="example-table-wrap"><table class="example-table"><thead><tr><th scope="col">Test</th><th scope="col">Result</th></tr></thead><tbody><tr><td>Intersection</td><td>{A}</td></tr><tr><td>Lossless test</td><td>A → R1</td></tr><tr><td>Dependency preservation</td><td>A → B stays in R1</td></tr></tbody></table></div></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Find the common attributes</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Check what the overlap determines</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Check the dependency too</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Find the common attributes</h3><p>R1 ∩ R2 = {A}. A is the overlap between the two decomposed relations.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Check what the overlap determines</h3><p>By A→B, A determines both attributes of R1: A and B. Therefore the overlap determines one complete side.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Check the dependency too</h3><p>A→B is contained in R1, so it can be enforced directly there. This split is lossless and preserves this dependency.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>The natural join of R1(A,B) and R2(A,C) reconstructs R without spurious tuples, and A→B remains locally checkable.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Define lossless and dependency-preserving decomposition, apply the binary test, and explain what the chase/tableau establishes.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-03.html">Return to Unit 03</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Refining a schema · 04 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

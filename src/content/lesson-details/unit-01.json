@@ -1,0 +1,473 @@
+{
+  "lessons": [
+    {
+      "plain": "A database stores organized facts. A DBMS manages those facts, and a database system includes the data and the programs that use it. Comparing a DBMS with separate application files shows why shared rules matter.",
+      "goals": [
+        "Distinguish a database, a DBMS, and a database system",
+        "Compare a traditional file-processing system with a DBMS",
+        "Trace a request from an application to stored data and back"
+      ],
+      "topics": [
+        {
+          "title": "Database, DBMS, and database system",
+          "definition": "A database is an organized collection of related data. A DBMS (database management system) is the software that defines the data structure, stores and retrieves the data, applies rules, and controls access. A database system means the data together with the programs used to access and modify it.",
+          "details": [
+            "Keep the parts separate: STUDENT(sid, name, course) describes a table; rows such as (21, Mina, DBMS) are stored data; the DBMS is the software that manages the table and its rows. The table description is the schema, while its current rows are the data instance.",
+            "When an app asks for the course where sid=21, the request goes to the DBMS. The DBMS checks the request and the user's permission, locates the matching row, and returns the requested value. The app does not need to know how the DBMS stores that row on disk.",
+            "The DBMS helps people use related data conveniently and efficiently. It can enforce data rules, manage access, coordinate users, and support recovery if a failure interrupts work."
+          ],
+          "example": "In STUDENT(sid, name, course), the row (21, Mina, DBMS) is data. The DBMS is the software that can create this table, check its rules, find the row, and return the course. It is not the row itself."
+        },
+        {
+          "title": "Database System vs. File System",
+          "definition": "In a traditional file-processing system, each application keeps and understands its own files. A DBMS manages a shared, described database and controls how applications read and change it.",
+          "details": [
+            "Separate files can repeat the same fact. If a student address is copied into fees.csv, library.csv, and hostel.csv, changing only two copies leaves conflicting addresses. This is an update anomaly.",
+            "A DBMS lets several applications use one agreed structure. Keys and constraints check the data; transactions coordinate simultaneous changes; authorization and recovery are managed by the database system.",
+            "A DBMS has setup, storage, and administration costs. A small, isolated file can be simpler. The advantage appears when data is shared, related, frequently updated, or important to protect."
+          ],
+          "example": "Suppose the fees and library programs each keep a student name and address. If a student moves, one program may update its file while the other does not. With a shared STUDENT row in a DBMS, both programs read the same current address and the DBMS can check who is allowed to change it.",
+          "table": {
+            "headers": [
+              "Concern",
+              "Traditional file-processing system",
+              "Database system with a DBMS"
+            ],
+            "rows": [
+              [
+                "Organization",
+                "Programs maintain separate files and often know their formats.",
+                "A shared database has a defined schema and catalog."
+              ],
+              [
+                "Repeated facts",
+                "Copies can multiply and disagree after an incomplete update.",
+                "Shared tables and good design reduce repetition; constraints help protect consistency."
+              ],
+              [
+                "Program changes",
+                "A file-format change may require edits to every program that reads it.",
+                "The DBMS separates logical requests from many storage details."
+              ],
+              [
+                "Rules and access",
+                "Each application may need to repeat validation and access checks.",
+                "Constraints and permissions can be managed centrally."
+              ],
+              [
+                "Concurrent work",
+                "Programs must coordinate simultaneous reads and writes themselves.",
+                "Transactions and concurrency control coordinate users."
+              ],
+              [
+                "Failure recovery",
+                "Recovery is often designed separately for each application.",
+                "Logs and recovery procedures help undo incomplete work and restore committed work."
+              ],
+              [
+                "Best fit",
+                "Simple, isolated data with low coordination needs.",
+                "Shared, related data with multiple users or important integrity requirements."
+              ]
+            ]
+          }
+        }
+      ],
+      "worked": {
+        "title": "Follow one request from question to answer",
+        "setup": "The database contains STUDENT(sid, name, course) with rows (21, Mina, DBMS) and (22, Arjun, OS). An app asks: “What course is recorded for student 21?”",
+        "table": {
+          "headers": [
+            "sid",
+            "name",
+            "course"
+          ],
+          "rows": [
+            [
+              "21",
+              "Mina",
+              "DBMS"
+            ],
+            [
+              "22",
+              "Arjun",
+              "OS"
+            ]
+          ]
+        },
+        "steps": [
+          {
+            "title": "The app sends a request",
+            "body": "The app asks the DBMS for the course belonging to sid=21. The app describes what information it needs; it does not search the stored files itself."
+          },
+          {
+            "title": "The DBMS checks the request",
+            "body": "The DBMS interprets the request, checks that it is valid, and checks whether this user is allowed to read the course value."
+          },
+          {
+            "title": "The DBMS finds the matching row",
+            "body": "It looks for sid=21 in STUDENT, finds Mina's row, and takes the value in the course column: DBMS."
+          },
+          {
+            "title": "The answer returns to the app",
+            "body": "The DBMS sends back the requested course value. The app can show “DBMS” without receiving every row or knowing how the row is stored on disk."
+          }
+        ],
+        "answer": "The database holds the rows. The DBMS processes and controls the request. The app asks, and the requested value comes back as the result."
+      },
+      "diagram": {
+        "title": "Follow a student-data request",
+        "caption": "The app asks for sid=21; the DBMS checks, reads STUDENT, and returns the course.",
+        "nodes": [
+          [
+            "Application",
+            "asks for course"
+          ],
+          [
+            "DBMS",
+            "checks request"
+          ],
+          [
+            "Database",
+            "STUDENT rows"
+          ],
+          [
+            "Result",
+            "course: DBMS"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Be ready to compare file processing and DBMS by redundancy, inconsistency, integrity, concurrent access, security, recovery, and cost.",
+      "diagramTopic": "Database, DBMS, and database system"
+    },
+    {
+      "plain": "DBMS structure explains how a request is checked and answered. Views show the data needed by a user; abstraction hides detail, and data independence reduces how often programs must change.",
+      "goals": [
+        "Name the query processor and storage manager",
+        "Explain external, conceptual, and internal views of data",
+        "Distinguish abstraction from logical and physical data independence"
+      ],
+      "topics": [
+        {
+          "title": "DBMS structure: main parts of a request",
+          "definition": "DBMS structure describes the components that check a request, decide how to run it, access stored pages, enforce rules, and return the result.",
+          "details": [
+            "The query processor parses and validates a query, the optimizer chooses a plan, and the execution engine runs that plan.",
+            "The storage manager works with data files, indexes, and the buffer pool. Transaction, authorization, integrity, and recovery components coordinate safe and permitted access.",
+            "An application does not normally fetch disk pages itself. It asks the DBMS for data; the DBMS checks the request and returns the requested result."
+          ],
+          "example": "For “show the courses for student 21,” the query processor checks the request, the transaction and authorization components apply the rules, the storage manager finds the matching enrollment pages, and the DBMS returns only those course names."
+        },
+        {
+          "title": "What is data abstraction?",
+          "definition": "Data abstraction means showing the useful information while hiding lower-level details that the user does not need.",
+          "details": [
+            "A student sees course names, not the disk page number where each enrollment is stored.",
+            "Abstraction makes the same database usable by people with different needs: a student, an instructor, and a DBA can see different views."
+          ],
+          "example": "A student portal may show name and courses. The registrar's screen may also show grades and registration dates."
+        },
+        {
+          "title": "View of data: the three schema levels",
+          "definition": "A view of data is the version of the database a particular user or program sees. The three-schema architecture separates that view from the complete logical design and physical storage.",
+          "details": [
+            "External level: a user-specific view, such as a student portal showing course names but not fee details.",
+            "Conceptual level: the overall logical database, including relations, attributes, relationships, and constraints.",
+            "Internal level: the physical representation, such as pages, files, indexes, and record layouts. Mappings connect the levels so a change at one level can sometimes be hidden from another."
+          ],
+          "example": "The student portal is an external view. STUDENT and ENROLLMENT are part of the conceptual schema. A B+ tree and disk pages belong to the internal level."
+        },
+        {
+          "title": "Logical and physical data independence",
+          "definition": "Physical independence lets storage change without changing the logical design. Logical independence lets the logical design change while user views remain stable.",
+          "details": [
+            "Adding an index or moving a table to a new disk layout is a physical change. A well-designed DBMS can hide it from applications.",
+            "Adding a new attribute to the conceptual design is a logical change. It is independent only if existing views and applications do not need to change."
+          ],
+          "example": "Adding an index on ENROLLMENT.sid should not require a rewrite of the student portal. Renaming a field used by the portal may require a view mapping or a program change."
+        }
+      ],
+      "worked": {
+        "title": "A portal gets faster without changing its screen",
+        "setup": "The course portal is slow. The DBA creates an index on ENROLLMENT.sid, but the page should look exactly the same.",
+        "steps": [
+          {
+            "title": "Separate the levels",
+            "body": "The portal's course list is an external view. ENROLLMENT is part of the conceptual schema. The index is an internal storage structure."
+          },
+          {
+            "title": "Change only storage",
+            "body": "The DBA adds the index so the DBMS can find a student's rows faster. The relation and portal fields do not change."
+          },
+          {
+            "title": "Name the independence",
+            "body": "Because the storage change is hidden from the logical design and the portal, this is physical data independence."
+          }
+        ],
+        "answer": "The index changes the internal level only, so the application can keep its existing view."
+      },
+      "diagram": {
+        "title": "Three levels, one database",
+        "caption": "A change at a lower level can be hidden from the level above it.",
+        "nodes": [
+          [
+            "External",
+            "student / staff views"
+          ],
+          [
+            "Conceptual",
+            "relations and rules"
+          ],
+          [
+            "Internal",
+            "indexes and pages"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "exam": "Draw the three-schema architecture. Define abstraction, identify each level, and compare logical with physical data independence.",
+      "diagramTopic": "View of data: the three schema levels"
+    },
+    {
+      "plain": "A data model is a way to describe data. A schema is the plan; an instance is today's contents. SQL provides commands to define, query, and change the database.",
+      "goals": [
+        "Compare a schema with an instance",
+        "Recognize common data models",
+        "Classify SQL commands and explain views"
+      ],
+      "topics": [
+        {
+          "title": "Data models",
+          "definition": "A data model is a set of ideas for describing data, its relationships, and its rules.",
+          "details": [
+            "The relational model organizes data in tables. Hierarchical and network models use parent-child or linked records. Object-based models represent richer objects.",
+            "A model helps designers express what must be stored before choosing physical storage."
+          ],
+          "example": "A college can be represented relationally using STUDENT, COURSE, and ENROLLMENT tables."
+        },
+        {
+          "title": "Schema and instance",
+          "definition": "The schema is the database's structure. The instance is the actual data present at a particular time.",
+          "details": [
+            "The schema changes occasionally; the instance changes whenever records are inserted, updated, or deleted.",
+            "A DBMS checks that each instance follows the schema's types, keys, and constraints."
+          ],
+          "example": "STUDENT(sid, name, program) is a schema. Rows for Anu and Dev are part of one current instance."
+        },
+        {
+          "title": "Database languages",
+          "definition": "DDL defines structures; DML reads or changes rows; DCL controls privileges; TCL commits or rolls back transactions.",
+          "details": [
+            "SQL combines these command families. CREATE and ALTER are DDL; SELECT, INSERT, UPDATE, and DELETE are DML; GRANT and REVOKE are DCL; COMMIT and ROLLBACK are TCL."
+          ],
+          "example": "CREATE TABLE defines a relation. SELECT retrieves rows. COMMIT makes a transaction's changes final."
+        },
+        {
+          "title": "Views",
+          "definition": "A view is a named query that users can read like a table. It can simplify queries and show only selected rows or columns.",
+          "details": [
+            "A regular view stores its query definition. A materialized view stores a result that the DBMS refreshes.",
+            "A view can restrict exposure, but it does not replace the need for correct authorization on the underlying data."
+          ],
+          "example": "A CS_Students view can show student IDs and names only for the CS program."
+        }
+      ],
+      "worked": {
+        "title": "Tell the plan from the current data",
+        "setup": "Use the schema STUDENT(sid, name, program). The current rows are (21, Mina, CS) and (22, Arjun, IT).",
+        "steps": [
+          {
+            "title": "Identify the schema",
+            "body": "The names sid, name, and program describe the columns and their meaning. That design is the schema."
+          },
+          {
+            "title": "Identify the instance",
+            "body": "The two student rows are the instance right now. Adding a third student changes the instance, not the schema."
+          },
+          {
+            "title": "Create a view",
+            "body": "A query can expose just CS students: CREATE VIEW CS_Students AS SELECT sid, name FROM STUDENT WHERE program='CS'. The view hides the program filter from repeated queries."
+          }
+        ],
+        "answer": "The table definition is the schema, the rows are the instance, and CS_Students is a view over those rows.",
+        "code": "CREATE VIEW CS_Students AS\nSELECT sid, name\nFROM STUDENT\nWHERE program = 'CS';"
+      },
+      "diagram": null,
+      "exam": "Define schema and instance; list data models and database languages; explain a view and its purpose."
+    },
+    {
+      "plain": "An ER design starts from requirements and names the entities, attributes, relationships, keys, and constraints the database must preserve.",
+      "goals": [
+        "Identify entity sets, attributes, keys, and relationship sets",
+        "Specify cardinality and participation constraints",
+        "Use extended ER features and map a design into relations"
+      ],
+      "topics": [
+        {
+          "title": "Entities, entity sets, attributes, and keys",
+          "definition": "An entity is one identifiable thing about which data is stored. An entity set is the collection of similar entities. Attributes describe each entity, and a key identifies it uniquely.",
+          "details": [
+            "A STUDENT entity set contains individual students. sid can identify one student; name and program describe that student. A value such as Mina is an attribute value, not an entity set.",
+            "Attributes may be simple, composite, single-valued, multivalued, or derived. A weak entity cannot be identified by its own attributes alone; it uses an owner key together with a partial key.",
+            "In a common ER diagram, an entity set is a rectangle, an attribute an oval, and a key attribute is marked. A weak entity has a distinct double-rectangle notation."
+          ],
+          "example": "STUDENT(sid,name,birthDate) is an entity set. A row with sid=21 represents one entity. Age can be derived from birthDate; a student may have several phone numbers, so phone is multivalued."
+        },
+        {
+          "title": "Relationships and relationship sets",
+          "definition": "A relationship is an association among particular entities. A relationship set is the collection of associations of the same kind.",
+          "details": [
+            "ENROLLS is a relationship set between STUDENT and COURSE. One enrollment instance connects one particular student with one particular course.",
+            "Cardinality says how many entities may be associated: 1:1, 1:N, or M:N. The degree counts participating entity sets; a relationship involving three sets is ternary.",
+            "Participation says whether an entity must take part. Total participation means every entity does; partial participation allows an entity to have no relationship. These rules express real constraints."
+          ],
+          "example": "A student can enroll in many courses and each course can have many students, so STUDENT–ENROLLS–COURSE is M:N. A student who has not enrolled yet can still exist, so student participation may be partial."
+        },
+        {
+          "title": "Additional ER features and mapping beyond ER",
+          "definition": "The extended ER model adds ways to describe subtypes, shared properties, and more complex constraints. Mapping then turns the conceptual ER design into relational tables.",
+          "details": [
+            "Specialization divides a superclass into subtypes; generalization combines similar entity sets into a superclass. Subtypes inherit common attributes and relationships.",
+            "A specialization can be disjoint or overlapping. Disjoint means an entity belongs to at most one subtype; overlapping allows several. Total (covering) means every superclass entity belongs to a subtype; partial allows some to belong to none.",
+            "Aggregation treats a relationship as a higher-level unit so it can take part in another relationship. A weak entity depends on an owner and a partial key. An associative entity gives an M:N relationship its own attributes and identity.",
+            "When mapping to relations, make a table for each entity set, put a foreign key on the many side of a 1:N relationship, and create a bridge table for an M:N relationship. Preserve keys and constraints."
+          ],
+          "example": "PERSON may be specialized into STUDENT and EMPLOYEE. A person may be both, so the specialization overlaps. ENROLLS between STUDENT and COURSE becomes ENROLLMENT(sid,cid,term,grade); term and grade describe the relationship."
+        },
+        {
+          "title": "Conceptual database design with ER diagrams",
+          "definition": "Conceptual design turns written requirements into a clear, technology-independent picture of the data and the rules connecting it.",
+          "details": [
+            "Read the requirements and list entity sets, attributes, and candidate keys. Then identify relationship sets, degree, cardinality, and participation constraints.",
+            "Check weak entities, multivalued attributes, and subtypes. Draw the ER diagram and review it against example questions the database must answer.",
+            "After the ER design is clear, map it to relations and choose physical storage. The ER diagram describes meaning; it is not a disk layout."
+          ],
+          "example": "For a library, identify MEMBER, BOOK, and LOAN. A loan connects one member and one book and stores checkoutDate and dueDate. Decide whether a member can have zero loans, whether a book can have many loans over time, and which values identify each entity."
+        },
+        {
+          "title": "Associative entity",
+          "definition": "An associative entity turns a relationship, usually M:N, into an entity that can carry its own attributes.",
+          "details": [
+            "Build it from the participating entity keys and add facts that describe the association.",
+            "It is useful when the relationship has a date, status, grade, quantity, or separate lifecycle."
+          ],
+          "example": "ENROLLMENT(sid,cid,term,grade) represents one student taking one course in one term; grade belongs to that enrollment, not to the student or course alone."
+        },
+        {
+          "title": "Ternary relationship",
+          "definition": "A ternary relationship connects three entity sets in one relationship instance.",
+          "details": [
+            "Its meaning belongs to the complete triple. Replacing it with three binary relationships can allow combinations that were never valid.",
+            "The degree of a relationship is the number of participating entity sets; ternary means degree three."
+          ],
+          "example": "SUPPLIES(supplier,part,project) records which supplier provides which part for which project. The fact is about that exact three-way combination."
+        },
+        {
+          "title": "EER overlap and covering constraints",
+          "definition": "Overlap and covering state which subtype memberships are allowed and whether every superclass entity must appear in a subtype.",
+          "details": [
+            "Disjoint subtypes allow at most one subtype membership; overlapping subtypes allow more than one.",
+            "Total specialization requires every superclass entity to appear in some subtype. Partial specialization allows entities in none."
+          ],
+          "example": "A PERSON can be both STUDENT and EMPLOYEE, so the subtypes overlap. If every person must be one of those, the specialization is total; otherwise it is partial."
+        }
+      ],
+      "worked": {
+        "title": "Model course registration",
+        "setup": "A college stores students, courses, and the term and grade for each registration.",
+        "steps": [
+          {
+            "title": "Choose entity sets",
+            "body": "Create STUDENT(sid, name) and COURSE(cid, title). sid and cid uniquely identify their rows."
+          },
+          {
+            "title": "Choose the relationship",
+            "body": "A student may enroll in many courses and each course may contain many students. ENROLLS is M:N and has attributes term and grade."
+          },
+          {
+            "title": "Map the relationship",
+            "body": "Create ENROLLMENT(sid, cid, term, grade). sid references STUDENT and cid references COURSE. Include term in the key if a student may retake a course in a later term."
+          }
+        ],
+        "answer": "The ER design becomes three relations. The bridge relation ENROLLMENT records each student-course registration and preserves both foreign-key links.",
+        "table": {
+          "headers": [
+            "Relation",
+            "Key",
+            "Meaning"
+          ],
+          "rows": [
+            [
+              "STUDENT",
+              "sid",
+              "One row per student"
+            ],
+            [
+              "COURSE",
+              "cid",
+              "One row per course"
+            ],
+            [
+              "ENROLLMENT",
+              "sid, cid, term",
+              "One registration and its grade"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "An M:N relationship becomes a bridge table",
+        "caption": "The bridge stores each registration and both references.",
+        "nodes": [
+          [
+            "STUDENT",
+            "sid · name"
+          ],
+          [
+            "ENROLLMENT",
+            "sid · cid · term · grade"
+          ],
+          [
+            "COURSE",
+            "cid · title"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "exam": "Design an ER model for a hospital, library, course registration, or reservation system. State assumptions, keys, cardinality, participation, weak entities, and EER features.",
+      "diagramTopic": "Additional ER features and mapping beyond ER"
+    }
+  ]
+}

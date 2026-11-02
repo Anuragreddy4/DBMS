@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="Recoverability is about commit order after a read. Cascadeless and strict schedules add stronger rules that make failures easier to handle."><title>Recoverable, cascadeless &amp; strict schedules | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--gold)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-04.html">Unit 04</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-04.html">Unit 04: Transactions &amp; schedules</a><span>›</span><span>Lesson 04</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 04 · LESSON 04</div><h1>Recoverable, cascadeless &amp; strict schedules</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>Recoverability is about commit order after a read. Cascadeless and strict schedules add stronger rules that make failures easier to handle.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Recognize a dirty read</li><li>Classify recoverable, cascadeless, and strict schedules</li><li>Explain the implication between the three</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Recoverable schedule</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>Cascadeless schedule</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Strict schedule</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Recoverable schedule</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>If T2 reads a value written by T1, a recoverable schedule makes T2 commit only after T1 commits.</p></div>
+          <p>If T1 aborts, T2 must still be allowed to roll back before its own commit.</p><p>Recoverability protects committed results from depending on work that may be undone.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>T1 writes A; T2 reads A; T1 commits; then T2 commits. This order is recoverable.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>Cascadeless schedule</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A cascadeless schedule allows a transaction to read a value only after the transaction that wrote it has committed.</p></div>
+          <p>This prevents dirty reads and avoids a chain of dependent transactions all needing to abort.</p><p>It is stricter than recoverability because it delays the read itself, not just the reader&#x27;s commit.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If T1 has written A but not committed, T2 waits before reading A.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Strict schedule</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A strict schedule prevents other transactions from reading or writing an item that a transaction has written but not yet committed or aborted.</p></div>
+          <p>The waiting rule protects both reads and overwrites of uncommitted values.</p><p>Strictness makes undo simpler because an uncommitted value has not escaped to another transaction.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>After T1 writes A, both T2&#x27;s read(A) and write(A) wait until T1 finishes.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Classify a dirty-read schedule</h2><p>T1 writes A. T2 reads A. T1 aborts. T2 then commits.</p></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Check the value T2 read</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Check commit order</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Classify it</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Check the value T2 read</h3><p>T2 read a value written by T1 before T1 committed. That is a dirty read.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Check commit order</h3><p>T2 committed before knowing whether T1&#x27;s value would remain valid. If T1 aborts, T2 has already committed based on undone data.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Classify it</h3><p>This schedule is not recoverable, not cascadeless, and not strict. A strict schedule would block T2&#x27;s read and write of A until T1 ends.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>The implication is strict ⇒ cascadeless ⇒ recoverable. The reverse is not guaranteed.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Given a schedule, determine whether it is recoverable, cascadeless, or strict. Explain dirty reads and cascading rollback.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-04.html">Return to Unit 04</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Transactions &amp; schedules · 04 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

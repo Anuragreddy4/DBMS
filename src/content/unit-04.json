@@ -1,0 +1,20 @@
+{
+  "n": 4,
+  "accent": "gold",
+  "title": "Transactions & schedules",
+  "deck": "Follow transaction state, interleaved operations, serializability, and safe recovery after failure.",
+  "lessons": [
+    {
+      "title": "Transactions, ACID & transaction states"
+    },
+    {
+      "title": "Schedules, concurrency & conflicts"
+    },
+    {
+      "title": "Conflict & view serializability"
+    },
+    {
+      "title": "Recoverable, cascadeless & strict schedules"
+    }
+  ]
+}

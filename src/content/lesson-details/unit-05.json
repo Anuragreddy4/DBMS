@@ -1,0 +1,423 @@
+{
+  "lessons": [
+    {
+      "plain": "Locks control who may read or change an item at the same time. Two-phase locking gives a safe pattern; a wait-for graph helps find deadlocks.",
+      "goals": [
+        "Explain shared and exclusive locks",
+        "Trace basic and strict 2PL",
+        "Detect a deadlock in a wait-for graph"
+      ],
+      "topics": [
+        {
+          "title": "Shared and exclusive locks",
+          "definition": "A shared (S) lock allows reading. An exclusive (X) lock allows reading and writing and must be held alone.",
+          "details": [
+            "Several transactions can hold S on the same item at once. An X request conflicts with S or X already held by another transaction.",
+            "For multiple-granularity locking, IS and IX announce plans to lock smaller objects; SIX combines shared access with an intention to take exclusive locks below."
+          ],
+          "example": "Two users may both read a course description under S locks. A writer needs X before changing that description."
+        },
+        {
+          "title": "Two-phase locking",
+          "definition": "2PL has a growing phase, when locks may be acquired, and a shrinking phase, when locks may be released but no new locks may be acquired.",
+          "details": [
+            "Basic 2PL guarantees conflict serializability. Strict 2PL holds exclusive locks until commit or abort, preventing others from reading or overwriting those uncommitted writes.",
+            "Conservative 2PL asks for every needed lock before the transaction starts. It prevents deadlock but may make a transaction wait even when some of its requested items are free."
+          ],
+          "example": "After T1 releases its first lock, it cannot acquire a new one under 2PL."
+        },
+        {
+          "title": "Deadlock",
+          "definition": "A deadlock is a cycle of transactions waiting for locks held by one another.",
+          "details": [
+            "In a wait-for graph, Ti→Tj means Ti is waiting for a lock held by Tj. A directed cycle means no transaction in the cycle can proceed without intervention.",
+            "A DBMS can prevent deadlock, detect a cycle and roll back a victim, or use a timeout."
+          ],
+          "example": "If T1 holds A and waits for B, while T2 holds B and waits for A, the graph T1→T2→T1 is a deadlock."
+        }
+      ],
+      "worked": {
+        "title": "Trace a lock conflict and deadlock",
+        "setup": "T1 needs A then B. T2 needs B then A. Both request exclusive locks.",
+        "steps": [
+          {
+            "title": "Grant the first locks",
+            "body": "T1 gets X(A). T2 gets X(B). These locks are on different items, so both requests can be granted."
+          },
+          {
+            "title": "Observe the waits",
+            "body": "T1 requests X(B) and waits for T2. T2 requests X(A) and waits for T1."
+          },
+          {
+            "title": "Draw the wait-for graph",
+            "body": "Add T1→T2 and T2→T1. The cycle proves a deadlock; aborting one transaction releases its lock so the other can continue."
+          }
+        ],
+        "answer": "The deadlock can be prevented by a consistent lock order, or detected and resolved by rolling back one victim.",
+        "table": {
+          "headers": [
+            "Requested lock",
+            "S already held",
+            "X already held"
+          ],
+          "rows": [
+            [
+              "S",
+              "Grant",
+              "Wait"
+            ],
+            [
+              "X",
+              "Wait",
+              "Wait"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "Two transactions wait in a cycle",
+        "caption": "A wait-for cycle means the system must prevent, detect, or break the deadlock.",
+        "nodes": [
+          [
+            "T1",
+            "holds A"
+          ],
+          [
+            "T2",
+            "holds B"
+          ],
+          [
+            "T1 waits",
+            "for B"
+          ],
+          [
+            "T2 waits",
+            "for A"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      },
+      "exam": "Show how 2PL ensures conflict serializability. Compare its variants, explain strict 2PL, state lock compatibility, and detect deadlock from a wait-for graph."
+    },
+    {
+      "plain": "Timestamp ordering gives each transaction a place in a planned serial order. Every read or write must respect that order.",
+      "goals": [
+        "Define transaction and item timestamps",
+        "Apply readTS and writeTS checks",
+        "Explain Thomas's write rule"
+      ],
+      "topics": [
+        {
+          "title": "Transaction timestamps",
+          "definition": "TS(T) is the unique timestamp assigned to transaction T. Smaller timestamps mean earlier in the intended serial order.",
+          "details": [
+            "For each item Q, readTS(Q) stores the largest timestamp of any transaction that successfully read Q.",
+            "writeTS(Q) stores the largest timestamp of any transaction that successfully wrote Q."
+          ],
+          "example": "If readTS(Q)=25, the item has already been read by a transaction whose timestamp is 25."
+        },
+        {
+          "title": "Read and write checks",
+          "definition": "Timestamp ordering rejects an operation when allowing it would contradict the assigned transaction order.",
+          "details": [
+            "A read by T is rejected if TS(T)<writeTS(Q): an earlier transaction is trying to read before a newer value that already exists.",
+            "For write(Q), abort T if TS(T)<readTS(Q). If TS(T)<writeTS(Q), the write is obsolete; basic ordering aborts it, while Thomas's rule ignores it. Otherwise, perform the write and update writeTS(Q)."
+          ],
+          "example": "An older transaction cannot overwrite a value after a newer transaction has already read it."
+        },
+        {
+          "title": "Thomas's write rule",
+          "definition": "Thomas's rule ignores a write that is older than the value already written, instead of aborting the whole transaction.",
+          "details": [
+            "The newer write already makes the old value irrelevant to the final database state.",
+            "It permits some schedules that basic timestamp ordering rejects, while keeping the valid timestamp order."
+          ],
+          "example": "If TS(T)=10 but writeTS(Q)=20, T's write is obsolete; ignore that write rather than replace Q with older data."
+        }
+      ],
+      "worked": {
+        "title": "Check operations on item Q",
+        "setup": "Let TS(T1)=10, TS(T2)=20, and TS(T3)=30. Initially readTS(Q)=0 and writeTS(Q)=0.",
+        "steps": [
+          {
+            "title": "T2 writes Q",
+            "body": "20 is not less than readTS(Q)=0 or writeTS(Q)=0. Accept the write and set writeTS(Q)=20."
+          },
+          {
+            "title": "T1 tries to read Q",
+            "body": "TS(T1)=10 is less than writeTS(Q)=20. Abort T1's read: it is too old to see a value written by a later transaction."
+          },
+          {
+            "title": "T1 tries an old write instead",
+            "body": "Because 10 is less than writeTS(Q)=20, basic timestamp ordering aborts it. Thomas's rule may ignore the obsolete write."
+          }
+        ],
+        "answer": "Use readTS to protect earlier readers and writeTS to protect the order of writes. State clearly whether the Thomas rule is being applied.",
+        "table": {
+          "headers": [
+            "Operation",
+            "Check",
+            "Outcome"
+          ],
+          "rows": [
+            [
+              "T2: write(Q)",
+              "20 ≥ 0",
+              "Accept; writeTS=20"
+            ],
+            [
+              "T1: read(Q)",
+              "10 < writeTS 20",
+              "Abort"
+            ],
+            [
+              "T1: write(Q)",
+              "10 < writeTS 20",
+              "Abort or ignore by Thomas"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "An item remembers who read and wrote it",
+        "caption": "The item timestamps constrain later operations.",
+        "nodes": [
+          [
+            "TS(T)",
+            "transaction order"
+          ],
+          [
+            "readTS(Q)",
+            "latest reader"
+          ],
+          [
+            "writeTS(Q)",
+            "latest writer"
+          ],
+          [
+            "Decision",
+            "allow, abort, or ignore"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Explain timestamp ordering using readTS and writeTS, then demonstrate Thomas's write rule on a schedule."
+    },
+    {
+      "plain": "Validation-based control lets a transaction work privately first. Just before it publishes changes, the DBMS checks whether another transaction made its work unsafe.",
+      "goals": [
+        "Name the read, validation, and write phases",
+        "Explain what validation checks",
+        "Choose when optimistic control is useful"
+      ],
+      "topics": [
+        {
+          "title": "Read phase",
+          "definition": "The transaction reads database values and calculates proposed changes in a private workspace.",
+          "details": [
+            "It records the items it read and the items it plans to write.",
+            "Other transactions are not blocked by locks held for this private work."
+          ],
+          "example": "A seat-booking transaction reads the available-seat count and prepares a new enrollment without publishing it yet."
+        },
+        {
+          "title": "Validation phase",
+          "definition": "Before writing, the DBMS checks whether the transaction can be serialized with transactions that overlapped it.",
+          "details": [
+            "Validation compares read sets and write sets and considers which transactions started, validated, and wrote first.",
+            "If another committed transaction changed information this transaction relied on, validation rejects it so it can retry with fresh data."
+          ],
+          "example": "Two transactions both read that one seat is free. The second cannot publish its enrollment using that now-stale count."
+        },
+        {
+          "title": "Write phase and workload",
+          "definition": "If validation succeeds, the DBMS applies the buffered writes. If it fails, the transaction aborts and may restart.",
+          "details": [
+            "This approach works well when conflicts are rare because transactions can read without waiting for locks.",
+            "Under high contention, repeated failed validations waste work. Range or predicate locking may be needed to prevent a phantom row from changing a query's result set."
+          ],
+          "example": "Read-heavy reports may benefit; a hot inventory counter may cause many retries."
+        }
+      ],
+      "worked": {
+        "title": "Two students try to take the last seat",
+        "setup": "A course has one available seat. T1 and T2 both read available=1 before either writes.",
+        "steps": [
+          {
+            "title": "Read privately",
+            "body": "T1 and T2 each read the same count and prepare an enrollment in their private workspace."
+          },
+          {
+            "title": "Validate T1",
+            "body": "T1 validates first. No conflicting committed write has changed its read set, so T1 passes and publishes its enrollment."
+          },
+          {
+            "title": "Validate T2",
+            "body": "T2 now validates against T1's write. The seat count T2 relied on is stale, so T2 fails validation, refreshes the count, and reports that no seat remains."
+          }
+        ],
+        "answer": "Validation prevents both enrollments from claiming the same last seat without locking every read during the initial work."
+      },
+      "exam": "Describe the read, validation, and write phases. Compare validation-based, lock-based, and timestamp-based control for different workloads."
+    },
+    {
+      "plain": "A log records concurrent changes. Write-ahead logging lets recovery redo committed work and undo incomplete work; checkpoints and the buffer manager help restore consistent pages.",
+      "goals": [
+        "Apply WAL and distinguish undo from redo",
+        "Explain checkpoints and recovery with concurrent transactions",
+        "Describe page pins, dirty pages, and buffer replacement"
+      ],
+      "topics": [
+        {
+          "title": "Log-based recovery, atomicity, and WAL",
+          "definition": "A log records transaction actions so the DBMS can recover after a failure. WAL requires the log record to reach stable storage before the changed data page is written.",
+          "details": [
+            "A log record identifies its transaction and update. Depending on the recovery method it contains the old value, the new value, or enough information to reconstruct them.",
+            "Undo restores the before-image of an uncommitted update. Redo repeats an update that belongs to committed work. WAL requires the relevant log record to reach stable storage before its changed data page is written.",
+            "A system can use force or no-force and steal or no-steal policies. These choices determine which updates may need redo or undo after a crash; log-based recovery handles the chosen policy."
+          ],
+          "example": "Before flushing a page that now contains balance=80, the log record describing the change must already be durable. If the update was uncommitted at crash time, undo restores the old balance; if it committed but the page was not flushed, redo restores 80."
+        },
+        {
+          "title": "Checkpoint and ARIES",
+          "definition": "A checkpoint records recovery information so restart can begin near recent work. ARIES recovers in Analysis, Redo, and Undo phases.",
+          "details": [
+            "Analysis finds active transactions and dirty pages. Redo repeats the history needed to restore pages. Undo rolls back incomplete transactions and records compensation log records.",
+            "A checkpoint can be fuzzy: transactions may continue while it is written."
+          ],
+          "example": "The transaction table and dirty-page table help recovery identify which work and pages need attention."
+        },
+        {
+          "title": "Buffer manager",
+          "definition": "The buffer manager keeps disk pages in memory while queries use them.",
+          "details": [
+            "Pin means a page is currently in use and cannot be replaced. Unpin says the operation is done with it. A dirty bit means the page has changes not yet flushed to disk.",
+            "LRU and clock are replacement strategies for choosing an unpinned page to evict. Flushing writes a page back to storage, subject to WAL."
+          ],
+          "example": "A query pins a page, reads rows, then unpins it. If it changed a row, the page is dirty until flushed."
+        },
+        {
+          "title": "Recovery with concurrent transactions",
+          "definition": "Concurrent recovery tracks several transactions whose log records may be interleaved, then restores committed work and removes incomplete work after a crash.",
+          "details": [
+            "Each log record includes a transaction identifier and a log sequence number. A checkpoint helps recovery identify active transactions and pages that may need repair.",
+            "Recovery distinguishes committed transactions (winners) from incomplete transactions (losers). It redoes required history so pages are consistent, then undoes loser transactions; ARIES records compensation log records during undo.",
+            "The log order matters even when transactions overlap. Recovery follows the log rather than assuming each transaction occupied one uninterrupted block."
+          ],
+          "example": "T1 updates page P and commits. T2 updates page Q but has no commit record when power fails. On restart, recovery ensures T1’s update is present and undoes T2’s incomplete update, even if their log records were interleaved."
+        }
+      ],
+      "worked": {
+        "title": "Recover after a crash",
+        "setup": "T1 transferred funds and committed. T2 started an update but did not commit before the crash. T1's log is durable; one data page was not flushed.",
+        "steps": [
+          {
+            "title": "Analysis",
+            "body": "Recovery scans the log and identifies T1 as committed and T2 as incomplete. It also identifies pages that may contain unflushed changes."
+          },
+          {
+            "title": "Redo",
+            "body": "Recovery reapplies T1's logged update if the page lacks it, ensuring the committed transfer is present."
+          },
+          {
+            "title": "Undo",
+            "body": "Recovery reverses T2's incomplete update using the before-image or undo information, then records that action in the log."
+          }
+        ],
+        "answer": "The recovered database includes all committed work and none of T2's partial work. WAL makes the needed undo and redo information available."
+      },
+      "exam": "Explain WAL, log records, atomicity and durability, undo/redo, checkpoints, recovery with concurrent transactions, and buffer management.",
+      "diagram": {
+        "title": "Recover concurrent work after a crash",
+        "caption": "The log preserves update order; restart redoes committed work and undoes incomplete work.",
+        "nodes": [
+          [
+            "Transactions",
+            "T1 and T2 overlap"
+          ],
+          [
+            "Write-ahead log",
+            "records updates"
+          ],
+          [
+            "Crash",
+            "some pages lag"
+          ],
+          [
+            "Redo winners",
+            "keep committed work"
+          ],
+          [
+            "Undo losers",
+            "remove incomplete work"
+          ],
+          [
+            "Consistent DB",
+            "restart completes"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
+      "diagramTopic": "Recovery with concurrent transactions"
+    }
+  ]
+}

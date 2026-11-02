@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="Relational calculus describes the condition a result row must satisfy. It says what to return, not which sequence of table operations to run."><title>Relational calculus &amp; safe queries | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--coral)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-02.html">Unit 02</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-02.html">Unit 02: Relations &amp; query logic</a><span>›</span><span>Lesson 03</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 02 · LESSON 03</div><h1>Relational calculus &amp; safe queries</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>Relational calculus describes the condition a result row must satisfy. It says what to return, not which sequence of table operations to run.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Tell tuple calculus from domain calculus</li><li>Read predicates and quantifiers</li><li>Explain why unsafe queries must be restricted</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Tuple relational calculus (TRC)</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>Domain relational calculus (DRC)</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Safe queries</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Tuple relational calculus (TRC)</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>TRC uses a tuple variable to describe each possible result row. Its form is { t | condition about t }.</p></div>
+          <p>The condition can refer to tuples in relations and compare their attributes.</p><p>A tuple variable ranges over possible tuples, so a safe query must restrict it to values grounded in the database.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>{s.name | STUDENT(s) and s.program=&#x27;CS&#x27;} describes the names of students whose program is CS.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>Domain relational calculus (DRC)</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>DRC uses one variable per attribute value. Its form is { &lt;x1,…,xn&gt; | condition about those values }.</p></div>
+          <p>TRC ranges over whole tuples; DRC ranges over the values in the tuple&#x27;s columns.</p><p>Both use logic such as AND, OR, NOT, and exists. An &#x27;all&#x27; condition can be written as &#x27;there is no required item missing&#x27;.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>A DRC query can return &lt;n&gt; when some &lt;id,n,p&gt; is a STUDENT row and p=&#x27;CS&#x27;.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Safe queries</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A safe query has a finite result whose values come from the active database domain.</p></div>
+          <p>A query that asks for every value that is not in a relation could range over all possible strings or numbers, producing an unbounded answer.</p><p>Make the query safe by anchoring variables to rows or values that occur in the database, then apply the negative condition.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>Instead of listing all possible people who are not students, start with the finite PERSON relation and return its rows for which no STUDENT row exists.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Find students enrolled in course C7</h2><p>STUDENT(sid,name) and ENROLLMENT(sid,cid). Return names, not the whole student row.</p><pre class="lesson-code"><code>{ s.name | STUDENT(s) AND EXISTS e (
+    ENROLLMENT(e) AND e.sid=s.sid
+    AND e.cid=&#x27;C7&#x27;
+) }</code></pre></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Choose the result variable</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Connect the matching registration</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Keep the query safe</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Choose the result variable</h3><p>In TRC, use s to stand for a STUDENT tuple. The result value will be s.name.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Connect the matching registration</h3><p>Require that an ENROLLMENT tuple e exists with e.sid=s.sid and e.cid=&#x27;C7&#x27;.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Keep the query safe</h3><p>The variable s is restricted by STUDENT(s), so possible answers come from actual student rows rather than every imaginable tuple.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>TRC: { s.name | STUDENT(s) and exists e (ENROLLMENT(e) and e.sid=s.sid and e.cid=&#x27;C7&#x27;) }. The same condition can be written in DRC using variables for sid and name.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Compare TRC and DRC. Define safety and explain why an unrestricted negated query may be unsafe.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-02.html">Return to Unit 02</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Relations &amp; query logic · 03 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

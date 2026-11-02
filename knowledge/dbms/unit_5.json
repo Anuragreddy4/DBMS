@@ -1,0 +1,459 @@
+{
+  "number": 5,
+  "label": "Unit 5",
+  "text": "Lock Based Protocols Timestamp Based Protocols - Validation- Based Protocols. Recovery and Atomicity Log - Based Recovery Recovery with Concurrent Transactions Buffer Management",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 45,
+  "questions": [
+    {
+      "id": "u5-a-1-185",
+      "unit": 5,
+      "part": "A",
+      "number": 1,
+      "text": "Define two-phase locking (2PL); distinguish basic, conservative, and strict 2PL.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-2-186",
+      "unit": 5,
+      "part": "A",
+      "number": 2,
+      "text": "What are lock modes S, X, IS, IX? Provide a small compatibility matrix.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-3-187",
+      "unit": 5,
+      "part": "A",
+      "number": 3,
+      "text": "What is timestamp ordering? Explain readTS and writeTS.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-4-188",
+      "unit": 5,
+      "part": "A",
+      "number": 4,
+      "text": "What is deadlock? Name two prevention strategies.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-5-189",
+      "unit": 5,
+      "part": "A",
+      "number": 5,
+      "text": "Define phantom problem; how does predicate locking or index locking address it?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-6-190",
+      "unit": 5,
+      "part": "A",
+      "number": 6,
+      "text": "What is a validation phase in optimistic CC?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-7-191",
+      "unit": 5,
+      "part": "A",
+      "number": 7,
+      "text": "Define atomicity and recovery; list log record fields.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-8-192",
+      "unit": 5,
+      "part": "A",
+      "number": 8,
+      "text": "What is fuzzy checkpointing?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-9-193",
+      "unit": 5,
+      "part": "A",
+      "number": 9,
+      "text": "What is buffer replacement policy? Name LRU and clock.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-10-194",
+      "unit": 5,
+      "part": "A",
+      "number": 10,
+      "text": "What is write-back vs write-through in buffer management?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-11-195",
+      "unit": 5,
+      "part": "A",
+      "number": 11,
+      "text": "What is a locking protocol?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-12-196",
+      "unit": 5,
+      "part": "A",
+      "number": 12,
+      "text": "How does 2PL ensure serializability?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-13-197",
+      "unit": 5,
+      "part": "A",
+      "number": 13,
+      "text": "What is strict 2PL?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-14-198",
+      "unit": 5,
+      "part": "A",
+      "number": 14,
+      "text": "What are the drawbacks of lock-based protocols?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-15-199",
+      "unit": 5,
+      "part": "A",
+      "number": 15,
+      "text": "What is the timestamp of a database item?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-16-200",
+      "unit": 5,
+      "part": "A",
+      "number": 16,
+      "text": "State Thomas Write Rule.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-17-201",
+      "unit": 5,
+      "part": "A",
+      "number": 17,
+      "text": "What is validation-based protocol?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-18-202",
+      "unit": 5,
+      "part": "A",
+      "number": 18,
+      "text": "What are the three phases of validation-based protocol?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-19-203",
+      "unit": 5,
+      "part": "A",
+      "number": 19,
+      "text": "When is validation-based protocol most suitable?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-20-204",
+      "unit": 5,
+      "part": "A",
+      "number": 20,
+      "text": "What is write-ahead logging (WAL)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-21-205",
+      "unit": 5,
+      "part": "A",
+      "number": 21,
+      "text": "What is an update log record?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-22-206",
+      "unit": 5,
+      "part": "A",
+      "number": 22,
+      "text": "How is atomicity and durability implemented?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-23-207",
+      "unit": 5,
+      "part": "A",
+      "number": 23,
+      "text": "Explain log-based recovery.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-24-208",
+      "unit": 5,
+      "part": "A",
+      "number": 24,
+      "text": "How is recovery done in concurrent transactions?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-25-209",
+      "unit": 5,
+      "part": "A",
+      "number": 25,
+      "text": "What is buffer management?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-a-26-210",
+      "unit": 5,
+      "part": "A",
+      "number": 26,
+      "text": "Compare volatile storage and non-volatile storage.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 6
+    },
+    {
+      "id": "u5-b-1-211",
+      "unit": 5,
+      "part": "B",
+      "number": 1,
+      "text": "Explain 2PL variants with timelines; prove that strict 2PL ensures conflict-serializability and simplifies recovery.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-2-212",
+      "unit": 5,
+      "part": "B",
+      "number": 2,
+      "text": "Describe timestamp ordering protocol; handle RW, WR, and WW conflicts with examples; analyze starvation scenarios and remedies.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-3-213",
+      "unit": 5,
+      "part": "B",
+      "number": 3,
+      "text": "Compare locking, timestamp, and optimistic protocols across throughput, abort rate, and workload characteristics; recommend for OLTP vs OLAP.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-4-214",
+      "unit": 5,
+      "part": "B",
+      "number": 4,
+      "text": "Detail log-based recovery with concurrent transactions: undo/redo logging, physiological logging, compensation log records (CLRs); walk through a crash example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-5-215",
+      "unit": 5,
+      "part": "B",
+      "number": 5,
+      "text": "Explain buffer manager architecture: page pin/unpin, dirty bit, flush, replacement; simulate a query’s page lifecycle and analyze I/O cost under different replacement policies.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-6-216",
+      "unit": 5,
+      "part": "B",
+      "number": 6,
+      "text": "Explain basic Two-Phase Locking (2PL) and how it ensures conflict serializability.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-7-217",
+      "unit": 5,
+      "part": "B",
+      "number": 7,
+      "text": "Explain strict 2PL locking protocol with example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-8-218",
+      "unit": 5,
+      "part": "B",
+      "number": 8,
+      "text": "Discuss the drawbacks of lock-based concurrency control.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-9-219",
+      "unit": 5,
+      "part": "B",
+      "number": 9,
+      "text": "Explain timestamp-based concurrency control in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-10-220",
+      "unit": 5,
+      "part": "B",
+      "number": 10,
+      "text": "Explain Thomas Write Rule with example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-11-221",
+      "unit": 5,
+      "part": "B",
+      "number": 11,
+      "text": "Explain validation-based protocol and its three phases.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-12-222",
+      "unit": 5,
+      "part": "B",
+      "number": 12,
+      "text": "How does validation protocol overcome timestamp protocol limitations?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-13-223",
+      "unit": 5,
+      "part": "B",
+      "number": 13,
+      "text": "Explain write-ahead logging and its importance.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-14-224",
+      "unit": 5,
+      "part": "B",
+      "number": 14,
+      "text": "Explain implementation of atomicity and durability.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-15-225",
+      "unit": 5,
+      "part": "B",
+      "number": 15,
+      "text": "Discuss log-based recovery schemes for handling system crash.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-16-226",
+      "unit": 5,
+      "part": "B",
+      "number": 16,
+      "text": "Explain recovery with concurrent transactions.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-17-227",
+      "unit": 5,
+      "part": "B",
+      "number": 17,
+      "text": "Explain durability of a transaction with example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-18-228",
+      "unit": 5,
+      "part": "B",
+      "number": 18,
+      "text": "Discuss buffer management techniques.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    },
+    {
+      "id": "u5-b-19-229",
+      "unit": 5,
+      "part": "B",
+      "number": 19,
+      "text": "Compare lock-based, timestamp-based, and validation-based protocols.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 7
+    }
+  ]
+}

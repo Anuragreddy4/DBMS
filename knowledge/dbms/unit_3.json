@@ -1,0 +1,469 @@
+{
+  "number": 3,
+  "label": "Unit 3",
+  "text": "Introduction to Schema Refinement - Problems Caused by redundancy, Decompositions- Problem related to decomposition, Functional Dependencies- Reasoning about FDS, Normal Forms - FIRST, SECOND, THIRD Normal forms - BCNF - Properties of Decompositions - Loss less join Decomposition, Dependency preserving Decomposition, Schema Refinement in Data base Design - Multi valued Dependencies - FOURTH Normal Form.",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 46,
+  "questions": [
+    {
+      "id": "u3-a-1-96",
+      "unit": 3,
+      "part": "A",
+      "number": 1,
+      "text": "Define functional dependency (FD) and notation X → Y.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-2-97",
+      "unit": 3,
+      "part": "A",
+      "number": 2,
+      "text": "What is Armstrong’s axioms? List them.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-3-98",
+      "unit": 3,
+      "part": "A",
+      "number": 3,
+      "text": "Define closure of attribute set X+ and its use.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-4-99",
+      "unit": 3,
+      "part": "A",
+      "number": 4,
+      "text": "Define Boyce–Codd Normal Form (BCNF).",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-5-100",
+      "unit": 3,
+      "part": "A",
+      "number": 5,
+      "text": "What is a lossless-join decomposition?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-6-101",
+      "unit": 3,
+      "part": "A",
+      "number": 6,
+      "text": "What is dependency-preserving decomposition?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-7-102",
+      "unit": 3,
+      "part": "A",
+      "number": 7,
+      "text": "Give one example causing update anomaly (insert/delete/modify).",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-8-103",
+      "unit": 3,
+      "part": "A",
+      "number": 8,
+      "text": "Does BCNF guarantee dependency preservation? State why/why not.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 3
+    },
+    {
+      "id": "u3-a-9-104",
+      "unit": 3,
+      "part": "A",
+      "number": 9,
+      "text": "Define schema refinement.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-10-105",
+      "unit": 3,
+      "part": "A",
+      "number": 10,
+      "text": "What are the problems caused by data redundancy?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-11-106",
+      "unit": 3,
+      "part": "A",
+      "number": 11,
+      "text": "What is a functional dependency?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-12-107",
+      "unit": 3,
+      "part": "A",
+      "number": 12,
+      "text": "Define trivial functional dependency.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-13-108",
+      "unit": 3,
+      "part": "A",
+      "number": 13,
+      "text": "What is attribute closure?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-14-109",
+      "unit": 3,
+      "part": "A",
+      "number": 14,
+      "text": "What are Armstrong’s inference rules?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-15-110",
+      "unit": 3,
+      "part": "A",
+      "number": 15,
+      "text": "What are the properties of decomposition?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-16-111",
+      "unit": 3,
+      "part": "A",
+      "number": 16,
+      "text": "Define lossless join decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-17-112",
+      "unit": 3,
+      "part": "A",
+      "number": 17,
+      "text": "Define dependency preserving decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-18-113",
+      "unit": 3,
+      "part": "A",
+      "number": 18,
+      "text": "What is First Normal Form (1NF)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-19-114",
+      "unit": 3,
+      "part": "A",
+      "number": 19,
+      "text": "What is Second Normal Form (2NF)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-20-115",
+      "unit": 3,
+      "part": "A",
+      "number": 20,
+      "text": "What is Third Normal Form (3NF)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-21-116",
+      "unit": 3,
+      "part": "A",
+      "number": 21,
+      "text": "What is a multivalued dependency (MVD)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-22-117",
+      "unit": 3,
+      "part": "A",
+      "number": 22,
+      "text": "What is Fourth Normal Form (4NF)?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-23-118",
+      "unit": 3,
+      "part": "A",
+      "number": 23,
+      "text": "What are insertion, deletion, and update anomalies?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-24-119",
+      "unit": 3,
+      "part": "A",
+      "number": 24,
+      "text": "What is redundancy in a relation?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-a-25-120",
+      "unit": 3,
+      "part": "A",
+      "number": 25,
+      "text": "What is canonical cover?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-1-121",
+      "unit": 3,
+      "part": "B",
+      "number": 1,
+      "text": "For a relation R(A,B,C,D,E) with FD set F = {A→B, BC→D, D→E, E→A}, compute candidate keys, minimal cover, and decompose R into BCNF, showing lossless and whether dependencies are preserved.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-2-122",
+      "unit": 3,
+      "part": "B",
+      "number": 2,
+      "text": "Explain redundancy problems and anomalies with a concrete table; normalize stepwise from UNF to 3NF; justify each step.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-3-123",
+      "unit": 3,
+      "part": "B",
+      "number": 3,
+      "text": "Prove the lossless-join test using the chase/tableau method and apply it to a provided decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-4-124",
+      "unit": 3,
+      "part": "B",
+      "number": 4,
+      "text": "Explain multivalued dependencies and 4NF; give an example where 3NF/BCNF still has redundancy and show 4NF decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-5-125",
+      "unit": 3,
+      "part": "B",
+      "number": 5,
+      "text": "Compare 3NF and BCNF in terms of dependency preservation and redundancy; design a schema meeting both lossless and dependency-preserving goals, or argue why impossible in a given case.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-6-126",
+      "unit": 3,
+      "part": "B",
+      "number": 6,
+      "text": "Explain functional dependencies in detail with suitable examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-7-127",
+      "unit": 3,
+      "part": "B",
+      "number": 7,
+      "text": "Explain the problems caused by redundancy with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-8-128",
+      "unit": 3,
+      "part": "B",
+      "number": 8,
+      "text": "Illustrate insertion, deletion, and update anomalies in an unnormalized relation.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-9-129",
+      "unit": 3,
+      "part": "B",
+      "number": 9,
+      "text": "Explain the need for normalization in DBMS.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-10-130",
+      "unit": 3,
+      "part": "B",
+      "number": 10,
+      "text": "Explain 1NF, 2NF, 3NF with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-11-131",
+      "unit": 3,
+      "part": "B",
+      "number": 11,
+      "text": "Compare 3NF and BCNF.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-12-132",
+      "unit": 3,
+      "part": "B",
+      "number": 12,
+      "text": "Explain BCNF with suitable example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-13-133",
+      "unit": 3,
+      "part": "B",
+      "number": 13,
+      "text": "Compare BCNF and 4NF.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-14-134",
+      "unit": 3,
+      "part": "B",
+      "number": 14,
+      "text": "Explain multivalued dependency and Fourth Normal Form with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-15-135",
+      "unit": 3,
+      "part": "B",
+      "number": 15,
+      "text": "Explain lossless join decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-16-136",
+      "unit": 3,
+      "part": "B",
+      "number": 16,
+      "text": "Explain dependency preserving decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-17-137",
+      "unit": 3,
+      "part": "B",
+      "number": 17,
+      "text": "Discuss the properties of decomposition.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-18-138",
+      "unit": 3,
+      "part": "B",
+      "number": 18,
+      "text": "Explain the significance of schema refinement in database design.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-19-139",
+      "unit": 3,
+      "part": "B",
+      "number": 19,
+      "text": "Compute closure of a set of functional dependencies and identify candidate keys.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 4
+    },
+    {
+      "id": "u3-b-20-140",
+      "unit": 3,
+      "part": "B",
+      "number": 20,
+      "text": "Compute the canonical cover of a set of FDs.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    },
+    {
+      "id": "u3-b-21-141",
+      "unit": 3,
+      "part": "B",
+      "number": 21,
+      "text": "Explain how a relation is converted from 3NF to BCNF.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 5
+    }
+  ]
+}

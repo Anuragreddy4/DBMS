@@ -1,0 +1,411 @@
+{
+  "lessons": [
+    {
+      "plain": "A relational database stores data in named tables. Keys identify rows; constraints keep rows valid; logical design maps the ER model into tables and references.",
+      "goals": [
+        "Explain relation, tuple, attribute, domain, degree, and cardinality",
+        "Find candidate, primary, and foreign keys",
+        "Apply integrity rules to a small database"
+      ],
+      "topics": [
+        {
+          "title": "Relation, tuple, attribute, and domain",
+          "definition": "A relation is a set of rows with named columns. A tuple is one row, an attribute is one column, and a domain is the allowed kind of value for that column.",
+          "details": [
+            "Degree (or arity) counts the attributes. Cardinality counts the tuples currently in the relation.",
+            "In the mathematical model, a relation has no duplicate tuples and no meaningful row order. A table display may show an order, but a query needs ORDER BY to request one."
+          ],
+          "example": "STUDENT(sid, name, program) has degree 3. If it currently has 40 students, its cardinality is 40."
+        },
+        {
+          "title": "Keys",
+          "definition": "A superkey is any set of attributes that uniquely identifies a row. A candidate key is a smallest such set. One candidate is chosen as the primary key.",
+          "details": [
+            "A table may have several candidate keys. A composite key contains more than one attribute.",
+            "A foreign key in one table points to a key in another table, linking the rows."
+          ],
+          "example": "In ENROLLMENT(sid,cid,term,grade), (sid,cid,term) may be the key if a student can take the same course in different terms."
+        },
+        {
+          "title": "Integrity constraints",
+          "definition": "An integrity constraint is a rule every valid database state must obey.",
+          "details": [
+            "A domain rule restricts a value's type or range. A key rule prevents duplicate identifiers. Entity integrity says no part of the primary key can be NULL.",
+            "Referential integrity says a non-NULL foreign-key value must match an existing referenced key. This prevents orphan rows."
+          ],
+          "example": "If ENROLLMENT.sid refers to STUDENT.sid, a registration for sid=999 is rejected when no student 999 exists."
+        },
+        {
+          "title": "Logical database design: ER model to relations",
+          "definition": "Logical database design converts a conceptual model into relation schemas with keys and constraints while keeping the real-world meaning clear.",
+          "details": [
+            "Create a relation for each strong entity set and choose its primary key. Include useful components of composite attributes as columns.",
+            "For a 1:N relationship, place the key from the one side as a foreign key on the many side. For an M:N relationship, create a bridge relation containing both keys and any relationship attributes.",
+            "Represent a weak entity with the owner key plus its partial key. Check that foreign keys and uniqueness rules preserve the original ER constraints."
+          ],
+          "example": "Map STUDENT–ENROLLS–COURSE to STUDENT(sid,name), COURSE(cid,title), and ENROLLMENT(sid,cid,term,grade). ENROLLMENT has foreign keys to both parent tables and a key such as (sid,cid,term)."
+        }
+      ],
+      "worked": {
+        "title": "Check one enrollment row",
+        "setup": "STUDENT contains sid values 14 and 22. COURSE contains cid values 301 and 302. ENROLLMENT uses key (sid,cid).",
+        "steps": [
+          {
+            "title": "Check the domain",
+            "body": "A sid must be an integer, cid must be an integer, and grade must use the allowed grade values."
+          },
+          {
+            "title": "Check the key",
+            "body": "The pair (22,301) may appear once. A second row with the same pair would describe the same enrollment twice."
+          },
+          {
+            "title": "Check the references",
+            "body": "(22,301,'A') is valid because student 22 and course 301 exist. (999,301,'A') is rejected because student 999 is missing."
+          }
+        ],
+        "answer": "A row is valid only when its values match their domains, its primary key is unique and non-NULL, and its foreign keys refer to existing rows.",
+        "table": {
+          "headers": [
+            "sid",
+            "cid",
+            "grade",
+            "Result"
+          ],
+          "rows": [
+            [
+              "22",
+              "301",
+              "A",
+              "Valid"
+            ],
+            [
+              "999",
+              "301",
+              "A",
+              "Invalid student reference"
+            ],
+            [
+              "22",
+              "301",
+              "B",
+              "Duplicate key"
+            ]
+          ]
+        }
+      },
+      "diagram": null,
+      "exam": "Define relation, tuple, degree, and cardinality. Explain primary and foreign keys and show domain, key, entity, and referential constraints with examples."
+    },
+    {
+      "plain": "Relational algebra builds a query from small table operations. Each operation produces another relation, so the operations can be combined step by step.",
+      "goals": [
+        "Apply selection, projection, and renaming",
+        "Use set operations, products, joins, and division",
+        "Write a multi-step algebra expression and explain intermediate results"
+      ],
+      "topics": [
+        {
+          "title": "Selection and projection",
+          "definition": "Selection σ keeps rows that satisfy a condition. Projection π keeps only the requested columns.",
+          "details": [
+            "Selection σ keeps complete rows that satisfy a condition. Projection π keeps the requested columns; under the relational model it removes duplicate result tuples.",
+            "Use selection to answer “which rows?” and projection to answer “which attributes?” Combine them when a question asks for a few columns from matching rows."
+          ],
+          "example": "σprogram='CS'(STUDENT) keeps CS students. πname(σprogram='CS'(STUDENT)) returns just their names."
+        },
+        {
+          "title": "Set operations and joins",
+          "definition": "Set operations combine compatible relations; joins connect rows whose values satisfy a relationship condition.",
+          "details": [
+            "Union R ∪ S returns rows in either relation; intersection R ∩ S returns rows in both; difference R − S returns rows in R but not S. These operations require union-compatible relations.",
+            "A theta join uses a comparison condition; an equijoin uses equality; a natural join matches same-named attributes and keeps one copy of the join column.",
+            "A Cartesian product pairs every row of one relation with every row of another. A join can be understood as a product followed by a selection."
+          ],
+          "example": "If CS_STUDENT and DBMS_STUDENT have compatible columns, their intersection returns students in both sets. Joining ENROLLMENT with COURSE on cid adds the course title to each registration."
+        },
+        {
+          "title": "Division: 'for every'",
+          "definition": "Division returns values on one side that are paired with every required value on the other side.",
+          "details": [
+            "It is useful when the question contains words such as 'all required courses' or 'every project part'.",
+            "To use it, compare the pairs a person has with the complete set they must have."
+          ],
+          "example": "ENROLLMENT(sid,cid) ÷ REQUIRED(cid) returns students enrolled in every required course."
+        },
+        {
+          "title": "Renaming and Cartesian product",
+          "definition": "Renaming ρ gives a relation or its attributes temporary names. Cartesian product pairs every row from one relation with every row from another.",
+          "details": [
+            "Renaming is especially useful when the same relation is used twice, such as comparing two employees in EMPLOYEE.",
+            "A product of relations with m and n rows has m×n row pairs before a condition filters it. Products can become large, so a join condition is normally applied."
+          ],
+          "example": "Rename EMPLOYEE as E1 and E2. A condition E1.managerId=E2.empId can compare an employee with a manager stored in the same relation."
+        },
+        {
+          "title": "Relational algebra: a multi-step query example",
+          "definition": "A relational algebra expression can combine selection, join, and projection to answer one question from several tables.",
+          "details": [
+            "Translate the question into three decisions: which rows qualify, which relations must be connected, and which columns belong in the answer.",
+            "Apply selective conditions early when possible. Each intermediate result is a relation and becomes the input to the next operation."
+          ],
+          "example": "Question: list names of CS students enrolled in DBMS. Select CS students and the DBMS course, join those results with ENROLLMENT on sid and cid, then project the student name: πname(σprogram='CS' and title='DBMS'(STUDENT ⋈ ENROLLMENT ⋈ COURSE))."
+        }
+      ],
+      "worked": {
+        "title": "Find the names of CS students",
+        "setup": "STUDENT(sid,name,program) has three rows: (11, Asha, CS), (12, Bilal, IT), (13, Chen, CS).",
+        "steps": [
+          {
+            "title": "Filter rows (selection)",
+            "body": "Apply σprogram='CS'. Keep the rows for Asha and Chen; discard Bilal's IT row."
+          },
+          {
+            "title": "Keep one column (projection)",
+            "body": "Apply πname to the filtered result. The sid and program columns are no longer needed."
+          },
+          {
+            "title": "Read the result",
+            "body": "The final relation contains the names Asha and Chen. Each step returns a relation, so the result can be used by another operation."
+          }
+        ],
+        "answer": "πname(σprogram='CS'(STUDENT)) = {Asha, Chen}.",
+        "table": {
+          "headers": [
+            "sid",
+            "name",
+            "program"
+          ],
+          "rows": [
+            [
+              "11",
+              "Asha",
+              "CS"
+            ],
+            [
+              "12",
+              "Bilal",
+              "IT"
+            ],
+            [
+              "13",
+              "Chen",
+              "CS"
+            ]
+          ]
+        }
+      },
+      "diagram": {
+        "title": "A query is a chain of table operations",
+        "caption": "Filter first, then choose the columns to return.",
+        "nodes": [
+          [
+            "STUDENT",
+            "all rows"
+          ],
+          [
+            "Selection σ",
+            "keep CS rows"
+          ],
+          [
+            "Projection π",
+            "keep names"
+          ],
+          [
+            "Result",
+            "Asha · Chen"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Write relational-algebra expressions for selection, projection, set operations, joins, and division. Show the intermediate relation for each step.",
+      "diagramTopic": "Relational algebra: a multi-step query example"
+    },
+    {
+      "plain": "Relational calculus describes the condition a result row must satisfy. It says what to return, not which sequence of table operations to run.",
+      "goals": [
+        "Tell tuple calculus from domain calculus",
+        "Read predicates and quantifiers",
+        "Explain why unsafe queries must be restricted"
+      ],
+      "topics": [
+        {
+          "title": "Tuple relational calculus (TRC)",
+          "definition": "TRC uses a tuple variable to describe each possible result row. Its form is { t | condition about t }.",
+          "details": [
+            "The condition can refer to tuples in relations and compare their attributes.",
+            "A tuple variable ranges over possible tuples, so a safe query must restrict it to values grounded in the database."
+          ],
+          "example": "{s.name | STUDENT(s) and s.program='CS'} describes the names of students whose program is CS."
+        },
+        {
+          "title": "Domain relational calculus (DRC)",
+          "definition": "DRC uses one variable per attribute value. Its form is { <x1,…,xn> | condition about those values }.",
+          "details": [
+            "TRC ranges over whole tuples; DRC ranges over the values in the tuple's columns.",
+            "Both use logic such as AND, OR, NOT, and exists. An 'all' condition can be written as 'there is no required item missing'."
+          ],
+          "example": "A DRC query can return <n> when some <id,n,p> is a STUDENT row and p='CS'."
+        },
+        {
+          "title": "Safe queries",
+          "definition": "A safe query has a finite result whose values come from the active database domain.",
+          "details": [
+            "A query that asks for every value that is not in a relation could range over all possible strings or numbers, producing an unbounded answer.",
+            "Make the query safe by anchoring variables to rows or values that occur in the database, then apply the negative condition."
+          ],
+          "example": "Instead of listing all possible people who are not students, start with the finite PERSON relation and return its rows for which no STUDENT row exists."
+        }
+      ],
+      "worked": {
+        "title": "Find students enrolled in course C7",
+        "setup": "STUDENT(sid,name) and ENROLLMENT(sid,cid). Return names, not the whole student row.",
+        "steps": [
+          {
+            "title": "Choose the result variable",
+            "body": "In TRC, use s to stand for a STUDENT tuple. The result value will be s.name."
+          },
+          {
+            "title": "Connect the matching registration",
+            "body": "Require that an ENROLLMENT tuple e exists with e.sid=s.sid and e.cid='C7'."
+          },
+          {
+            "title": "Keep the query safe",
+            "body": "The variable s is restricted by STUDENT(s), so possible answers come from actual student rows rather than every imaginable tuple."
+          }
+        ],
+        "answer": "TRC: { s.name | STUDENT(s) and exists e (ENROLLMENT(e) and e.sid=s.sid and e.cid='C7') }. The same condition can be written in DRC using variables for sid and name.",
+        "code": "{ s.name | STUDENT(s) AND EXISTS e (\n    ENROLLMENT(e) AND e.sid=s.sid\n    AND e.cid='C7'\n) }"
+      },
+      "diagram": null,
+      "exam": "Compare TRC and DRC. Define safety and explain why an unrestricted negated query may be unsafe."
+    },
+    {
+      "plain": "Logical design turns the data model into tables. SQL can create, query, alter, and remove tables and views; a view is a saved query that can present a useful window onto data.",
+      "goals": [
+        "Translate an ER design into relation schemas",
+        "Create, query, alter, and remove tables and views",
+        "Explain what a view exposes and when it can be updated"
+      ],
+      "topics": [
+        {
+          "title": "Ask a question with SELECT",
+          "definition": "SELECT names the output columns; FROM names the input relations; WHERE filters rows.",
+          "details": [
+            "JOIN matches related rows from different tables. GROUP BY forms groups, then COUNT, AVG, MIN, and MAX summarize each group.",
+            "ORDER BY is needed when the answer must appear in a particular order."
+          ],
+          "example": "SELECT cid, AVG(score) FROM Result GROUP BY cid returns one average per course."
+        },
+        {
+          "title": "Create and modify database structures",
+          "definition": "CREATE TABLE defines columns, types, keys, and constraints. ALTER TABLE changes a table's structure.",
+          "details": [
+            "CREATE TABLE defines columns, types, keys, and constraints. ALTER TABLE changes the structure; DROP TABLE removes the table definition and its stored rows.",
+            "INSERT adds rows, UPDATE changes values, and DELETE removes selected rows. These are data changes, not table-structure changes.",
+            "A primary-key or foreign-key constraint is part of the schema, so the DBMS can reject invalid changes."
+          ],
+          "example": "Use ALTER TABLE Enrollment ADD COLUMN grade CHAR(2) to add a column. Use UPDATE Enrollment SET grade='A' WHERE sid=22 AND cid=301 to change a row; these commands affect different layers."
+        },
+        {
+          "title": "Views and updatability",
+          "definition": "A view is a named SELECT statement. It is often updatable when each view row maps clearly to one base-table row.",
+          "details": [
+            "A simple view over one table may allow updates. A grouped, aggregate, or many-table view can be ambiguous: one displayed row may represent many source rows.",
+            "Views simplify repeated queries and can limit which columns a user sees. Access permissions still decide who may read or change base data."
+          ],
+          "example": "A fee-summary view can show sid and balance while hiding private contact details."
+        },
+        {
+          "title": "Additional SQL forms (extension)",
+          "definition": "These useful SQL features are not named in the official Unit 2 syllabus, so treat them as optional background after the listed topics. Triggers respond to events; embedded or dynamic SQL connects queries with programs; recursive queries follow repeated relationships.",
+          "details": [
+            "A trigger runs automatically after a specified database event. Embedded SQL is written inside another programming language; dynamic SQL is assembled while a program runs.",
+            "A recursive query repeatedly follows a relationship such as an employee-manager chain. Exact syntax varies between SQL systems."
+          ],
+          "example": "A trigger can record an audit row after a salary update. A recursive query can follow manager_id repeatedly to find all levels above an employee."
+        },
+        {
+          "title": "Drop and alter tables and views",
+          "definition": "ALTER changes an existing database object. DROP removes an object definition; dropping a table removes its table data as well, while dropping a view removes the saved query definition.",
+          "details": [
+            "ALTER TABLE can add, remove, or change columns and constraints; exact syntax depends on the SQL system. CREATE VIEW defines a saved query, and DROP VIEW removes that view.",
+            "Some systems support ALTER VIEW or CREATE OR REPLACE VIEW to change a view definition. Other systems require dropping and recreating it.",
+            "RESTRICT blocks removal when dependent objects exist. CASCADE may remove dependent objects too, so use it only when those dependencies are intended to go."
+          ],
+          "example": "Examples: ALTER TABLE Enrollment ADD COLUMN grade CHAR(2); DROP VIEW CurrentStudents; DROP TABLE OldEnrollment. DROP TABLE removes the table and its rows, so check dependencies and backups first."
+        }
+      ],
+      "worked": {
+        "title": "Show average scores by course",
+        "setup": "RESULT(cid,sid,score) contains (C1,11,80), (C1,12,90), and (C2,13,70). We want one average per course.",
+        "steps": [
+          {
+            "title": "Choose the columns",
+            "body": "SELECT cid, AVG(score) says to return the course identifier and the average score."
+          },
+          {
+            "title": "Choose the source rows",
+            "body": "FROM RESULT means calculate from the rows in the result relation."
+          },
+          {
+            "title": "Make one group per course",
+            "body": "GROUP BY cid places C1 rows together and C2 rows together. The averages are (80+90)/2 = 85 for C1, and 70 for C2."
+          }
+        ],
+        "answer": "The query returns C1 → 85 and C2 → 70. A grouped aggregate view is useful for reports, but it is not usually directly updatable because one result row summarizes several source rows.",
+        "code": "SELECT cid, AVG(score)\nFROM RESULT\nGROUP BY cid;"
+      },
+      "diagram": {
+        "title": "How a grouped query is evaluated",
+        "caption": "Rows are filtered if needed, grouped by course, then summarized.",
+        "nodes": [
+          [
+            "RESULT rows",
+            "cid · sid · score"
+          ],
+          [
+            "GROUP BY cid",
+            "make course groups"
+          ],
+          [
+            "AVG(score)",
+            "calculate each mean"
+          ],
+          [
+            "Report",
+            "one row per course"
+          ]
+        ],
+        "links": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "exam": "Explain views and their significance, create or modify relations with SQL, enforce constraints, and demonstrate aggregation with GROUP BY. The additional SQL forms are included from the supplied notes; confirm their exam status against the current syllabus.",
+      "diagramTopic": "Ask a question with SELECT"
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+{
+  "number": 1,
+  "label": "Unit 1",
+  "text": "Introduction: Data base System VS file System, View of Data, Data Abstraction, Instances and Schemas, data Models, Database Languages and Data base System Structure. Data base design and ER diagrams Beyond ER Design Entities, Attributes and Entity sets Relationships and Relationship sets, Additional features of ER Model, Concept Design with the ER Model",
+  "source": "DBMS-1 (1).PNG",
+  "questionCount": 46,
+  "questions": [
+    {
+      "id": "u1-a-1-1",
+      "unit": 1,
+      "part": "A",
+      "number": 1,
+      "text": "Define DBMS. How is it different from a file system?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-2-2",
+      "unit": 1,
+      "part": "A",
+      "number": 2,
+      "text": "What is data abstraction? List the three levels with one-line roles.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-3-3",
+      "unit": 1,
+      "part": "A",
+      "number": 3,
+      "text": "Define instance and schema with one example each.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-4-4",
+      "unit": 1,
+      "part": "A",
+      "number": 4,
+      "text": "Name the four major data models and give one real use for each.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-5-5",
+      "unit": 1,
+      "part": "A",
+      "number": 5,
+      "text": "What is a database view? Mention two advantages.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-6-6",
+      "unit": 1,
+      "part": "A",
+      "number": 6,
+      "text": "Define entity, attribute, entity set; give examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-7-7",
+      "unit": 1,
+      "part": "A",
+      "number": 7,
+      "text": "Differentiate between key, super key, candidate key.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-8-8",
+      "unit": 1,
+      "part": "A",
+      "number": 8,
+      "text": "What is a weak entity? How is it represented in ERD?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-9-9",
+      "unit": 1,
+      "part": "A",
+      "number": 9,
+      "text": "Define relationship set and degree of relationship.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-10-10",
+      "unit": 1,
+      "part": "A",
+      "number": 10,
+      "text": "What is participation constraint? Distinguish total vs partial.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-11-11",
+      "unit": 1,
+      "part": "A",
+      "number": 11,
+      "text": "List additional ER features: specialization, generalization, aggregation.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-12-12",
+      "unit": 1,
+      "part": "A",
+      "number": 12,
+      "text": "What is aggregation in ER? Give a small example.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-13-13",
+      "unit": 1,
+      "part": "A",
+      "number": 13,
+      "text": "Map cardinalities 1:1, 1:N, M:N with a real example each.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-14-14",
+      "unit": 1,
+      "part": "A",
+      "number": 14,
+      "text": "Define composite, multivalued, and derived attributes.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-15-15",
+      "unit": 1,
+      "part": "A",
+      "number": 15,
+      "text": "State two limitations of basic ER modeling that extended ER addresses.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-16-16",
+      "unit": 1,
+      "part": "A",
+      "number": 16,
+      "text": "Define DBMS and database.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-17-17",
+      "unit": 1,
+      "part": "A",
+      "number": 17,
+      "text": "Differentiate database system and file system.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-18-18",
+      "unit": 1,
+      "part": "A",
+      "number": 18,
+      "text": "What are data models? List their types.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-19-19",
+      "unit": 1,
+      "part": "A",
+      "number": 19,
+      "text": "Explain database languages: DDL, DML, DCL, TCL.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-20-20",
+      "unit": 1,
+      "part": "A",
+      "number": 20,
+      "text": "Draw or explain the overall structure of DBMS.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-21-21",
+      "unit": 1,
+      "part": "A",
+      "number": 21,
+      "text": "Define entity, entity set, relationship, and relationship set.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-22-22",
+      "unit": 1,
+      "part": "A",
+      "number": 22,
+      "text": "What are attributes? List different types of attributes.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-23-23",
+      "unit": 1,
+      "part": "A",
+      "number": 23,
+      "text": "Give examples of simple, composite, single-valued, multi-valued, derived attributes.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-24-24",
+      "unit": 1,
+      "part": "A",
+      "number": 24,
+      "text": "What is a weak entity set?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-25-25",
+      "unit": 1,
+      "part": "A",
+      "number": 25,
+      "text": "What is an associative entity?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-26-26",
+      "unit": 1,
+      "part": "A",
+      "number": 26,
+      "text": "Give example for ternary relationship.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-27-27",
+      "unit": 1,
+      "part": "A",
+      "number": 27,
+      "text": "What is partial participation and total participation?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-28-28",
+      "unit": 1,
+      "part": "A",
+      "number": 28,
+      "text": "Define specialization, generalization, and aggregation in ER model.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-a-29-29",
+      "unit": 1,
+      "part": "A",
+      "number": 29,
+      "text": "What is the role of primary key in ER diagram?",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-1-30",
+      "unit": 1,
+      "part": "B",
+      "number": 1,
+      "text": "Discuss “DBMS vs File System”: structure, redundancy, integrity, concurrency, recovery, and cost-benefit.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-2-31",
+      "unit": 1,
+      "part": "B",
+      "number": 2,
+      "text": "Design an ER diagram for a Hospital Management System capturing patients, doctors, appointments, treatments, billing, and wards; state assumptions and keys; list participation/cardinality and constraints.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-3-32",
+      "unit": 1,
+      "part": "B",
+      "number": 3,
+      "text": "Convert your ER from above to a relational schema; specify primary/foreign keys and discuss how you’d handle weak entities and multivalued attributes.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-4-33",
+      "unit": 1,
+      "part": "B",
+      "number": 4,
+      "text": "Explain schema vs instance, data independence (logical/physical) and the ANSI/SPARC 3-level architecture with a neat diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-5-34",
+      "unit": 1,
+      "part": "B",
+      "number": 5,
+      "text": "Write short notes with examples: specialization/generalization, constraints and inheritance, aggregation, and overlap/covering constraints.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 1
+    },
+    {
+      "id": "u1-b-6-35",
+      "unit": 1,
+      "part": "B",
+      "number": 6,
+      "text": "Differentiate file system vs DBMS in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-7-36",
+      "unit": 1,
+      "part": "B",
+      "number": 7,
+      "text": "Explain the structure/architecture of DBMS with neat diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-8-37",
+      "unit": 1,
+      "part": "B",
+      "number": 8,
+      "text": "Explain the three-schema architecture with diagram.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-9-38",
+      "unit": 1,
+      "part": "B",
+      "number": 9,
+      "text": "Describe data models and database languages in detail.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-10-39",
+      "unit": 1,
+      "part": "B",
+      "number": 10,
+      "text": "Explain the ER model with entities, attributes, relationships, and constraints.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-11-40",
+      "unit": 1,
+      "part": "B",
+      "number": 11,
+      "text": "Design an ER diagram for hospital management system.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-12-41",
+      "unit": 1,
+      "part": "B",
+      "number": 12,
+      "text": "Design an ER diagram for library management system.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-13-42",
+      "unit": 1,
+      "part": "B",
+      "number": 13,
+      "text": "Design an ER diagram for course registration system.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-14-43",
+      "unit": 1,
+      "part": "B",
+      "number": 14,
+      "text": "Design an ER diagram for movie ticket reservation system.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-15-44",
+      "unit": 1,
+      "part": "B",
+      "number": 15,
+      "text": "Explain additional features of ER model such as specialization, generalization, and aggregation.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-16-45",
+      "unit": 1,
+      "part": "B",
+      "number": 16,
+      "text": "Explain weak entity set, strong entity set, roles, and participation constraints with examples.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    },
+    {
+      "id": "u1-b-17-46",
+      "unit": 1,
+      "part": "B",
+      "number": 17,
+      "text": "Explain conceptual database design using ER model.",
+      "marks": null,
+      "source": "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+      "page": 2
+    }
+  ]
+}

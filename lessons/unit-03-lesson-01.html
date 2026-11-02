@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="A functional dependency is a promise about the data: once you know the values on the left, the values on the right are fixed. Closure helps test keys and consequences."><title>Functional dependencies, closure &amp; keys | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--sage)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-03.html">Unit 03</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-03.html">Unit 03: Refining a schema</a><span>›</span><span>Lesson 01</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 03 · LESSON 01</div><h1>Functional dependencies, closure &amp; keys</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>A functional dependency is a promise about the data: once you know the values on the left, the values on the right are fixed. Closure helps test keys and consequences.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Read X → Y as a rule about rows</li><li>Compute an attribute closure</li><li>Use closure to find keys and check dependency sets</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Functional dependency</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>Attribute closure</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Armstrong rules and minimal cover</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Functional dependency</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>X → Y means that any two rows with the same X values must also have the same Y values.</p></div>
+          <figure class="concept-diagram">
+      <figcaption><strong>Closure grows as rules are applied</strong><span>Keep applying any rule whose left-hand side is already known.</span></figcaption>
+      <div class="diagram-scroll"><svg viewBox="0 0 1000 360" role="img" aria-label="Closure grows as rules are applied. Keep applying any rule whose left-hand side is already known." xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60757b"/></marker></defs>
+        <path class="diagram-edge" d="M 205.0 180.0 C 240.0 180.0, 240.0 180.0, 275.0 180.0" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 465.0 180.0 C 500.0 180.0, 500.0 180.0, 535.0 180.0" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 725.0 180.0 C 760.0 180.0, 760.0 180.0, 795.0 180.0" marker-end="url(#arrow)"/><g class="diagram-node">
+          <rect x="15.0" y="142.0" width="190" height="76" rx="14" fill="#246f84"/>
+          <path d="M 29.0 144.0 H 191.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="110.0" y="177.0" class="diagram-title"><tspan x="110.0" dy="0">Student + Course</tspan></text>
+          <text x="110.0" y="201.0" class="diagram-detail">start</text>
+        </g><g class="diagram-node">
+          <rect x="275.0" y="142.0" width="190" height="76" rx="14" fill="#d66f4d"/>
+          <path d="M 289.0 144.0 H 451.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="370.0" y="177.0" class="diagram-title"><tspan x="370.0" dy="0">Grade</tspan></text>
+          <text x="370.0" y="201.0" class="diagram-detail">from enrollment rule</text>
+        </g><g class="diagram-node">
+          <rect x="535.0" y="142.0" width="190" height="76" rx="14" fill="#c39a42"/>
+          <path d="M 549.0 144.0 H 711.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="630.0" y="177.0" class="diagram-title"><tspan x="630.0" dy="0">Instructor</tspan></text>
+          <text x="630.0" y="201.0" class="diagram-detail">from course rule</text>
+        </g><g class="diagram-node">
+          <rect x="795.0" y="142.0" width="190" height="76" rx="14" fill="#718f83"/>
+          <path d="M 809.0 144.0 H 971.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="890.0" y="177.0" class="diagram-title"><tspan x="890.0" dy="0">Room</tspan></text>
+          <text x="890.0" y="201.0" class="diagram-detail">from instructor rule</text>
+        </g>
+      </svg></div>
+    </figure><p>It is a rule the organization promises to follow, not just a pattern noticed in a small sample.</p><p>X is the determinant. Y is determined by X. If a student id identifies a student, sid → name.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If course id determines the department, then two rows with the same cid must have the same department.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>Attribute closure</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>X⁺ is the set of all attributes that the dependency rules can determine from X.</p></div>
+          <p>Start with X. Whenever the left side of a dependency is already in the set, add its right side. Repeat until no new attribute can be added.</p><p>If X⁺ contains every attribute of the relation, X is a superkey. If no smaller subset works, it is a candidate key.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>Let R(A,B,C,D) have FDs A→B, B→C, and AC→D. Start A+={A}; A→B adds B; B→C adds C; now AC→D adds D. Thus A+={A,B,C,D}; A is a superkey and is a candidate key if no proper subset determines every column.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Armstrong rules and minimal cover</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>Armstrong&#x27;s reflexivity, augmentation, and transitivity rules derive dependencies that logically follow from the original rules.</p></div>
+          <p>Reflexivity: if Y is contained in X, then X → Y. Augmentation: if X → Y, then XZ → YZ. Transitivity: if X → Y and Y → Z, then X → Z.</p><p>A minimal (canonical) cover has one attribute on each right side, no unnecessary left-side attributes, and no redundant dependency.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>If sid → name and name → email, then sid → email by transitivity.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Find the key of a course-enrollment relation</h2><p>R(Student, Course, Grade, Instructor, Room). Rules: Student,Course → Grade; Course → Instructor; Instructor → Room.</p><div class="example-table-wrap"><table class="example-table"><thead><tr><th scope="col">Round</th><th scope="col">New attributes</th><th scope="col">Closure</th></tr></thead><tbody><tr><td>Start</td><td>—</td><td>Student, Course</td></tr><tr><td>Apply first rule</td><td>Grade</td><td>Student, Course, Grade</td></tr><tr><td>Apply next rules</td><td>Instructor, Room</td><td>All five attributes</td></tr></tbody></table></div></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Begin with the proposed key</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Apply the matching rules</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Check all attributes and minimality</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Begin with the proposed key</h3><p>Start closure of {Student, Course}: it currently contains Student and Course.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Apply the matching rules</h3><p>Student,Course → Grade adds Grade. Course → Instructor adds Instructor. Instructor → Room adds Room.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Check all attributes and minimality</h3><p>The closure now contains Student, Course, Grade, Instructor, and Room, so the pair is a superkey. Neither Student alone nor Course alone determines every attribute, so the pair is a candidate key.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>{Student, Course}⁺ contains every attribute. The candidate key is {Student, Course}.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Compute closures and candidate keys. State Armstrong&#x27;s axioms and find a canonical cover for a small FD set.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-03.html">Return to Unit 03</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>Refining a schema · 01 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

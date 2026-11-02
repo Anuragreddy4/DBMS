@@ -1,0 +1,44 @@
+{
+  "courseTitle": "DATABASE MANAGEMENT SYSTEMS",
+  "courseOutcomes": [],
+  "units": [
+    {
+      "number": 1,
+      "label": "Unit 1",
+      "text": "Introduction: Data base System VS file System, View of Data, Data Abstraction, Instances and Schemas, data Models, Database Languages and Data base System Structure. Data base design and ER diagrams Beyond ER Design Entities, Attributes and Entity sets Relationships and Relationship sets, Additional features of ER Model, Concept Design with the ER Model",
+      "source": "DBMS-1 (1).PNG"
+    },
+    {
+      "number": 2,
+      "label": "Unit 2",
+      "text": "Introduction to the Relational Model- Enforcing Integrity constraints, Querying relational data, Logical data base Design, Introduction to Views, Destroying /altering Tables and Views. Relational Algebra - Selection and projection set operations, renaming, Joins, Division, Examples of Algebra overviews, Relational calculus, Tuple relational Calculus, Domain relational calculus.",
+      "source": "DBMS-1 (1).PNG"
+    },
+    {
+      "number": 3,
+      "label": "Unit 3",
+      "text": "Introduction to Schema Refinement - Problems Caused by redundancy, Decompositions- Problem related to decomposition, Functional Dependencies- Reasoning about FDS, Normal Forms - FIRST, SECOND, THIRD Normal forms - BCNF - Properties of Decompositions - Loss less join Decomposition, Dependency preserving Decomposition, Schema Refinement in Data base Design - Multi valued Dependencies - FOURTH Normal Form.",
+      "source": "DBMS-1 (1).PNG"
+    },
+    {
+      "number": 4,
+      "label": "Unit 4",
+      "text": "Transaction Concept- Transaction State- Implementation of Atomicity and Durability Concurrent Executions Serializability- Recoverability Testing for serializability.",
+      "source": "DBMS-1 (1).PNG"
+    },
+    {
+      "number": 5,
+      "label": "Unit 5",
+      "text": "Lock Based Protocols Timestamp Based Protocols - Validation- Based Protocols. Recovery and Atomicity Log - Based Recovery Recovery with Concurrent Transactions Buffer Management",
+      "source": "DBMS-1 (1).PNG"
+    },
+    {
+      "number": 6,
+      "label": "Unit 6",
+      "text": "Overview of Storage and Indexing: Data on External Storage - File Organization and Indexing Hash Based Indexing Tree base Indexing",
+      "source": "DBMS-1 (1).PNG"
+    }
+  ],
+  "rawText": "R18 B.Tech. CSE Syllabus\nDATABASE MANAGEMENT SYSTEMS\nCOURSEOUTCOMES\nAt the end of the course, the students will develop ability to\n1.\nComprehend the basic concepts of DBMS in comparison of File Systems and design\nEntity Relationship Models.\n2. Identify the constraints to be used on different relation models.\n3.Apply various Normal Form that need be used on data base tables.\n4. Analyse various concurrent execution and recoverability techniques to be used on\ndatabase tables.\nCompare various indexing methods to define storage techniques.\nUNITI\nIntroduction: Data base System VS file System, View of Data, Data Abstraction, Instances\nand Schemas, data Models, Database Languages and Data base System Structure.\nData base design and ER diagrams Beyond ER Design Entities, Attributes and Entity sets\nRelationships and Relationship sets, Additional features of ER Model, Concept Design with\nthe ER Model\nUNIT II\nIntroduction to the Relational Model- Enforcing Integrity constraints, Querying relational\ndata, Logical data base Design, Introduction to Views, Destroying /altering Tables and\nViews.\nRelational Algebra - Selection and projection set operations, renaming, Joins, Division,\nExamples of Algebra overviews, Relational calculus, Tuple relational Calculus, Domain\nrelational calculus.\nUNIT III\nIntroduction to Schema Refinement - Problems Caused by redundancy, Decompositions-\nProblem related to decomposition, Functional Dependencies- Reasoning about FDS, Normal\nForms - FIRST, SECOND, THIRD Normal forms - BCNF - Properties of Decompositions -\nLoss less join Decomposition, Dependency preserving Decomposition, Schema Refinement\nin Data base Design - Multi valued Dependencies - FOURTH Normal Form.\nUNIT IV\nTransaction Concept- Transaction State- Implementation of Atomicity and Durability\nConcurrent Executions Serializability- Recoverability Testing for serializability.\nUNIT V\nLock Based Protocols Timestamp Based Protocols - Validation- Based Protocols.\nRecovery and Atomicity Log - Based Recovery Recovery with Concurrent Transactions \nBuffer Management\nUNIT VI\nOverview of Storage and Indexing: Data on External Storage - File Organization and\nIndexing Hash Based Indexing Tree base Indexing",
+  "source": "DBMS-1 (1).PNG"
+}

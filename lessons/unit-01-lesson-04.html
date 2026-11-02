@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f2eb"><meta name="description" content="An ER design starts from requirements and names the entities, attributes, relationships, keys, and constraints the database must preserve."><title>ER design, EER features &amp; mapping | DBMS Field Guide</title><link rel="stylesheet" href="../assets/site.css"><link rel="stylesheet" href="../assets/bot.css"></head>
+<body class="lesson-page" style="--unit-accent:var(--blue)">
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">D</span><span>DBMS <small>FIELD GUIDE</small></span></a><nav class="main-nav"><a href="../units/unit-01.html">Unit 01</a><a href="../index.html#units">All units</a></nav></header>
+<main class="wrap lesson-main">
+  <div class="breadcrumb"><a href="../index.html#units">All units</a><span>›</span><a href="../units/unit-01.html">Unit 01: The database system</a><span>›</span><span>Lesson 04</span></div>
+  <section class="lesson-intro"><div class="eyebrow"><span class="eyebrow-line"></span>UNIT 01 · LESSON 04</div><h1>ER design, EER features &amp; mapping</h1><div class="plain-definition"><span class="section-label">IN PLAIN WORDS</span><p>An ER design starts from requirements and names the entities, attributes, relationships, keys, and constraints the database must preserve.</p></div><div class="learning-goals"><strong>By the end, you can:</strong><ul><li>Identify entity sets, attributes, keys, and relationship sets</li><li>Specify cardinality and participation constraints</li><li>Use extended ER features and map a design into relations</li></ul></div></section>
+  <section class="lesson-topic-map"><div class="section-label">TOPICS IN THIS LESSON</div><div class="subtopic-grid"><a class="subtopic-card" href="#topic-1"><span class="subtopic-number">01</span><strong>Entities, entity sets, attributes, and keys</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-2"><span class="subtopic-number">02</span><strong>Relationships and relationship sets</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-3"><span class="subtopic-number">03</span><strong>Additional ER features and mapping beyond ER</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-4"><span class="subtopic-number">04</span><strong>Conceptual database design with ER diagrams</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-5"><span class="subtopic-number">05</span><strong>Associative entity</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-6"><span class="subtopic-number">06</span><strong>Ternary relationship</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a><a class="subtopic-card" href="#topic-7"><span class="subtopic-number">07</span><strong>EER overlap and covering constraints</strong><span class="subtopic-arrow" aria-hidden="true">↘</span></a></div></section>
+  <section class="concept-list"><div class="section-label">EXPLANATION</div><section class="concept-panel" id="topic-1">
+          <div class="concept-number">TOPIC 01</div><h2>Entities, entity sets, attributes, and keys</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>An entity is one identifiable thing about which data is stored. An entity set is the collection of similar entities. Attributes describe each entity, and a key identifies it uniquely.</p></div>
+          <p>A STUDENT entity set contains individual students. sid can identify one student; name and program describe that student. A value such as Mina is an attribute value, not an entity set.</p><p>Attributes may be simple, composite, single-valued, multivalued, or derived. A weak entity cannot be identified by its own attributes alone; it uses an owner key together with a partial key.</p><p>In a common ER diagram, an entity set is a rectangle, an attribute an oval, and a key attribute is marked. A weak entity has a distinct double-rectangle notation.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>STUDENT(sid,name,birthDate) is an entity set. A row with sid=21 represents one entity. Age can be derived from birthDate; a student may have several phone numbers, so phone is multivalued.</p></div>
+        </section><section class="concept-panel" id="topic-2">
+          <div class="concept-number">TOPIC 02</div><h2>Relationships and relationship sets</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A relationship is an association among particular entities. A relationship set is the collection of associations of the same kind.</p></div>
+          <p>ENROLLS is a relationship set between STUDENT and COURSE. One enrollment instance connects one particular student with one particular course.</p><p>Cardinality says how many entities may be associated: 1:1, 1:N, or M:N. The degree counts participating entity sets; a relationship involving three sets is ternary.</p><p>Participation says whether an entity must take part. Total participation means every entity does; partial participation allows an entity to have no relationship. These rules express real constraints.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>A student can enroll in many courses and each course can have many students, so STUDENT–ENROLLS–COURSE is M:N. A student who has not enrolled yet can still exist, so student participation may be partial.</p></div>
+        </section><section class="concept-panel" id="topic-3">
+          <div class="concept-number">TOPIC 03</div><h2>Additional ER features and mapping beyond ER</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>The extended ER model adds ways to describe subtypes, shared properties, and more complex constraints. Mapping then turns the conceptual ER design into relational tables.</p></div>
+          <figure class="concept-diagram">
+      <figcaption><strong>An M:N relationship becomes a bridge table</strong><span>The bridge stores each registration and both references.</span></figcaption>
+      <div class="diagram-scroll"><svg viewBox="0 0 1000 360" role="img" aria-label="An M:N relationship becomes a bridge table. The bridge stores each registration and both references." xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60757b"/></marker></defs>
+        <path class="diagram-edge" d="M 205.0 180.0 C 305.0 180.0, 305.0 180.0, 405.0 180.0" marker-end="url(#arrow)"/><path class="diagram-edge" d="M 595.0 180.0 C 695.0 180.0, 695.0 180.0, 795.0 180.0" marker-end="url(#arrow)"/><g class="diagram-node">
+          <rect x="15.0" y="142.0" width="190" height="76" rx="14" fill="#246f84"/>
+          <path d="M 29.0 144.0 H 191.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="110.0" y="177.0" class="diagram-title"><tspan x="110.0" dy="0">STUDENT</tspan></text>
+          <text x="110.0" y="201.0" class="diagram-detail">sid · name</text>
+        </g><g class="diagram-node">
+          <rect x="405.0" y="142.0" width="190" height="76" rx="14" fill="#d66f4d"/>
+          <path d="M 419.0 144.0 H 581.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="500.0" y="177.0" class="diagram-title"><tspan x="500.0" dy="0">ENROLLMENT</tspan></text>
+          <text x="500.0" y="201.0" class="diagram-detail">sid · cid · term · grade</text>
+        </g><g class="diagram-node">
+          <rect x="795.0" y="142.0" width="190" height="76" rx="14" fill="#c39a42"/>
+          <path d="M 809.0 144.0 H 971.0" stroke="rgba(255,255,255,.48)" stroke-width="2"/>
+          <text x="890.0" y="177.0" class="diagram-title"><tspan x="890.0" dy="0">COURSE</tspan></text>
+          <text x="890.0" y="201.0" class="diagram-detail">cid · title</text>
+        </g>
+      </svg></div>
+    </figure><p>Specialization divides a superclass into subtypes; generalization combines similar entity sets into a superclass. Subtypes inherit common attributes and relationships.</p><p>A specialization can be disjoint or overlapping. Disjoint means an entity belongs to at most one subtype; overlapping allows several. Total (covering) means every superclass entity belongs to a subtype; partial allows some to belong to none.</p><p>Aggregation treats a relationship as a higher-level unit so it can take part in another relationship. A weak entity depends on an owner and a partial key. An associative entity gives an M:N relationship its own attributes and identity.</p><p>When mapping to relations, make a table for each entity set, put a foreign key on the many side of a 1:N relationship, and create a bridge table for an M:N relationship. Preserve keys and constraints.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>PERSON may be specialized into STUDENT and EMPLOYEE. A person may be both, so the specialization overlaps. ENROLLS between STUDENT and COURSE becomes ENROLLMENT(sid,cid,term,grade); term and grade describe the relationship.</p></div>
+        </section><section class="concept-panel" id="topic-4">
+          <div class="concept-number">TOPIC 04</div><h2>Conceptual database design with ER diagrams</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>Conceptual design turns written requirements into a clear, technology-independent picture of the data and the rules connecting it.</p></div>
+          <p>Read the requirements and list entity sets, attributes, and candidate keys. Then identify relationship sets, degree, cardinality, and participation constraints.</p><p>Check weak entities, multivalued attributes, and subtypes. Draw the ER diagram and review it against example questions the database must answer.</p><p>After the ER design is clear, map it to relations and choose physical storage. The ER diagram describes meaning; it is not a disk layout.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>For a library, identify MEMBER, BOOK, and LOAN. A loan connects one member and one book and stores checkoutDate and dueDate. Decide whether a member can have zero loans, whether a book can have many loans over time, and which values identify each entity.</p></div>
+        </section><section class="concept-panel" id="topic-5">
+          <div class="concept-number">TOPIC 05</div><h2>Associative entity</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>An associative entity turns a relationship, usually M:N, into an entity that can carry its own attributes.</p></div>
+          <p>Build it from the participating entity keys and add facts that describe the association.</p><p>It is useful when the relationship has a date, status, grade, quantity, or separate lifecycle.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>ENROLLMENT(sid,cid,term,grade) represents one student taking one course in one term; grade belongs to that enrollment, not to the student or course alone.</p></div>
+        </section><section class="concept-panel" id="topic-6">
+          <div class="concept-number">TOPIC 06</div><h2>Ternary relationship</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>A ternary relationship connects three entity sets in one relationship instance.</p></div>
+          <p>Its meaning belongs to the complete triple. Replacing it with three binary relationships can allow combinations that were never valid.</p><p>The degree of a relationship is the number of participating entity sets; ternary means degree three.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>SUPPLIES(supplier,part,project) records which supplier provides which part for which project. The fact is about that exact three-way combination.</p></div>
+        </section><section class="concept-panel" id="topic-7">
+          <div class="concept-number">TOPIC 07</div><h2>EER overlap and covering constraints</h2>
+          <div class="definition-box"><span class="section-label">DEFINITION</span><p>Overlap and covering state which subtype memberships are allowed and whether every superclass entity must appear in a subtype.</p></div>
+          <p>Disjoint subtypes allow at most one subtype membership; overlapping subtypes allow more than one.</p><p>Total specialization requires every superclass entity to appear in some subtype. Partial specialization allows entities in none.</p><div class="small-example"><span class="section-label">QUICK EXAMPLE</span><p>A PERSON can be both STUDENT and EMPLOYEE, so the subtypes overlap. If every person must be one of those, the specialization is total; otherwise it is partial.</p></div>
+        </section></section>
+  <section class="worked-example" id="worked-example" data-walkthrough>
+      <div class="worked-heading"><span class="section-label">WORKED EXAMPLE · SELECT A STEP</span><h2>Model course registration</h2><p>A college stores students, courses, and the term and grade for each registration.</p><div class="example-table-wrap"><table class="example-table"><thead><tr><th scope="col">Relation</th><th scope="col">Key</th><th scope="col">Meaning</th></tr></thead><tbody><tr><td>STUDENT</td><td>sid</td><td>One row per student</td></tr><tr><td>COURSE</td><td>cid</td><td>One row per course</td></tr><tr><td>ENROLLMENT</td><td>sid, cid, term</td><td>One registration and its grade</td></tr></tbody></table></div></div>
+      <div class="walkthrough"><div class="walk-steps" role="group" aria-label="Select a worked example step"><button class="walk-step is-active" type="button" data-step-index="0" aria-pressed="true"><span>01</span><strong>Choose entity sets</strong></button><button class="walk-step" type="button" data-step-index="1" aria-pressed="false"><span>02</span><strong>Choose the relationship</strong></button><button class="walk-step" type="button" data-step-index="2" aria-pressed="false"><span>03</span><strong>Map the relationship</strong></button></div><div class="walk-panels" aria-live="polite"><div class="walk-detail is-active" data-detail-index="0"><span>STEP 01</span><h3>Choose entity sets</h3><p>Create STUDENT(sid, name) and COURSE(cid, title). sid and cid uniquely identify their rows.</p></div><div class="walk-detail" data-detail-index="1"><span>STEP 02</span><h3>Choose the relationship</h3><p>A student may enroll in many courses and each course may contain many students. ENROLLS is M:N and has attributes term and grade.</p></div><div class="walk-detail" data-detail-index="2"><span>STEP 03</span><h3>Map the relationship</h3><p>Create ENROLLMENT(sid, cid, term, grade). sid references STUDENT and cid references COURSE. Include term in the key if a student may retake a course in a later term.</p></div></div></div>
+      <div class="worked-answer"><span class="section-label">RESULT</span><p>The ER design becomes three relations. The bridge relation ENROLLMENT records each student-course registration and preserves both foreign-key links.</p></div>
+    </section>
+  <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>Design an ER model for a hospital, library, course registration, or reservation system. State assumptions, keys, cardinality, participation, weak entities, and EER features.</p></section>
+  <div class="lesson-return"><a class="button-secondary" href="../units/unit-01.html">Return to Unit 01</a></div>
+</main>
+<footer class="site-footer"><div class="wrap footer-inner"><span>The database system · 04 of 04</span><a href="../index.html">Home</a></div></footer>
+<button class="qno-launcher" id="qno-open" type="button" aria-haspopup="dialog" aria-controls="qno-overlay" aria-label="Open Qno, the DBMS study assistant">
+  <span class="qno-launcher-mark" aria-hidden="true">Q</span><span class="qno-launcher-copy"><strong>Ask Qno</strong><small>DBMS study guide</small></span><span class="qno-launcher-dot" aria-hidden="true"></span>
+</button>
+<section class="qno-overlay" id="qno-overlay" role="dialog" aria-modal="true" aria-labelledby="qno-title" aria-describedby="qno-description" data-root-prefix="../" hidden>
+  <div class="qno-window">
+    <header class="qno-header"><button class="qno-brand" type="button" data-qno-action="new" aria-label="Start a new conversation"><span class="qno-brand-mark">Q</span><span><strong id="qno-title">Qno</strong><small>QnOka · DBMS study companion</small></span></button><div class="qno-header-status"><span class="qno-status-dot"></span><span data-qno-status>Checking Gemini</span></div><button class="qno-close" type="button" data-qno-close aria-label="Close Qno">×</button></header>
+    <div class="qno-layout">
+      <aside class="qno-sidebar" aria-label="Qno menu">
+        <button class="qno-new-chat" type="button" data-qno-action="new"><span>＋</span> New doubt</button>
+        <div class="qno-side-label">STUDY TOOLS</div>
+        <button class="qno-menu-link" type="button" data-qno-action="browse"><span>⌕</span> Find a topic</button>
+        <button class="qno-menu-link" type="button" data-qno-action="quiz"><span>◇</span> Take a quiz</button>
+        <button class="qno-menu-link" type="button" data-qno-action="example"><span>▤</span> Show a worked example</button>
+        <div class="qno-side-label qno-unit-label">DOUBT BY UNIT</div>
+        <nav class="qno-unit-list" aria-label="Choose a DBMS unit"><button class="qno-unit-link" type="button" data-qno-unit="1"><span>01</span>The database system</button><button class="qno-unit-link" type="button" data-qno-unit="2"><span>02</span>Relations &amp; query logic</button><button class="qno-unit-link" type="button" data-qno-unit="3"><span>03</span>Refining a schema</button><button class="qno-unit-link" type="button" data-qno-unit="4"><span>04</span>Transactions &amp; schedules</button><button class="qno-unit-link" type="button" data-qno-unit="5"><span>05</span>Concurrency &amp; recovery</button><button class="qno-unit-link" type="button" data-qno-unit="6"><span>06</span>Storage &amp; indexing</button></nav>
+        <div class="qno-sidebar-note"><span class="qno-sidebar-note-dot"></span><p>The question bank comes from your Important Questions PDF; unit labels follow the official syllabus.</p></div>
+      </aside>
+      <main class="qno-main">
+        <div class="qno-chat-scroll" id="qno-scroll" aria-live="polite" aria-relevant="additions text">
+          <section class="qno-welcome" id="qno-welcome">
+            <div class="qno-welcome-orbit" aria-hidden="true"><span>Q</span><i></i><b></b></div>
+            <div class="qno-eyebrow">YOUR DBMS STUDY COMPANION</div>
+            <h1>Hi, I’m Qno.<br><span>What would you like to understand?</span></h1>
+            <p id="qno-description">Ask in your own words—even with a spelling mistake. I can explain course topics clearly, answer follow-up questions, find lesson pages, walk through examples, or quiz you.</p>
+            <div class="qno-welcome-actions"><button type="button" data-qno-action="browse"><span>⌕</span><strong>Find a topic</strong><small>Locate it in the course</small></button><button type="button" data-qno-action="units"><span>▦</span><strong>Choose a unit</strong><small>Browse its lessons</small></button><button type="button" data-qno-action="quiz"><span>◇</span><strong>Take a quick quiz</strong><small>Check your understanding</small></button></div>
+            <div class="qno-prompt-label">TRY ASKING</div>
+            <div class="qno-prompt-chips"><button type="button" data-qno-prompt="What is a DBMS? Explain with an example.">What is a DBMS?</button><button type="button" data-qno-prompt="Where can I learn about normalization?">Find normalization</button><button type="button" data-qno-prompt="Quiz me on Unit 4">Quiz me on Unit 4</button></div>
+          </section>
+          <div class="qno-messages" id="qno-messages" role="log" aria-label="Conversation with Qno"></div>
+        </div>
+        <form class="qno-composer" id="qno-form">
+          <label class="qno-scope"><span class="sr-only">Limit search to a unit</span><select id="qno-scope"><option value="">All units</option><option value="1">Unit 1: The database system</option><option value="2">Unit 2: Relations &amp; query logic</option><option value="3">Unit 3: Refining a schema</option><option value="4">Unit 4: Transactions &amp; schedules</option><option value="5">Unit 5: Concurrency &amp; recovery</option><option value="6">Unit 6: Storage &amp; indexing</option></select><span aria-hidden="true">⌄</span></label>
+          <label class="sr-only" for="qno-input">Ask Qno a DBMS question</label><textarea id="qno-input" rows="1" placeholder="Ask a DBMS question or say “where is…”" autocomplete="off"></textarea>
+          <button class="qno-send" type="submit" aria-label="Send question"><span aria-hidden="true">↑</span></button>
+        </form>
+        <div class="qno-footer-note" data-qno-privacy>Checking AI connection…</div>
+      </main>
+    </div>
+  </div>
+</section>
+<script src="../assets/site.js"></script><script src="../assets/bot-knowledge.js"></script><script src="../assets/bot.js"></script></body></html>

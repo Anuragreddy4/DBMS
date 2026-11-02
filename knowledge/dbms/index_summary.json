@@ -1,0 +1,44 @@
+{
+  "sourceDocuments": 2,
+  "indexedSources": [
+    "DBMS IMPORTANT QUESTIONS-UNI TWISE(1-6).pdf",
+    "DBMS-1 (1).PNG"
+  ],
+  "importantQuestionCount": 279,
+  "syllabusUnitCount": 6,
+  "ocrSources": 1,
+  "searchSegments": 285,
+  "scope": "Only the Important Questions PDF and DBMS-1 syllabus image are indexed. Lecture notes and previous-paper PDFs are excluded.",
+  "units": [
+    {
+      "unit": 1,
+      "importantQuestions": 46,
+      "syllabusCharacters": 355
+    },
+    {
+      "unit": 2,
+      "importantQuestions": 49,
+      "syllabusCharacters": 380
+    },
+    {
+      "unit": 3,
+      "importantQuestions": 46,
+      "syllabusCharacters": 406
+    },
+    {
+      "unit": 4,
+      "importantQuestions": 43,
+      "syllabusCharacters": 165
+    },
+    {
+      "unit": 5,
+      "importantQuestions": 45,
+      "syllabusCharacters": 177
+    },
+    {
+      "unit": 6,
+      "importantQuestions": 50,
+      "syllabusCharacters": 130
+    }
+  ]
+}
