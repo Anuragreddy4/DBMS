@@ -280,7 +280,7 @@ async function handleQno(request, response) {
   const selectedQuestion = getSelectedQuestion(body, history);
   const relevant = searchSources(question, unit, selectedQuestion);
   const depth = depthFor(question);
-  const followup = isContextualFollowup(question) || body.intent === "followup" || body.intent === "clarification";
+  const followup = body.intent === "followup" || body.intent === "clarification" || (history.length > 0 && isContextualFollowup(question));
   const priorUser = [...history].reverse().find((turn) => turn.role === "user");
   const priorAssistant = [...history].reverse().find((turn) => turn.role === "assistant");
   const followupAnchor = followup
