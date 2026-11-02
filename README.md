@@ -24,7 +24,7 @@ The local Node process serves the static preview and shares the same Qno handler
 
 ## Index regeneration
 
-Install the small source-index dependencies with `python -m pip install -r requirements.txt`, then run `npm run index:dbms` after either indexed source changes. This reads the Important Questions PDF and OCRs only the syllabus image. It regenerates `knowledge/dbms/`; it does not process the lecture notes or past-paper PDFs.
+Install the source-index dependencies with `python -m pip install -r requirements-indexing.txt`, then run `npm run index:dbms` after either indexed source changes. This reads the Important Questions PDF and OCRs only the syllabus image. It regenerates `knowledge/dbms/`; it does not process the lecture notes or past-paper PDFs. These indexing-only packages are kept out of Vercel's automatically detected `requirements.txt` so deploys do not install them unnecessarily.
 
 `npm run build` regenerates the existing pages, bundles the static question list into `assets/bot-knowledge.js`, and stages the site in `public/` for Vercel. The deployment output includes the site and generated question data, not the original source PDFs, `.env`, or source-index script.
 
