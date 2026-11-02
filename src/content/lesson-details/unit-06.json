@@ -38,47 +38,47 @@
         }
       ],
       "worked": {
-        "title": "Choose a file layout for three jobs",
-        "setup": "A student table has many inserts, exact searches by sid, and reports for sid ranges.",
-        "steps": [
-          {
-            "title": "Frequent inserts",
-            "body": "Heap placement makes new records easy to add without maintaining sort order."
-          },
-          {
-            "title": "Exact lookup by sid",
-            "body": "A hash organization can map sid to a bucket for equality queries. A separate index may still be needed for other access patterns."
-          },
-          {
-            "title": "Range report",
-            "body": "Hash order does not help with sid between 100 and 200. Sorted storage or a B+ tree can find the first key and then scan neighbors."
-          }
-        ],
-        "answer": "There is no best file organization for every query. Choose based on the workload, and consider indexes when the table serves several patterns.",
+        "title": "Choose a file layout for common tasks",
+        "setup": "A school often adds student records, looks up one student by ID, and prints a range of IDs.",
         "table": {
           "headers": [
             "Layout",
-            "Strength",
-            "Trade-off"
+            "Simple benefit",
+            "Simple drawback"
           ],
           "rows": [
             [
               "Heap",
-              "Simple inserts",
-              "Search may scan"
+              "Easy to add a new record",
+              "May scan many rows to find one ID"
             ],
             [
               "Sorted",
-              "Range queries",
-              "Inserts maintain order"
+              "Easy to list IDs in order",
+              "Adding a row may require moving records"
             ],
             [
               "Hash",
-              "Equality lookups",
-              "Poor range order"
+              "Fast to find an exact ID",
+              "Not good for ID ranges"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Think about new records",
+            "body": "If the school mostly adds records, a heap file is simple because a new row can go in the next open space."
+          },
+          {
+            "title": "Think about an exact ID",
+            "body": "Hashing can jump to the place for one exact ID instead of checking every row."
+          },
+          {
+            "title": "Think about a range",
+            "body": "Sorted records make it easier to find IDs from 100 to 120 because nearby IDs are stored together."
+          }
+        ],
+        "answer": "Choose the layout that matches the most common task. No one layout is best for every kind of search."
       },
       "diagram": {
         "title": "From a query to an external-storage page",
@@ -169,47 +169,47 @@
         }
       ],
       "worked": {
-        "title": "Search using a sparse index",
-        "setup": "Data pages are ordered. The first keys in the pages are 10, 25, 40, and 55. Find key 37.",
-        "steps": [
-          {
-            "title": "Find the nearest index key below 37",
-            "body": "25 is the greatest page-start key that is no larger than 37."
-          },
-          {
-            "title": "Follow the page pointer",
-            "body": "The index points to the page that starts at 25. Key 37 must be on that page if it exists, or in its overflow area."
-          },
-          {
-            "title": "Scan within the page",
-            "body": "Read the ordered records on that page until 37 is found or the next key is larger."
-          }
-        ],
-        "answer": "The sparse index narrows the search to one page range; ordering makes the final short scan possible.",
+        "title": "Find an ID with a small index",
+        "setup": "A book's contents page points to the first ID on each data page. We want to find student ID 37.",
         "table": {
           "headers": [
-            "Index key",
-            "Pointer"
+            "First ID on page",
+            "Page"
           ],
           "rows": [
             [
               "10",
-              "Page 1"
+              "1"
             ],
             [
               "25",
-              "Page 2"
+              "2"
             ],
             [
               "40",
-              "Page 3"
+              "3"
             ],
             [
               "55",
-              "Page 4"
+              "4"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Find the nearest smaller starting ID",
+            "body": "25 is the largest page-start ID that is not greater than 37."
+          },
+          {
+            "title": "Open that page",
+            "body": "The index says IDs starting at 25 are on page 2, so check that page."
+          },
+          {
+            "title": "Look through the short range",
+            "body": "Scan page 2 for 37. If the next ID is already larger, then 37 is not in the file."
+          }
+        ],
+        "answer": "The index skips pages that cannot contain ID 37 and sends us straight to page 2. This is how a sparse index narrows a search."
       },
       "diagram": {
         "title": "An index narrows the search",
@@ -286,23 +286,39 @@
         }
       ],
       "worked": {
-        "title": "Insert into a full leaf",
-        "setup": "For a small teaching example, a leaf can hold at most two keys. The leaf currently has [12, 18]. Insert 25.",
+        "title": "Split a full B+ tree leaf",
+        "setup": "For this tiny example, one leaf box can hold at most two numbers. It currently holds 12 and 18. Insert 25.",
+        "table": {
+          "headers": [
+            "Before",
+            "After"
+          ],
+          "rows": [
+            [
+              "Leaf: [12, 18]",
+              "Leaves: [12, 18] and [25]"
+            ],
+            [
+              "Parent separator",
+              "Add 25 to direct searches to the right leaf"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Find the target leaf",
-            "body": "Compare 25 with the tree's separators and follow the pointer to the leaf [12,18]."
+            "title": "Put the new number in order",
+            "body": "The leaf becomes [12, 18, 25], but the example leaf has room for only two numbers."
           },
           {
-            "title": "Insert in sorted order",
-            "body": "The temporary leaf is [12,18,25], which exceeds its two-key capacity."
+            "title": "Make a second leaf",
+            "body": "Keep [12, 18] in the first leaf and put [25] in a new leaf to its right."
           },
           {
-            "title": "Split and promote a separator",
-            "body": "Split into [12,18] and [25]. Copy 25 into the parent as the separator for the new right leaf. If the parent is full, split it too."
+            "title": "Update the parent",
+            "body": "Put 25 in the parent as a signpost. A search for 25 or more follows the pointer to the new leaf."
           }
         ],
-        "answer": "The leaves remain sorted and at the same depth. A root split creates a new root, preserving balance."
+        "answer": "A B+ tree splits a full leaf and updates its signpost. The leaves stay in sorted order, so searches can continue correctly."
       },
       "exam": "Draw a B+ tree and trace search, insert, split, root growth, and range scan. State the order convention and compare B+ trees with B-trees."
     },
@@ -343,23 +359,39 @@
         }
       ],
       "worked": {
-        "title": "Split an extendible-hash bucket",
-        "setup": "Use the low bits of each key's hash. The directory has global depth 1 and one bucket has local depth 1. A new key causes that bucket to overflow.",
+        "title": "Split one full hash bucket",
+        "setup": "A hash directory checks the last 1 bit of a key. The bucket for keys ending in 0 is full, so it must split.",
+        "table": {
+          "headers": [
+            "Key's last 2 bits",
+            "New bucket"
+          ],
+          "rows": [
+            [
+              "00",
+              "Bucket 00"
+            ],
+            [
+              "10",
+              "Bucket 10"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Inspect the bucket's local depth",
-            "body": "Local depth 1 means this bucket is currently distinguished by one hash bit."
+            "title": "Look at the full bucket",
+            "body": "The directory currently checks only one bit, so both 00 and 10 go to the bucket ending in 0."
           },
           {
-            "title": "Split and redistribute",
-            "body": "Create a second bucket and use the next hash bit to separate the old and new records."
+            "title": "Split that bucket",
+            "body": "Make two smaller buckets. Check two bits now: keys ending in 00 go to one, and keys ending in 10 go to the other."
           },
           {
-            "title": "Check the directory depth",
-            "body": "If local depth becomes greater than global depth, double the directory so it can address the new distinction. If not, only update the directory entries for the split bucket."
+            "title": "Make the directory bigger",
+            "body": "The directory needs two bits to point to the new buckets, so it doubles from two entries to four."
           }
         ],
-        "answer": "Only the overflowing bucket needs redistribution. Global depth controls directory size; local depth controls an individual bucket split."
+        "answer": "Extendible hashing splits only the full bucket. If the directory needs another bit to tell the buckets apart, it doubles."
       },
       "exam": "Compare static, extendible, and linear hashing. Trace overflow/split and compare hash-based with tree-based indexing for point and range queries."
     }

@@ -37,47 +37,39 @@
         }
       ],
       "worked": {
-        "title": "Find the key of a course-enrollment relation",
-        "setup": "R(Student, Course, Grade, Instructor, Room). Rules: Student,Course → Grade; Course → Instructor; Instructor → Room.",
-        "steps": [
-          {
-            "title": "Begin with the proposed key",
-            "body": "Start closure of {Student, Course}: it currently contains Student and Course."
-          },
-          {
-            "title": "Apply the matching rules",
-            "body": "Student,Course → Grade adds Grade. Course → Instructor adds Instructor. Instructor → Room adds Room."
-          },
-          {
-            "title": "Check all attributes and minimality",
-            "body": "The closure now contains Student, Course, Grade, Instructor, and Room, so the pair is a superkey. Neither Student alone nor Course alone determines every attribute, so the pair is a candidate key."
-          }
-        ],
-        "answer": "{Student, Course}⁺ contains every attribute. The candidate key is {Student, Course}.",
+        "title": "Find the smallest set of fields that identifies a registration",
+        "setup": "Each registration has a Student ID, Course, Grade, and Teacher. A student can take many courses.",
         "table": {
           "headers": [
-            "Round",
-            "New attributes",
-            "Closure"
+            "Known fact",
+            "What it tells us"
           ],
           "rows": [
             [
-              "Start",
-              "—",
-              "Student, Course"
+              "Student ID + Course",
+              "The Grade for that registration"
             ],
             [
-              "Apply first rule",
-              "Grade",
-              "Student, Course, Grade"
-            ],
-            [
-              "Apply next rules",
-              "Instructor, Room",
-              "All five attributes"
+              "Course",
+              "The Teacher for that course"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Start with Student ID and Course",
+            "body": "Together, these tell us which one registration row we mean."
+          },
+          {
+            "title": "Use the known facts",
+            "body": "The pair gives the Grade. The Course gives the Teacher. Now we know every field in the row."
+          },
+          {
+            "title": "Check whether either field can be removed",
+            "body": "Student ID alone cannot tell us the course. Course alone cannot tell us which student. We need both."
+          }
+        ],
+        "answer": "Student ID and Course together form the candidate key: they identify one registration, and neither one is enough alone."
       },
       "diagram": {
         "title": "Closure grows as rules are applied",
@@ -164,55 +156,51 @@
         }
       ],
       "worked": {
-        "title": "Normalize enrollment records",
-        "setup": "ENROLLMENT(sid, sname, cid, title, grade), with key (sid,cid). Rules: sid→sname, cid→title, and sid,cid→grade.",
-        "steps": [
-          {
-            "title": "Check the values",
-            "body": "If each row has one sid, one cid, and one grade, it is atomic and meets 1NF. If courses were stored as a comma-separated list, first make one course per row."
-          },
-          {
-            "title": "Remove partial dependencies",
-            "body": "sname depends only on sid; title depends only on cid. Split those facts into STUDENT(sid,sname) and COURSE(cid,title)."
-          },
-          {
-            "title": "Keep the full-key fact in enrollment",
-            "body": "grade depends on both sid and cid, so ENROLLMENT(sid,cid,grade) keeps it. The three relations reduce repeated names and titles."
-          }
-        ],
-        "answer": "STUDENT(sid,sname), COURSE(cid,title), and ENROLLMENT(sid,cid,grade) form a cleaner design. The key of ENROLLMENT is (sid,cid).",
+        "title": "Stop repeating the same student and course details",
+        "setup": "The same student name and course name are copied into every registration row. This makes updates harder.",
         "table": {
           "headers": [
-            "sid",
-            "sname",
-            "cid",
-            "title",
-            "grade"
+            "Student ID",
+            "Student name",
+            "Course",
+            "Grade"
           ],
           "rows": [
             [
-              "11",
+              "1",
               "Asha",
-              "C1",
               "DBMS",
               "A"
             ],
             [
-              "11",
+              "1",
               "Asha",
-              "C2",
-              "Networks",
+              "OS",
               "B"
             ],
             [
-              "12",
+              "2",
               "Bilal",
-              "C1",
               "DBMS",
               "A"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Keep each cell simple",
+            "body": "One cell should hold one value. A list of several courses should be stored as several rows, not one comma-separated cell."
+          },
+          {
+            "title": "Move student details once",
+            "body": "Store each student's name in STUDENT. Then the name does not have to be typed again for every course."
+          },
+          {
+            "title": "Keep the grade with the registration",
+            "body": "A grade belongs to one student taking one course, so keep it in ENROLLMENT with Student ID and Course."
+          }
+        ],
+        "answer": "A cleaner design uses STUDENT(Student ID, Name), COURSE(Course), and ENROLLMENT(Student ID, Course, Grade). It reduces repeated facts and update mistakes."
       },
       "diagram": {
         "title": "Move each fact to the table it depends on",
@@ -289,37 +277,47 @@
         }
       ],
       "worked": {
-        "title": "Separate hobbies from languages",
-        "setup": "Student 7 has hobbies chess and hiking, and speaks Tamil, English, and Hindi. The two lists are independent.",
-        "steps": [
-          {
-            "title": "Count the repeated combinations",
-            "body": "One combined table needs 2 × 3 = 6 rows: every hobby is paired with every language."
-          },
-          {
-            "title": "Identify the independent facts",
-            "body": "The hobby list depends on the student. The language list also depends on the student, but neither list determines the other."
-          },
-          {
-            "title": "Split the relation",
-            "body": "Store (7,chess), (7,hiking) in StudentHobby and (7,Tamil), (7,English), (7,Hindi) in StudentLanguage."
-          }
-        ],
-        "answer": "The split removes cross-product redundancy. The original combinations can still be generated by joining the two relations on sid.",
+        "title": "Separate two independent lists",
+        "setup": "One student has two hobbies, chess and music, and speaks two languages, Tamil and Hindi. Neither list depends on the other.",
         "table": {
           "headers": [
-            "Combined row count",
-            "StudentHobby rows",
-            "StudentLanguage rows"
+            "Hobby",
+            "Language"
           ],
           "rows": [
             [
-              "6 repeated pairs",
-              "2 facts",
-              "3 facts"
+              "Chess",
+              "Tamil"
+            ],
+            [
+              "Chess",
+              "Hindi"
+            ],
+            [
+              "Music",
+              "Tamil"
+            ],
+            [
+              "Music",
+              "Hindi"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "See why the combined table grows",
+            "body": "The table pairs every hobby with every language. Two hobbies and two languages create four rows."
+          },
+          {
+            "title": "Notice the extra pairings",
+            "body": "The four rows do not mean the student learned a language through a hobby. The lists are separate facts."
+          },
+          {
+            "title": "Store each list separately",
+            "body": "Keep one table for Student-Hobby and another for Student-Language. This stores two hobby facts and two language facts."
+          }
+        ],
+        "answer": "When two multi-value lists are independent, store them separately. This avoids storing every possible pair, which is the idea behind 4NF."
       },
       "diagram": {
         "title": "Separate independent lists",
@@ -398,43 +396,39 @@
         }
       ],
       "worked": {
-        "title": "Test a binary decomposition",
-        "setup": "R(A,B,C) has dependency A→B. Decompose into R1(A,B) and R2(A,C).",
-        "steps": [
-          {
-            "title": "Find the common attributes",
-            "body": "R1 ∩ R2 = {A}. A is the overlap between the two decomposed relations."
-          },
-          {
-            "title": "Check what the overlap determines",
-            "body": "By A→B, A determines both attributes of R1: A and B. Therefore the overlap determines one complete side."
-          },
-          {
-            "title": "Check the dependency too",
-            "body": "A→B is contained in R1, so it can be enforced directly there. This split is lossless and preserves this dependency."
-          }
-        ],
-        "answer": "The natural join of R1(A,B) and R2(A,C) reconstructs R without spurious tuples, and A→B remains locally checkable.",
+        "title": "Split a table and join it back without inventing rows",
+        "setup": "Asha takes DBMS and OS. Bilal takes DBMS. We split student names from course registrations.",
         "table": {
           "headers": [
-            "Test",
-            "Result"
+            "Original rows"
           ],
           "rows": [
             [
-              "Intersection",
-              "{A}"
+              "1, Asha, DBMS"
             ],
             [
-              "Lossless test",
-              "A → R1"
+              "1, Asha, OS"
             ],
             [
-              "Dependency preservation",
-              "A → B stays in R1"
+              "2, Bilal, DBMS"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Find what belongs to Student",
+            "body": "Student ID 1 always means Asha, and ID 2 means Bilal. Put each ID and name in STUDENT once."
+          },
+          {
+            "title": "Find what belongs to Enrollment",
+            "body": "Put each Student ID and Course pair in ENROLLMENT. The ID connects it to the student."
+          },
+          {
+            "title": "Join the two tables",
+            "body": "Match equal Student IDs. The result is the same three original rows; no extra student-course pair appears."
+          }
+        ],
+        "answer": "This split is lossless because joining the two smaller tables rebuilds exactly the original rows. The student-name rule stays together in STUDENT."
       },
       "diagram": {
         "title": "Split, then join the pieces",

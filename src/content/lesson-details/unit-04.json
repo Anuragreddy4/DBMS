@@ -47,23 +47,45 @@
         }
       ],
       "worked": {
-        "title": "Transfer 20 from A to B",
-        "setup": "Before the transfer, A has 100 and B has 40. The intended final values are A=80 and B=60.",
+        "title": "Move 10 points between two accounts",
+        "setup": "Account A has 50 points and account B has 20. Move 10 points from A to B.",
+        "table": {
+          "headers": [
+            "Moment",
+            "Account A",
+            "Account B",
+            "Total"
+          ],
+          "rows": [
+            [
+              "Before",
+              "50",
+              "20",
+              "70"
+            ],
+            [
+              "After",
+              "40",
+              "30",
+              "70"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Read both balances",
-            "body": "The transaction reads A=100 and B=40 before calculating the new values."
+            "title": "Read both accounts",
+            "body": "The transaction checks that A has 50 and B has 20."
           },
           {
-            "title": "Apply both writes as one unit",
-            "body": "It writes A=80 and B=60. If the second write fails, atomicity requires undoing the first."
+            "title": "Make both changes",
+            "body": "Subtract 10 from A and add 10 to B. If one change fails, undo the other so points are not lost."
           },
           {
-            "title": "Commit and make it durable",
-            "body": "After both writes satisfy the rules, COMMIT is recorded. If power fails later, recovery restores the committed values."
+            "title": "Save the completed transfer",
+            "body": "When both changes are correct, the transaction commits. A later crash must not erase this saved transfer."
           }
         ],
-        "answer": "A+B is 140 before and after. The transfer preserves the balance rule and is all-or-nothing."
+        "answer": "Atomicity means both changes happen or neither happens. Durability means a committed change stays saved. The total remains 70."
       },
       "diagram": {
         "title": "A transaction can commit or abort",
@@ -141,43 +163,47 @@
         }
       ],
       "worked": {
-        "title": "Spot the lost update",
-        "setup": "A is 100. T1 adds 20 and T2 subtracts 5. Both read A before either writes.",
-        "steps": [
-          {
-            "title": "Read the same old value",
-            "body": "T1 reads 100. T2 also reads 100 because neither update has been written yet."
-          },
-          {
-            "title": "Compute independently",
-            "body": "T1 calculates 120. T2 calculates 95."
-          },
-          {
-            "title": "Overwrite the shared item",
-            "body": "If T1 writes 120 and then T2 writes 95, the +20 disappears. The serial result should be 115 in either order."
-          }
-        ],
-        "answer": "The schedule is unsafe because the two transactions perform conflicting writes based on the same old value. A concurrency protocol must order or reject one update.",
+        "title": "See how one update can be lost",
+        "setup": "There are 2 seats left. Two students try to reserve one seat at almost the same time.",
         "table": {
           "headers": [
-            "Order",
-            "Final A"
+            "What happens",
+            "Seats left"
           ],
           "rows": [
             [
-              "T1 then T2",
-              "115"
+              "Both students read the starting value",
+              "2"
             ],
             [
-              "T2 then T1",
-              "115"
+              "Student A calculates a new value",
+              "1"
             ],
             [
-              "Both read 100, T2 writes last",
-              "95 (lost update)"
+              "Student B calculates from the same old value",
+              "1"
+            ],
+            [
+              "Both write 1; the last write replaces the other",
+              "1 (wrong; should be 0)"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Both see the same number",
+            "body": "Each booking reads 2 seats before either booking saves its change."
+          },
+          {
+            "title": "Both calculate one seat left",
+            "body": "Each subtracts one from 2, so each prepares to write 1."
+          },
+          {
+            "title": "One booking overwrites the other",
+            "body": "The final value is 1, even though two seats were booked. One update disappeared: a lost update."
+          }
+        ],
+        "answer": "The correct value is 0 seats. The DBMS must coordinate the two bookings so one cannot overwrite the other's change."
       },
       "diagram": {
         "title": "Two transactions touch the same value",
@@ -264,55 +290,52 @@
         }
       ],
       "worked": {
-        "title": "Test a two-transaction schedule",
-        "setup": "Schedule: w1(A), r2(A), w2(B), w1(B). Operations with subscripts belong to that transaction.",
-        "steps": [
-          {
-            "title": "Compare operations on A",
-            "body": "w1(A) occurs before r2(A). They are different transactions, same item, and one is a write, so add T1→T2."
-          },
-          {
-            "title": "Compare operations on B",
-            "body": "w2(B) occurs before w1(B). This conflict gives T2→T1."
-          },
-          {
-            "title": "Check the graph",
-            "body": "The graph has T1→T2 and T2→T1. Those arrows form a cycle."
-          }
-        ],
-        "answer": "The schedule is not conflict-serializable. There is no serial order that preserves both conflict directions.",
-        "diagram": {
-          "title": "Precedence graph has a cycle",
-          "caption": "The two required orders contradict one another.",
-          "nodes": [
-            [
-              "T1",
-              "writes A first"
-            ],
-            [
-              "T2",
-              "reads A · writes B"
-            ],
-            [
-              "T1",
-              "writes B last"
-            ]
+        "title": "Use arrows to test a schedule",
+        "setup": "Two transactions change two marks, A and B. The order is T1 changes A, T2 reads A, T2 changes B, then T1 changes B.",
+        "table": {
+          "headers": [
+            "Order",
+            "Action",
+            "What it requires"
           ],
-          "links": [
+          "rows": [
             [
-              0,
-              1
+              "1",
+              "T1 changes A",
+              "T1 acts before T2 on A"
             ],
             [
-              1,
-              2
+              "2",
+              "T2 reads A",
+              "Add arrow T1 → T2"
             ],
             [
-              2,
-              0
+              "3",
+              "T2 changes B",
+              "T2 acts before T1 on B"
+            ],
+            [
+              "4",
+              "T1 changes B",
+              "Add arrow T2 → T1"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Draw the first arrow",
+            "body": "T1 changes A before T2 reads A. To keep this order, T1 must come before T2."
+          },
+          {
+            "title": "Draw the second arrow",
+            "body": "T2 changes B before T1 changes B. To keep this order, T2 must come before T1."
+          },
+          {
+            "title": "Look for a loop",
+            "body": "The arrows say T1 before T2 and T2 before T1. That is a cycle, so no single serial order can match it."
+          }
+        ],
+        "answer": "A cycle in the conflict graph means this schedule is not conflict-serializable."
       },
       "diagram": {
         "title": "The precedence graph",
@@ -385,51 +408,43 @@
         }
       ],
       "worked": {
-        "title": "Classify a dirty-read schedule",
-        "setup": "T1 writes A. T2 reads A. T1 aborts. T2 then commits.",
-        "steps": [
-          {
-            "title": "Check the value T2 read",
-            "body": "T2 read a value written by T1 before T1 committed. That is a dirty read."
-          },
-          {
-            "title": "Check commit order",
-            "body": "T2 committed before knowing whether T1's value would remain valid. If T1 aborts, T2 has already committed based on undone data."
-          },
-          {
-            "title": "Classify it",
-            "body": "This schedule is not recoverable, not cascadeless, and not strict. A strict schedule would block T2's read and write of A until T1 ends."
-          }
-        ],
-        "answer": "The implication is strict ⇒ cascadeless ⇒ recoverable. The reverse is not guaranteed.",
-        "diagram": {
-          "title": "Three safety levels",
-          "caption": "Each stronger rule prevents more unsafe reads or writes.",
-          "nodes": [
-            [
-              "Recoverable",
-              "commit after writer"
-            ],
-            [
-              "Cascadeless",
-              "read after commit"
-            ],
-            [
-              "Strict",
-              "no read/write before end"
-            ]
+        "title": "Spot a decision based on an unconfirmed payment",
+        "setup": "T1 records that Asha paid her fee, but has not finished. T2 sees “Paid” and issues Asha a hall ticket. Then T1 fails and the payment is cancelled.",
+        "table": {
+          "headers": [
+            "Step",
+            "What the database shows"
           ],
-          "links": [
+          "rows": [
             [
-              0,
-              1
+              "T1 changes payment status",
+              "Paid, but not confirmed"
             ],
             [
-              1,
-              2
+              "T2 reads the status and commits",
+              "Hall ticket issued"
+            ],
+            [
+              "T1 aborts",
+              "Payment status returns to Unpaid"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Notice the unconfirmed change",
+            "body": "T1 marked the fee as paid, but it has not committed. The DBMS may still cancel this change."
+          },
+          {
+            "title": "T2 acts on that change",
+            "body": "T2 reads “Paid” and commits the hall-ticket decision before T1 has finished."
+          },
+          {
+            "title": "T1 is cancelled",
+            "body": "The payment is undone, but the hall-ticket decision has already been committed using that temporary value."
+          }
+        ],
+        "answer": "T2 read data that was not yet confirmed. This is a dirty read, and the schedule is not recoverable because T2 committed before the transaction it depended on."
       },
       "exam": "Given a schedule, determine whether it is recoverable, cascadeless, or strict. Explain dirty reads and cascading rollback."
     }

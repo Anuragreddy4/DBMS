@@ -37,42 +37,42 @@
         }
       ],
       "worked": {
-        "title": "Trace a lock conflict and deadlock",
-        "setup": "T1 needs A then B. T2 needs B then A. Both request exclusive locks.",
-        "steps": [
-          {
-            "title": "Grant the first locks",
-            "body": "T1 gets X(A). T2 gets X(B). These locks are on different items, so both requests can be granted."
-          },
-          {
-            "title": "Observe the waits",
-            "body": "T1 requests X(B) and waits for T2. T2 requests X(A) and waits for T1."
-          },
-          {
-            "title": "Draw the wait-for graph",
-            "body": "Add T1→T2 and T2→T1. The cycle proves a deadlock; aborting one transaction releases its lock so the other can continue."
-          }
-        ],
-        "answer": "The deadlock can be prevented by a consistent lock order, or detected and resolved by rolling back one victim.",
+        "title": "See why two transactions can deadlock",
+        "setup": "T1 needs to update records A and B. T2 also needs both records. A lock means one transaction has temporary control of a record.",
         "table": {
           "headers": [
-            "Requested lock",
-            "S already held",
-            "X already held"
+            "Transaction",
+            "Has a lock on",
+            "Waiting for"
           ],
           "rows": [
             [
-              "S",
-              "Grant",
-              "Wait"
+              "T1",
+              "A",
+              "B, held by T2"
             ],
             [
-              "X",
-              "Wait",
-              "Wait"
+              "T2",
+              "B",
+              "A, held by T1"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Each gets one lock",
+            "body": "T1 locks A. T2 locks B. Neither can change the other's locked record yet."
+          },
+          {
+            "title": "Each asks for the other record",
+            "body": "T1 waits for B. T2 waits for A."
+          },
+          {
+            "title": "See the loop",
+            "body": "T1 is waiting for T2, and T2 is waiting for T1. Neither can continue: this is a deadlock."
+          }
+        ],
+        "answer": "The DBMS can break the deadlock by cancelling one transaction, which releases its lock so the other can finish."
       },
       "diagram": {
         "title": "Two transactions wait in a cycle",
@@ -153,47 +153,39 @@
         }
       ],
       "worked": {
-        "title": "Check operations on item Q",
-        "setup": "Let TS(T1)=10, TS(T2)=20, and TS(T3)=30. Initially readTS(Q)=0 and writeTS(Q)=0.",
-        "steps": [
-          {
-            "title": "T2 writes Q",
-            "body": "20 is not less than readTS(Q)=0 or writeTS(Q)=0. Accept the write and set writeTS(Q)=20."
-          },
-          {
-            "title": "T1 tries to read Q",
-            "body": "TS(T1)=10 is less than writeTS(Q)=20. Abort T1's read: it is too old to see a value written by a later transaction."
-          },
-          {
-            "title": "T1 tries an old write instead",
-            "body": "Because 10 is less than writeTS(Q)=20, basic timestamp ordering aborts it. Thomas's rule may ignore the obsolete write."
-          }
-        ],
-        "answer": "Use readTS to protect earlier readers and writeTS to protect the order of writes. State clearly whether the Thomas rule is being applied.",
+        "title": "Keep older and newer transactions in order",
+        "setup": "T1 starts first, so it is older. T2 starts later. T2 changes the available-seat value to 0 before T1 reads it.",
         "table": {
           "headers": [
-            "Operation",
-            "Check",
-            "Outcome"
+            "Action",
+            "Result"
           ],
           "rows": [
             [
-              "T2: write(Q)",
-              "20 ≥ 0",
-              "Accept; writeTS=20"
+              "T2 writes available seats = 0",
+              "Accepted as the newer change"
             ],
             [
-              "T1: read(Q)",
-              "10 < writeTS 20",
-              "Abort"
-            ],
-            [
-              "T1: write(Q)",
-              "10 < writeTS 20",
-              "Abort or ignore by Thomas"
+              "T1 tries to read the item afterward",
+              "Rejected; T1 is older than the saved change"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Give each transaction a start time",
+            "body": "The DBMS labels T1 as older and T2 as newer based on when each began."
+          },
+          {
+            "title": "T2 saves a change",
+            "body": "T2 changes the seat count. The DBMS remembers that this item was changed by the newer transaction."
+          },
+          {
+            "title": "T1 tries to go backward",
+            "body": "If the older T1 read this newer value, the time order would be broken. The DBMS aborts T1 and can restart it later."
+          }
+        ],
+        "answer": "Timestamp ordering uses transaction start times to keep operations in a consistent order. Here the older read is rejected."
       },
       "diagram": {
         "title": "An item remembers who read and wrote it",
@@ -274,23 +266,42 @@
         }
       ],
       "worked": {
-        "title": "Two students try to take the last seat",
-        "setup": "A course has one available seat. T1 and T2 both read available=1 before either writes.",
+        "title": "Protect the last seat with validation",
+        "setup": "One seat is left. Two students begin booking at the same time. They first work without locking the seat.",
+        "table": {
+          "headers": [
+            "Booking",
+            "What it saw",
+            "Validation result"
+          ],
+          "rows": [
+            [
+              "T1",
+              "1 seat left",
+              "Passes first and books it"
+            ],
+            [
+              "T2",
+              "1 seat left",
+              "Fails because T1 has already booked it"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Read privately",
-            "body": "T1 and T2 each read the same count and prepare an enrollment in their private workspace."
+            "title": "Both check the seat",
+            "body": "T1 and T2 each see one seat left and prepare a booking."
           },
           {
-            "title": "Validate T1",
-            "body": "T1 validates first. No conflicting committed write has changed its read set, so T1 passes and publishes its enrollment."
+            "title": "Check T1 before saving",
+            "body": "T1 validates first. The seat count has not changed, so T1's booking is accepted."
           },
           {
-            "title": "Validate T2",
-            "body": "T2 now validates against T1's write. The seat count T2 relied on is stale, so T2 fails validation, refreshes the count, and reports that no seat remains."
+            "title": "Check T2 before saving",
+            "body": "T2 now validates. The seat count changed after T2 read it, so T2 must try again and cannot take the last seat."
           }
         ],
-        "answer": "Validation prevents both enrollments from claiming the same last seat without locking every read during the initial work."
+        "answer": "Validation catches the conflict before both bookings are saved. Only one student gets the last seat."
       },
       "exam": "Describe the read, validation, and write phases. Compare validation-based, lock-based, and timestamp-based control for different workloads."
     },
@@ -342,23 +353,42 @@
         }
       ],
       "worked": {
-        "title": "Recover after a crash",
-        "setup": "T1 transferred funds and committed. T2 started an update but did not commit before the crash. T1's log is durable; one data page was not flushed.",
+        "title": "Restore the database after a crash",
+        "setup": "The log says T1 finished a transfer. T2 began changing a record but did not finish before the computer crashed.",
+        "table": {
+          "headers": [
+            "Transaction",
+            "Before the crash",
+            "Recovery action"
+          ],
+          "rows": [
+            [
+              "T1",
+              "Committed",
+              "Redo if its saved change is missing"
+            ],
+            [
+              "T2",
+              "Not committed",
+              "Undo its unfinished change"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Analysis",
-            "body": "Recovery scans the log and identifies T1 as committed and T2 as incomplete. It also identifies pages that may contain unflushed changes."
+            "title": "Read the log",
+            "body": "The log is the DBMS's record of changes. It shows which transactions finished and which were still in progress."
           },
           {
-            "title": "Redo",
-            "body": "Recovery reapplies T1's logged update if the page lacks it, ensuring the committed transfer is present."
+            "title": "Redo finished work",
+            "body": "Keep T1's committed transfer. If it was not fully written to the data file, apply it again from the log."
           },
           {
-            "title": "Undo",
-            "body": "Recovery reverses T2's incomplete update using the before-image or undo information, then records that action in the log."
+            "title": "Undo unfinished work",
+            "body": "Cancel T2's incomplete change so the database does not keep half-finished work."
           }
         ],
-        "answer": "The recovered database includes all committed work and none of T2's partial work. WAL makes the needed undo and redo information available."
+        "answer": "After recovery, T1's finished work remains and T2's unfinished work is removed."
       },
       "exam": "Explain WAL, log records, atomicity and durability, undo/redo, checkpoints, recovery with concurrent transactions, and buffer management.",
       "diagram": {

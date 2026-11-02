@@ -47,51 +47,51 @@
         }
       ],
       "worked": {
-        "title": "Check one enrollment row",
-        "setup": "STUDENT contains sid values 14 and 22. COURSE contains cid values 301 and 302. ENROLLMENT uses key (sid,cid).",
-        "steps": [
-          {
-            "title": "Check the domain",
-            "body": "A sid must be an integer, cid must be an integer, and grade must use the allowed grade values."
-          },
-          {
-            "title": "Check the key",
-            "body": "The pair (22,301) may appear once. A second row with the same pair would describe the same enrollment twice."
-          },
-          {
-            "title": "Check the references",
-            "body": "(22,301,'A') is valid because student 22 and course 301 exist. (999,301,'A') is rejected because student 999 is missing."
-          }
-        ],
-        "answer": "A row is valid only when its values match their domains, its primary key is unique and non-NULL, and its foreign keys refer to existing rows.",
+        "title": "Check whether a registration row is allowed",
+        "setup": "Student IDs 1 and 2 exist. Course DBMS exists. A registration must use a real student, a real course, and a unique student-course pair.",
         "table": {
           "headers": [
-            "sid",
-            "cid",
-            "grade",
+            "Student ID",
+            "Course",
+            "Grade",
             "Result"
           ],
           "rows": [
             [
-              "22",
-              "301",
+              "1",
+              "DBMS",
               "A",
-              "Valid"
+              "Allowed"
             ],
             [
-              "999",
-              "301",
+              "9",
+              "DBMS",
               "A",
-              "Invalid student reference"
+              "Rejected: student 9 is missing"
             ],
             [
-              "22",
-              "301",
+              "1",
+              "DBMS",
               "B",
-              "Duplicate key"
+              "Rejected: same student-course pair"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Check the values",
+            "body": "The ID must be a student number, the course must be a known course, and the grade must be an allowed grade."
+          },
+          {
+            "title": "Check for a duplicate",
+            "body": "Student 1 can have only one DBMS registration row for this term. A second row for the same pair is not allowed."
+          },
+          {
+            "title": "Check the linked records",
+            "body": "Student 9 is not in STUDENT, so a DBMS registration for student 9 must be rejected."
+          }
+        ],
+        "answer": "A valid row uses allowed values, does not repeat its key, and points to student and course rows that really exist."
       },
       "diagram": null,
       "exam": "Define relation, tuple, degree, and cardinality. Explain primary and foreign keys and show domain, key, entity, and referential constraints with examples."
@@ -152,47 +152,47 @@
         }
       ],
       "worked": {
-        "title": "Find the names of CS students",
-        "setup": "STUDENT(sid,name,program) has three rows: (11, Asha, CS), (12, Bilal, IT), (13, Chen, CS).",
-        "steps": [
-          {
-            "title": "Filter rows (selection)",
-            "body": "Apply σprogram='CS'. Keep the rows for Asha and Chen; discard Bilal's IT row."
-          },
-          {
-            "title": "Keep one column (projection)",
-            "body": "Apply πname to the filtered result. The sid and program columns are no longer needed."
-          },
-          {
-            "title": "Read the result",
-            "body": "The final relation contains the names Asha and Chen. Each step returns a relation, so the result can be used by another operation."
-          }
-        ],
-        "answer": "πname(σprogram='CS'(STUDENT)) = {Asha, Chen}.",
+        "title": "Keep CS students, then show only their names",
+        "setup": "The table has three students. We want the names of the students in CS.",
         "table": {
           "headers": [
-            "sid",
-            "name",
-            "program"
+            "ID",
+            "Name",
+            "Program"
           ],
           "rows": [
             [
-              "11",
+              "1",
               "Asha",
               "CS"
             ],
             [
-              "12",
+              "2",
               "Bilal",
               "IT"
             ],
             [
-              "13",
+              "3",
               "Chen",
               "CS"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "Keep matching rows",
+            "body": "Look down the Program column. Keep Asha and Chen because their program is CS."
+          },
+          {
+            "title": "Keep the needed column",
+            "body": "The question asks for names, so remove the ID and Program columns from the answer."
+          },
+          {
+            "title": "Read the result",
+            "body": "The answer is Asha and Chen. In relational algebra, selection chooses rows and projection chooses columns."
+          }
+        ],
+        "answer": "The result is the names Asha and Chen: first select CS rows, then project the Name column."
       },
       "diagram": {
         "title": "A query is a chain of table operations",
@@ -270,24 +270,42 @@
         }
       ],
       "worked": {
-        "title": "Find students enrolled in course C7",
-        "setup": "STUDENT(sid,name) and ENROLLMENT(sid,cid). Return names, not the whole student row.",
+        "title": "Find students enrolled in DBMS",
+        "setup": "STUDENT has Asha (ID 1) and Bilal (ID 2). ENROLLMENT says ID 1 takes DBMS and ID 2 takes OS.",
+        "table": {
+          "headers": [
+            "Student ID",
+            "Name",
+            "Enrolled course"
+          ],
+          "rows": [
+            [
+              "1",
+              "Asha",
+              "DBMS"
+            ],
+            [
+              "2",
+              "Bilal",
+              "OS"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Choose the result variable",
-            "body": "In TRC, use s to stand for a STUDENT tuple. The result value will be s.name."
+            "title": "Start with real students",
+            "body": "Check the students that actually appear in the STUDENT table."
           },
           {
-            "title": "Connect the matching registration",
-            "body": "Require that an ENROLLMENT tuple e exists with e.sid=s.sid and e.cid='C7'."
+            "title": "Look for a matching registration",
+            "body": "For each student, check ENROLLMENT for the same ID and the course DBMS."
           },
           {
-            "title": "Keep the query safe",
-            "body": "The variable s is restricted by STUDENT(s), so possible answers come from actual student rows rather than every imaginable tuple."
+            "title": "Return the matching name",
+            "body": "ID 1 has a DBMS registration, so the answer is Asha. ID 2 does not match."
           }
         ],
-        "answer": "TRC: { s.name | STUDENT(s) and exists e (ENROLLMENT(e) and e.sid=s.sid and e.cid='C7') }. The same condition can be written in DRC using variables for sid and name.",
-        "code": "{ s.name | STUDENT(s) AND EXISTS e (\n    ENROLLMENT(e) AND e.sid=s.sid\n    AND e.cid='C7'\n) }"
+        "answer": "Tuple calculus describes which student rows should be returned. Domain calculus describes which individual column values should be returned. Both express the same request: Asha."
       },
       "diagram": null,
       "exam": "Compare TRC and DRC. Define safety and explain why an unrestricted negated query may be unsafe."
@@ -349,24 +367,47 @@
         }
       ],
       "worked": {
-        "title": "Show average scores by course",
-        "setup": "RESULT(cid,sid,score) contains (C1,11,80), (C1,12,90), and (C2,13,70). We want one average per course.",
+        "title": "Create a simple view and add a column",
+        "setup": "STUDENT has ID, Name, and Program. We want a saved list of CS student names, then we want to add a Phone column.",
+        "table": {
+          "headers": [
+            "ID",
+            "Name",
+            "Program"
+          ],
+          "rows": [
+            [
+              "1",
+              "Asha",
+              "CS"
+            ],
+            [
+              "2",
+              "Bilal",
+              "IT"
+            ],
+            [
+              "3",
+              "Chen",
+              "CS"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Choose the columns",
-            "body": "SELECT cid, AVG(score) says to return the course identifier and the average score."
+            "title": "Choose what the view shows",
+            "body": "The view keeps only Name and only rows where Program is CS. It acts like a saved filter."
           },
           {
-            "title": "Choose the source rows",
-            "body": "FROM RESULT means calculate from the rows in the result relation."
+            "title": "See the view's result",
+            "body": "The view shows Asha and Chen. The original STUDENT table still keeps all three rows."
           },
           {
-            "title": "Make one group per course",
-            "body": "GROUP BY cid places C1 rows together and C2 rows together. The averages are (80+90)/2 = 85 for C1, and 70 for C2."
+            "title": "Change the table plan",
+            "body": "Adding a Phone column changes the table's design. Existing student rows can then be filled with phone numbers."
           }
         ],
-        "answer": "The query returns C1 → 85 and C2 → 70. A grouped aggregate view is useful for reports, but it is not usually directly updatable because one result row summarizes several source rows.",
-        "code": "SELECT cid, AVG(score)\nFROM RESULT\nGROUP BY cid;"
+        "answer": "A view is a saved way to look at selected table data. Altering a table changes its columns; it does not mean deleting the whole table."
       },
       "diagram": {
         "title": "How a grouped query is evaluated",

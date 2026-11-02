@@ -56,7 +56,7 @@
       else pointerCue.classList.remove("is-hovering");
     }, { passive: true });
 
-    document.querySelectorAll(".unit-card, .lesson-choice, .subtopic-card, .concept-panel, .worked-example, .exam-focus, .how-card, .exam-item").forEach((card) => {
+    document.querySelectorAll(".unit-card, .important-unit-card, .lesson-choice, .subtopic-card, .concept-panel, .worked-example, .exam-focus, .how-card, .exam-item").forEach((card) => {
       card.dataset.tiltCard = "";
       const strength = card.matches(".concept-panel, .worked-example, .exam-focus") ? 3 : 8;
 
@@ -84,11 +84,11 @@
 
     const revealSelector = [
       ".site-header", ".breadcrumb", ".hero-copy", ".hero-visual", ".course-strip", ".unit-intro", ".unit-promise",
-      ".unit-motion", ".unit-grid > .unit-card", ".lesson-choices > .lesson-choice", ".lesson-intro", ".plain-definition",
+      ".unit-motion", ".unit-grid > .unit-card", ".important-section", ".important-unit-grid > .important-unit-card", ".lesson-choices > .lesson-choice", ".lesson-intro", ".plain-definition",
       ".learning-goals", ".lesson-topic-map", ".subtopic-grid > .subtopic-card", ".concept-list > .concept-panel",
       ".concept-panel .definition-box", ".concept-panel .small-example", ".concept-diagram", ".worked-example",
       ".worked-heading", ".example-table-wrap", ".lesson-code", ".worked-answer", ".worked-example .walk-step", ".worked-example .walk-panels",
-      ".exam-focus", ".exam-copy", ".exam-list > .exam-item", ".how-card", ".unit-return", ".lesson-return", ".site-footer"
+      ".exam-focus", ".exam-copy", ".exam-list > .exam-item", ".how-card", ".unit-return", ".lesson-navigation", ".site-footer"
     ].join(",");
     const revealTargets = [...document.querySelectorAll(revealSelector)];
     const parentIndexes = new Map();
@@ -101,7 +101,7 @@
       const delay = Math.min(index * 105, 525);
       element.style.setProperty("--reveal-delay", `${delay}ms`);
 
-      if (element.matches(".unit-card, .lesson-choice, .subtopic-card, .how-card, .exam-item, .concept-panel")) {
+      if (element.matches(".unit-card, .important-unit-card, .lesson-choice, .subtopic-card, .how-card, .exam-item, .concept-panel")) {
         const direction = index % 3;
         const distance = window.innerWidth < 640 ? 42 : 72;
         const x = direction === 0 ? -distance : direction === 2 ? distance : 0;
@@ -114,7 +114,7 @@
     });
 
     const typeSelector = [
-      ".hero h1", ".hero-copy>p", ".unit-intro h1", ".unit-intro>p", ".unit-card h3", ".unit-card p",
+      ".hero h1", ".hero-copy>p", ".unit-intro h1", ".unit-intro>p", ".unit-card h3", ".unit-card p", ".important-unit-card>strong",
       ".lesson-choice h2", ".lesson-choice p", ".lesson-intro h1", ".plain-definition p", ".learning-goals li",
       ".subtopic-card strong", ".concept-panel h2", ".definition-box p", ".concept-panel>p", ".small-example p",
       ".concept-diagram figcaption strong", ".concept-diagram figcaption span", ".worked-heading h2", ".worked-heading>p", ".walk-detail h3", ".walk-detail p", ".worked-answer p",
@@ -181,6 +181,23 @@
         buttons[next].focus();
         select(next);
       });
+    });
+  });
+
+  document.querySelectorAll("[data-important-open]").forEach((button) => {
+    const dialog = document.getElementById(button.dataset.importantOpen);
+    if (!dialog) return;
+    button.addEventListener("click", () => {
+      if (!dialog.open) dialog.showModal();
+    });
+  });
+
+  document.querySelectorAll(".important-dialog").forEach((dialog) => {
+    dialog.querySelectorAll("[data-important-close]").forEach((button) => {
+      button.addEventListener("click", () => dialog.close());
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
     });
   });
 })();

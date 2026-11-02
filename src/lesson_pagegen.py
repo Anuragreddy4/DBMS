@@ -10,6 +10,7 @@ OUT = ROOT / "lessons"
 OUT.mkdir(exist_ok=True)
 ALL_UNITS = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(CONTENT.glob("unit-*.json"))]
 COLORS = ["#246f84", "#d66f4d", "#c39a42", "#718f83"]
+COURSE_LESSONS = [(unit, index, lesson) for unit in ALL_UNITS for index, lesson in enumerate(unit["lessons"])]
 
 def diagram_markup(diagram):
     if not diagram:
@@ -139,6 +140,28 @@ def worked_markup(worked):
       <div class="worked-answer"><span class="section-label">RESULT</span><p>{escape(worked["answer"])}</p></div>
     </section>'''
 
+def lesson_nav_markup(unit_no, lesson_no):
+    position = next(i for i, (unit, index, _) in enumerate(COURSE_LESSONS) if unit["n"] == unit_no and index == lesson_no - 1)
+
+    def link(entry, direction):
+        if entry is None:
+            label = "COURSE START" if direction == "previous" else "COURSE COMPLETE"
+            title = "This is the first lesson" if direction == "previous" else "You reached the last lesson"
+            return f'<div class="lesson-nav-edge"><span>{label}</span><strong>{title}</strong></div>'
+        unit, index, lesson = entry
+        href = f"unit-{unit['n']:02d}-lesson-{index+1:02d}.html"
+        place = f"UNIT {unit['n']:02d} · LESSON {index+1:02d}"
+        arrow = "←" if direction == "previous" else "→"
+        return f'<a class="lesson-nav-link lesson-nav-{direction}" href="{href}"><span>{arrow} {direction.upper()} LESSON</span><strong>{place}</strong><em>{escape(lesson["title"])}</em></a>'
+
+    previous = COURSE_LESSONS[position - 1] if position > 0 else None
+    following = COURSE_LESSONS[position + 1] if position + 1 < len(COURSE_LESSONS) else None
+    return f'''<nav class="lesson-navigation" aria-label="Move between lessons">
+      {link(previous, "previous")}
+      <a class="lesson-nav-unit button-secondary" href="../units/unit-{unit_no:02d}.html">Return to Unit {unit_no:02d}</a>
+      {link(following, "next")}
+    </nav>'''
+
 def lesson_html(unit, lesson, detail, index):
     unit_no = unit["n"]
     lesson_no = index + 1
@@ -166,6 +189,7 @@ def lesson_html(unit, lesson, detail, index):
     if detail.get("diagram") and not diagram_inserted:
         sections.append(diagram_markup(detail["diagram"]))
     worked = worked_markup(detail["worked"])
+    lesson_navigation = lesson_nav_markup(unit_no, lesson_no)
     unit_link = f"../units/unit-{unit_no:02d}.html"
     plain_slug = f"Unit {unit_no:02d} · Lesson {lesson_no:02d}"
     return f'''<!doctype html>
@@ -179,7 +203,7 @@ def lesson_html(unit, lesson, detail, index):
   <section class="concept-list"><div class="section-label">EXPLANATION</div>{''.join(sections)}</section>
   {worked}
   <section class="exam-focus"><span class="section-label">EXAM FOCUS</span><h2>What to be ready to explain</h2><p>{escape(detail["exam"])}</p></section>
-  <div class="lesson-return"><a class="button-secondary" href="{unit_link}">Return to Unit {unit_no:02d}</a></div>
+  {lesson_navigation}
 </main>
 <footer class="site-footer"><div class="wrap footer-inner"><span>{escape(unit["title"])} · {lesson_no:02d} of 04</span><a href="../index.html">Home</a></div></footer>
 {bot_widget_markup("../", ALL_UNITS)}

@@ -74,46 +74,42 @@
         }
       ],
       "worked": {
-        "title": "Follow one request from question to answer",
-        "setup": "The database contains STUDENT(sid, name, course) with rows (21, Mina, DBMS) and (22, Arjun, OS). An app asks: “What course is recorded for student 21?”",
+        "title": "Find a student's course",
+        "setup": "A class app asks: “Which course is student 1 taking?” The table has two students.",
         "table": {
           "headers": [
-            "sid",
-            "name",
-            "course"
+            "Student ID",
+            "Name",
+            "Course"
           ],
           "rows": [
             [
-              "21",
-              "Mina",
+              "1",
+              "Asha",
               "DBMS"
             ],
             [
-              "22",
-              "Arjun",
+              "2",
+              "Ravi",
               "OS"
             ]
           ]
         },
         "steps": [
           {
-            "title": "The app sends a request",
-            "body": "The app asks the DBMS for the course belonging to sid=21. The app describes what information it needs; it does not search the stored files itself."
+            "title": "The app asks",
+            "body": "The app sends the DBMS a simple request: find the course for student ID 1."
           },
           {
-            "title": "The DBMS checks the request",
-            "body": "The DBMS interprets the request, checks that it is valid, and checks whether this user is allowed to read the course value."
+            "title": "The DBMS looks",
+            "body": "The DBMS checks the STUDENT table and finds the row whose ID is 1."
           },
           {
-            "title": "The DBMS finds the matching row",
-            "body": "It looks for sid=21 in STUDENT, finds Mina's row, and takes the value in the course column: DBMS."
-          },
-          {
-            "title": "The answer returns to the app",
-            "body": "The DBMS sends back the requested course value. The app can show “DBMS” without receiving every row or knowing how the row is stored on disk."
+            "title": "The answer comes back",
+            "body": "That row says Asha is taking DBMS, so the app receives “DBMS”."
           }
         ],
-        "answer": "The database holds the rows. The DBMS processes and controls the request. The app asks, and the requested value comes back as the result."
+        "answer": "The app asks a question, the DBMS finds the matching row, and the database supplies the answer: DBMS."
       },
       "diagram": {
         "title": "Follow a student-data request",
@@ -202,23 +198,47 @@
         }
       ],
       "worked": {
-        "title": "A portal gets faster without changing its screen",
-        "setup": "The course portal is slow. The DBA creates an index on ENROLLMENT.sid, but the page should look exactly the same.",
+        "title": "Change storage without changing the screen",
+        "setup": "A student portal shows each student's name and course. The database team adds a small lookup list so student records are found faster.",
+        "table": {
+          "headers": [
+            "Part",
+            "Simple meaning",
+            "Example"
+          ],
+          "rows": [
+            [
+              "External view",
+              "What a user sees",
+              "Name and course on the portal"
+            ],
+            [
+              "Conceptual design",
+              "What data the database contains",
+              "Student ID, name, and course"
+            ],
+            [
+              "Internal storage",
+              "How the computer keeps the data",
+              "Data pages and a lookup list"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Separate the levels",
-            "body": "The portal's course list is an external view. ENROLLMENT is part of the conceptual schema. The index is an internal storage structure."
+            "title": "Look at the screen",
+            "body": "Students see only the portal fields they need. This is their view of the data."
           },
           {
-            "title": "Change only storage",
-            "body": "The DBA adds the index so the DBMS can find a student's rows faster. The relation and portal fields do not change."
+            "title": "Keep the data design",
+            "body": "The database still has the same student ID, name, and course. The meaning of the data has not changed."
           },
           {
-            "title": "Name the independence",
-            "body": "Because the storage change is hidden from the logical design and the portal, this is physical data independence."
+            "title": "Improve the storage",
+            "body": "The lookup list helps the DBMS find a student faster. The portal still looks and works the same."
           }
         ],
-        "answer": "The index changes the internal level only, so the application can keep its existing view."
+        "answer": "The storage changed, but the screen and the data design stayed the same. This is physical data independence."
       },
       "diagram": {
         "title": "Three levels, one database",
@@ -296,24 +316,42 @@
         }
       ],
       "worked": {
-        "title": "Tell the plan from the current data",
-        "setup": "Use the schema STUDENT(sid, name, program). The current rows are (21, Mina, CS) and (22, Arjun, IT).",
+        "title": "Separate the table plan from today's rows",
+        "setup": "The STUDENT table is planned with three columns: ID, Name, and Program. It currently has two students.",
+        "table": {
+          "headers": [
+            "ID",
+            "Name",
+            "Program"
+          ],
+          "rows": [
+            [
+              "1",
+              "Asha",
+              "CS"
+            ],
+            [
+              "2",
+              "Bilal",
+              "IT"
+            ]
+          ]
+        },
         "steps": [
           {
-            "title": "Identify the schema",
-            "body": "The names sid, name, and program describe the columns and their meaning. That design is the schema."
+            "title": "Read the plan",
+            "body": "ID, Name, and Program are the table's design. The design is called the schema."
           },
           {
-            "title": "Identify the instance",
-            "body": "The two student rows are the instance right now. Adding a third student changes the instance, not the schema."
+            "title": "Read today's data",
+            "body": "Asha and Bilal are the rows stored now. These current rows are called the instance."
           },
           {
-            "title": "Create a view",
-            "body": "A query can expose just CS students: CREATE VIEW CS_Students AS SELECT sid, name FROM STUDENT WHERE program='CS'. The view hides the program filter from repeated queries."
+            "title": "Show only what is needed",
+            "body": "A saved view could show just the names of students in CS. It is a selected view of the same table."
           }
         ],
-        "answer": "The table definition is the schema, the rows are the instance, and CS_Students is a view over those rows.",
-        "code": "CREATE VIEW CS_Students AS\nSELECT sid, name\nFROM STUDENT\nWHERE program = 'CS';"
+        "answer": "The schema is the table plan. The instance is the data currently in the table. A view shows selected data."
       },
       "diagram": null,
       "exam": "Define schema and instance; list data models and database languages; explain a view and its purpose."
@@ -396,47 +434,47 @@
         }
       ],
       "worked": {
-        "title": "Model course registration",
-        "setup": "A college stores students, courses, and the term and grade for each registration.",
-        "steps": [
-          {
-            "title": "Choose entity sets",
-            "body": "Create STUDENT(sid, name) and COURSE(cid, title). sid and cid uniquely identify their rows."
-          },
-          {
-            "title": "Choose the relationship",
-            "body": "A student may enroll in many courses and each course may contain many students. ENROLLS is M:N and has attributes term and grade."
-          },
-          {
-            "title": "Map the relationship",
-            "body": "Create ENROLLMENT(sid, cid, term, grade). sid references STUDENT and cid references COURSE. Include term in the key if a student may retake a course in a later term."
-          }
-        ],
-        "answer": "The ER design becomes three relations. The bridge relation ENROLLMENT records each student-course registration and preserves both foreign-key links.",
+        "title": "Turn course registration into tables",
+        "setup": "A college records which students take which courses, and the grade each student gets.",
         "table": {
           "headers": [
-            "Relation",
-            "Key",
-            "Meaning"
+            "Table",
+            "Example row",
+            "What it means"
           ],
           "rows": [
             [
               "STUDENT",
-              "sid",
-              "One row per student"
+              "1, Asha",
+              "One student"
             ],
             [
               "COURSE",
-              "cid",
-              "One row per course"
+              "C1, DBMS",
+              "One course"
             ],
             [
               "ENROLLMENT",
-              "sid, cid, term",
-              "One registration and its grade"
+              "1, C1, Spring, A",
+              "Asha takes DBMS in Spring and gets A"
             ]
           ]
-        }
+        },
+        "steps": [
+          {
+            "title": "List the things",
+            "body": "Students and courses are two kinds of things the college wants to store. Each gets its own table."
+          },
+          {
+            "title": "Connect the things",
+            "body": "A student can take many courses, and a course can have many students. ENROLLMENT records each connection."
+          },
+          {
+            "title": "Store details with the connection",
+            "body": "The term and grade belong to one student's course registration, so they go in ENROLLMENT."
+          }
+        ],
+        "answer": "Use one STUDENT table, one COURSE table, and one ENROLLMENT table to record each registration."
       },
       "diagram": {
         "title": "An M:N relationship becomes a bridge table",
