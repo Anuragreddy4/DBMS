@@ -24,8 +24,8 @@ for u in units:
       <strong>Unit {unit_number} Important Questions</strong>
       <span class="important-card-counts"><span>Part A <b>{len(part_a)}</b></span><span>Part B <b>{len(part_b)}</b></span></span>
     </button>'''
-    list_a = "".join(f'<li value="{item["number"]}">{escape(item["text"])}</li>' for item in part_a)
-    list_b = "".join(f'<li value="{item["number"]}">{escape(item["text"])}</li>' for item in part_b)
+    list_a = "".join(f'<li value="{item["number"]}"><span class="important-question-text">{escape(item["text"])}</span><button class="important-ask-button" type="button" data-qno-question-id="{escape(item["id"], quote=True)}" aria-label="Ask Qno to answer Part A question {item["number"]}">Ask Qno <span aria-hidden="true">↗</span></button></li>' for item in part_a)
+    list_b = "".join(f'<li value="{item["number"]}"><span class="important-question-text">{escape(item["text"])}</span><button class="important-ask-button" type="button" data-qno-question-id="{escape(item["id"], quote=True)}" aria-label="Ask Qno to answer Part B question {item["number"]}">Ask Qno <span aria-hidden="true">↗</span></button></li>' for item in part_b)
     important_dialogs += f'''<dialog class="important-dialog" id="{dialog_id}" aria-labelledby="{dialog_id}-title">
       <div class="important-dialog-frame">
         <header class="important-dialog-header"><div><span class="eyebrow"><span class="eyebrow-line"></span>UNIT {unit_number:02d}</span><h2 id="{dialog_id}-title">Unit {unit_number} Important Questions</h2></div><button class="important-close" type="button" data-important-close aria-label="Close important questions">×</button></header>

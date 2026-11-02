@@ -26,6 +26,7 @@
   let activeQuestionContext = null;
   let activeQuestionSet = null;
   let lastAnswerQuery = "";
+  let queuedQuestion = null;
 
   const stopWords = new Set([
     "a", "an", "and", "are", "as", "at", "be", "can", "could", "do", "does", "explain", "for", "from",
@@ -1285,6 +1286,7 @@
 
   async function sendQuestion(value, questionContext = null) {
     if (requestPending) {
+      if (questionContext) queuedQuestion = { value, questionContext };
       activeController?.abort();
       return;
     }
@@ -1300,6 +1302,11 @@
     } finally {
       activeController = null;
       setRequestPending(false);
+      if (queuedQuestion) {
+        const nextQuestion = queuedQuestion;
+        queuedQuestion = null;
+        window.setTimeout(() => sendQuestion(nextQuestion.value, nextQuestion.questionContext), 0);
+      }
       input.focus();
     }
   }
@@ -1326,6 +1333,7 @@
     lastTopic = null;
     activeQuestionContext = null;
     activeQuestionSet = null;
+    queuedQuestion = null;
     lastAnswerQuery = "";
     currentUnit = 0;
     scope.value = "";
@@ -1437,6 +1445,25 @@
       more.textContent = "Ask me another question";
       addMessage("bot", more);
     }
+  });
+
+  document.addEventListener("click", (event) => {
+    const askButton = event.target.closest("[data-qno-question-id]");
+    if (!askButton) return;
+    const question = knowledge.questionBank?.items?.find((item) => item.id === askButton.dataset.qnoQuestionId);
+    if (!question) return;
+
+    const questionDialog = askButton.closest(".important-dialog");
+    if (questionDialog?.open) questionDialog.close();
+    currentUnit = Number(question.unit);
+    scope.value = String(question.unit);
+    overlay.querySelectorAll("[data-qno-unit]").forEach((button) => {
+      button.classList.toggle("is-selected", Number(button.dataset.qnoUnit) === currentUnit);
+    });
+    activeQuestionContext = question;
+    activeQuestionSet = { unit: currentUnit, part: question.part, questions: [question], allQuestions: [question], kind: "important" };
+    openBot();
+    sendQuestion(`Explain Question ${question.number}${question.part}: ${question.text}`, question);
   });
 
 })();
