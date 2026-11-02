@@ -230,8 +230,18 @@
     return /\b(i (?:still )?(?:do not|don['’]?t|dont) (?:understand|get it)|i(?:'m| am) not understanding|not understanding|still not (?:clear|understandable)|not (?:clear|understandable|easy to understand)|didn['’]?t understand|i(?:'m| am) confused|what do you mean|what does that mean|explain(?: it| that)? (?:again|differently|in other words)|explain(?: it| that)? (?:in )?(?:different|simpler) words|explain again|can you explain (?:again|that again)|say (?:it )?(?:in )?(?:different|simpler) words|put (?:it|that) another way|explain more|another example|one more example|simpler please|make it simpler)\b/i.test(query);
   }
 
+  function isAffirmativeConfirmation(query) {
+    const text = String(query || "").toLowerCase().replace(/[,.!?]+/g, " ").replace(/\s+/g, " ").trim();
+    return /^(?:(?:yes|yeah|yep|yup|sure|certainly|absolutely|okay|ok|alright|all right)(?: (?:please|do|go ahead|yes|yeah)){0,2}|please|go ahead|please do|do it|that would be (?:great|helpful)|sounds good)$/.test(text);
+  }
+
+  function previousAssistantOfferedAction() {
+    const previousAssistant = recentConversation(8).filter((turn) => turn.role === "assistant").at(-1)?.text || "";
+    return /\b(?:would you like|do you want|shall i|should i|can i|could i|want me to|let me know if you|if you(?:'d| would) like|would it help|would you prefer|i can (?:give|show|provide|write|create|explain|walk you through))\b/i.test(previousAssistant);
+  }
+
   function isContextualFollowUp(query) {
-    return isClarificationRequest(query) ||
+    return (isAffirmativeConfirmation(query) && previousAssistantOfferedAction()) || isClarificationRequest(query) ||
       /\b(?:give (?:me )?(?:an? )?example|example please|for example|explain (?:it |that |this )?(?:simply|in simple english|step by step|more simply|more slowly)|in simple english|step by step|make (?:it|that|this) (?:shorter|simpler|clearer)|shorten (?:it|that)|the (?:first|second|third|next|previous) (?:one|point|property|step)|difference between it and|compare it with)\b/i.test(query) ||
       /\b(?:it|that|this|those|these|same|above|previous|second|third|first|former|latter)\b/i.test(query) ||
       Boolean(activeQuestionContext && /\b(?:\d+\s*[- ]?marks?|exam answer|more detail|give an example)\b/i.test(query));
@@ -665,7 +675,10 @@
     return rows.slice(0, currentQuestionIndex).slice(-turnCount).map((row) => {
       const userBubble = row.querySelector(".qno-user-bubble");
       const content = userBubble || row.querySelector(".qno-message-body");
-      const text = content?.textContent?.trim().slice(0, 1_100) || "";
+      const fullText = content?.textContent?.trim() || "";
+      const text = fullText.length > 1_100
+        ? fullText.slice(0, 680) + "\n[…middle omitted…]\n" + fullText.slice(-400)
+        : fullText;
       return { role: userBubble ? "user" : "assistant", text };
     }).filter((turn) => turn.text);
   }
