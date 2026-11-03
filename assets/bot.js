@@ -611,10 +611,12 @@
       status.textContent = "Gemini is reading the lesson and preparing a complete explanation with Q&A…";
       output.hidden = false;
       output.replaceChildren();
+      const skeleton = createAnswerSkeleton("lesson-regeneration-skeleton");
       const liveText = document.createElement("div");
       liveText.className = "lesson-regeneration-stream";
-      liveText.setAttribute("aria-live", "polite");
-      output.append(liveText);
+      liveText.setAttribute("aria-live", "off");
+      liveText.hidden = true;
+      output.append(skeleton, liveText);
       const question = [
         "Create a complete regenerated DBMS study lesson with a Q&A review.",
         "Course: Unit " + unitNumber + " — " + unitTitle + ". Lesson " + lessonNumber + " — " + lessonTitle + ".",
@@ -633,6 +635,11 @@
         if (typeof payload.text === "string" && payload.text) {
           if (firstTokenAt === null) firstTokenAt = performance.now();
           chunks += 1;
+          if (chunks === 1) {
+            skeleton.remove();
+            liveText.hidden = false;
+            status.textContent = "Gemini is writing the lesson and Q&A…";
+          }
           answer += payload.text;
           liveText.textContent = answer;
         }
@@ -1059,6 +1066,14 @@
     return badge;
   }
 
+  function createAnswerSkeleton(className = "") {
+    const skeleton = document.createElement("div");
+    skeleton.className = "qno-answer-skeleton" + (className ? " " + className : "");
+    skeleton.setAttribute("aria-hidden", "true");
+    for (let index = 0; index < 6; index += 1) skeleton.append(document.createElement("span"));
+    return skeleton;
+  }
+
   function sourceNote(sources) {
     if (!Array.isArray(sources) || !sources.length) return null;
     const note = document.createElement("div");
@@ -1143,10 +1158,12 @@
     identityStatus.textContent = "Preparing your course-based answer";
     identityCopy.append(identityTitle, identityStatus);
     identity.append(signal, identityCopy);
+    const skeleton = createAnswerSkeleton("qno-chat-skeleton");
     const streamNode = document.createElement("div");
     streamNode.className = "qno-gemini-answer qno-gemini-stream";
     streamNode.setAttribute("aria-live", "off");
-    responseCard.append(identity, streamNode);
+    streamNode.hidden = true;
+    responseCard.append(identity, skeleton, streamNode);
     const streamBody = addMessage("bot", responseCard);
     const responseRow = streamBody.closest(".qno-message");
     const relevantMatches = followUp
@@ -1200,6 +1217,8 @@
           receivedChunks += 1;
           if (!createdFirstChunk) {
             createdFirstChunk = true;
+            skeleton.remove();
+            streamNode.hidden = false;
             responseCard.classList.remove("qno-generation-waiting");
             responseCard.classList.add("qno-generation-active");
             responseCard.setAttribute("aria-label", "Qno is writing an answer");
