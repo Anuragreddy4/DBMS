@@ -500,6 +500,194 @@
       cta.append(makeAskGptLink(lessonGptPrompt(unitNumber, unitTitle, promptTitle, topicRows)));
       introTitle.insertAdjacentElement("afterend", cta);
     }
+    enhanceLessonRegeneration(unitNumber, unitTitle, Number(lessonNumber) || 1, lessonTitle, subtopics);
+  }
+
+  function lessonPageContext(unitNumber, unitTitle, lessonNumber, lessonTitle) {
+    const textOf = (node) => String(node?.innerText || node?.textContent || "").replace(/\s+/g, " ").trim();
+    const tableText = (table) => [...table.querySelectorAll("tr")].map((row) =>
+      [...row.querySelectorAll("th,td")].map(textOf).join(" | "),
+    ).filter(Boolean).join("\n");
+    const intro = document.querySelector(".lesson-intro");
+    const plainWords = textOf(intro?.querySelector(".plain-definition p"));
+    const goals = [...(intro?.querySelectorAll(".learning-goals li") || [])].map(textOf);
+    const syllabusTopics = [...document.querySelectorAll(".subtopic-grid .subtopic-card strong")].map(textOf);
+    const topics = [...document.querySelectorAll(".concept-list .concept-panel")].map((panel, index) => {
+      const title = textOf(panel.querySelector("h2"));
+      const definition = textOf(panel.querySelector(".definition-box p"));
+      const details = [...panel.querySelectorAll(":scope > p, .small-example p")].map(textOf);
+      const tables = [...panel.querySelectorAll("table")].map(tableText);
+      const diagrams = [...panel.querySelectorAll(".concept-diagram")].map((figure) => {
+        const caption = textOf(figure.querySelector("figcaption"));
+        const labels = [...figure.querySelectorAll("svg text")].map(textOf).filter(Boolean);
+        return [caption, labels.join(" → ")].filter(Boolean).join("; ");
+      });
+      return ["Topic " + (index + 1) + ": " + title, definition ? "Definition: " + definition : "", ...details, ...tables, ...diagrams].filter(Boolean).join("\n");
+    });
+    const worked = document.querySelector(".worked-example");
+    const workedSteps = [...(worked?.querySelectorAll(".walk-detail") || [])].map((step, index) =>
+      "Step " + (index + 1) + ": " + [textOf(step.querySelector("h3")), textOf(step.querySelector("p"))].filter(Boolean).join(" — "),
+    );
+    const workedTables = [...(worked?.querySelectorAll("table") || [])].map(tableText);
+    const workedCode = [...(worked?.querySelectorAll("pre code") || [])].map((code) => "Code example:\n" + String(code.textContent || "").trim());
+    const workedExample = worked ? [
+      textOf(worked.querySelector(".worked-heading h2")),
+      textOf(worked.querySelector(".worked-heading > p")),
+      ...workedTables,
+      ...workedCode,
+      ...workedSteps,
+      textOf(worked.querySelector(".worked-answer p")),
+    ].filter(Boolean).join("\n") : "";
+    const examFocus = document.querySelector(".exam-focus");
+    return [
+      "DBMS course: " + unitTitle + " (Unit " + unitNumber + ").",
+      "Lesson " + lessonNumber + ": " + lessonTitle + ".",
+      plainWords ? "Lesson overview: " + plainWords : "",
+      goals.length ? "Learning goals:\n- " + goals.join("\n- ") : "",
+      syllabusTopics.length ? "Syllabus topics:\n- " + syllabusTopics.join("\n- ") : "",
+      topics.length ? "Full topic explanations:\n\n" + topics.join("\n\n") : "",
+      workedExample ? "Worked example and every step:\n" + workedExample : "",
+      examFocus ? "Exam focus: " + textOf(examFocus.querySelector("p")) : "",
+    ].filter(Boolean).join("\n\n").slice(0, 14_000);
+  }
+
+  function enhanceLessonRegeneration(unitNumber, unitTitle, lessonNumber, lessonTitle, subtopics) {
+    const navigation = document.querySelector(".lesson-navigation");
+    if (!navigation || document.querySelector(".lesson-regeneration-card")) return;
+    const card = document.createElement("section");
+    card.className = "lesson-regeneration-card";
+    card.setAttribute("aria-labelledby", "lesson-regeneration-title");
+    const heading = document.createElement("div");
+    heading.className = "lesson-regeneration-heading";
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "section-label";
+    eyebrow.textContent = "GEMINI STUDY REBUILD";
+    const title = document.createElement("h2");
+    title.id = "lesson-regeneration-title";
+    title.textContent = "Regenerate this lesson with Q&A";
+    const description = document.createElement("p");
+    description.textContent = "Ask Gemini for a fresh, complete explanation of every topic in this lesson, followed by review questions with answers.";
+    heading.append(eyebrow, title, description);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "lesson-regeneration-button";
+    button.textContent = "Regenerate with Q&A";
+    const status = document.createElement("p");
+    status.className = "lesson-regeneration-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    status.hidden = true;
+    const output = document.createElement("div");
+    output.className = "lesson-regeneration-output";
+    output.hidden = true;
+    card.append(heading, button, status, output);
+    navigation.insertAdjacentElement("afterend", card);
+
+    let activeController = null;
+    button.addEventListener("click", async () => {
+      if (activeController) {
+        activeController.abort();
+        status.textContent = "Stopping generation…";
+        return;
+      }
+      const lessonContext = lessonPageContext(unitNumber, unitTitle, lessonNumber, lessonTitle);
+      if (!lessonContext) {
+        status.hidden = false;
+        status.textContent = "This lesson’s content could not be collected. Reload the page and try again.";
+        return;
+      }
+      const controller = new AbortController();
+      activeController = controller;
+      const startedAt = performance.now();
+      let firstTokenAt = null;
+      let chunks = 0;
+      let answer = "";
+      let streamError = "";
+      let serverMetrics = null;
+      let completed = false;
+      button.textContent = "Stop generation";
+      button.setAttribute("aria-busy", "true");
+      status.hidden = false;
+      status.textContent = "Gemini is reading the lesson and preparing a complete explanation with Q&A…";
+      output.hidden = false;
+      output.replaceChildren();
+      const liveText = document.createElement("div");
+      liveText.className = "lesson-regeneration-stream";
+      liveText.setAttribute("aria-live", "polite");
+      output.append(liveText);
+      const question = [
+        "Create a complete regenerated DBMS study lesson with a Q&A review.",
+        "Course: Unit " + unitNumber + " — " + unitTitle + ". Lesson " + lessonNumber + " — " + lessonTitle + ".",
+        "Cover every subtopic: " + (subtopics.length ? subtopics.join("; ") : lessonTitle) + ".",
+        "Use the full lesson page content supplied with this request. Preserve every concept, important rule, example, worked-example step, and exam-focus point; do not omit or combine unrelated ideas.",
+        "Explain in simple student-friendly English with clear headings, definitions before technical terms, step-by-step explanations, and basic examples. Finish with 5–8 useful questions and their answers covering the lesson. Return the full lesson, not a short summary.",
+      ].join("\n");
+      const consumeEvent = (eventText) => {
+        const data = eventText.split(/\r?\n/).filter((line) => line.startsWith("data:")).map((line) => line.slice(5).trimStart()).join("\n");
+        if (!data || data === "[DONE]") return;
+        let payload;
+        try { payload = JSON.parse(data); } catch { return; }
+        if (payload.metrics) serverMetrics = payload.metrics;
+        if (payload.error) { streamError = payload.error; return; }
+        if (payload.done) completed = true;
+        if (typeof payload.text === "string" && payload.text) {
+          if (firstTokenAt === null) firstTokenAt = performance.now();
+          chunks += 1;
+          answer += payload.text;
+          liveText.textContent = answer;
+        }
+      };
+      try {
+        const response = await fetch(`${rootPrefix}api/qno`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "text/event-stream, application/json" },
+          body: JSON.stringify({ question, intent: "lesson-regenerate", unit: unitNumber, history: [], lessonContext }),
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "Gemini could not regenerate this lesson.");
+        }
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error("This browser cannot stream the generated lesson.");
+        const decoder = new TextDecoder();
+        let buffer = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+          const events = buffer.split(/\r?\n\r?\n/);
+          buffer = events.pop() || "";
+          events.forEach(consumeEvent);
+          if (streamError) throw new Error(streamError);
+          if (done) break;
+        }
+        if (buffer.trim()) consumeEvent(buffer);
+        if (streamError) throw new Error(streamError);
+        if (!completed || !answer.trim()) throw new Error("Gemini ended before confirming a complete lesson. The partial text is saved; regenerate to retry.");
+        const rendered = geminiAnswerContent(answer);
+        rendered.classList.add("lesson-regeneration-answer");
+        output.replaceChildren(rendered);
+        status.textContent = "Complete lesson and Q&A ready.";
+      } catch (error) {
+        if (answer.trim()) {
+          const rendered = geminiAnswerContent(answer);
+          rendered.classList.add("lesson-regeneration-answer");
+          output.replaceChildren(rendered);
+        } else {
+          output.replaceChildren();
+          output.hidden = true;
+        }
+        status.textContent = controller.signal.aborted
+          ? (answer.trim() ? "Generation stopped. The partial answer is saved; regenerate to finish it." : "Generation stopped. Select Regenerate with Q&A to try again.")
+          : (error.message || "Gemini could not finish this lesson. Please try again.");
+        console.warn("[Qno lesson regeneration]", { totalMs: Math.round(performance.now() - startedAt), ttftMs: firstTokenAt === null ? null : Math.round(firstTokenAt - startedAt), chunks, server: serverMetrics, error: error.name });
+      } finally {
+        activeController = null;
+        button.textContent = "Regenerate with Q&A";
+        button.removeAttribute("aria-busy");
+      }
+      if (completed) console.info("[Qno lesson regeneration]", { totalMs: Math.round(performance.now() - startedAt), ttftMs: firstTokenAt === null ? null : Math.round(firstTokenAt - startedAt), chunks, progressiveText: chunks > 1, server: serverMetrics });
+    });
   }
 
   function getLesson(topic) {
