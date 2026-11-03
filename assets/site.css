@@ -163,8 +163,9 @@ body>header,body>main,body>footer{position:relative;z-index:2}
 @media(prefers-reduced-motion:reduce){.important-dialog[open]{animation:none}.important-unit-card,.lesson-nav-link{transition:none}}
 
 /* Direct ChatGPT launch links for questions and lesson context. */
-.ask-gpt-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid #161b1d;border-radius:8px;background:#181d1f;color:#fff;font-family:inherit;font-size:10px;font-weight:800;line-height:1.1;text-decoration:none;white-space:nowrap;box-shadow:0 2px 0 #080b0c;transition:transform .16s,background .16s,box-shadow .16s}
-.ask-gpt-link:hover{transform:translateY(-1px);background:#2b3234;color:#fff;box-shadow:0 3px 0 #080b0c,0 7px 14px rgba(14,19,20,.13)}
+.ask-gpt-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid #000;border-radius:8px;background:#000;color:#fff;font-family:inherit;font-size:10px;font-weight:800;line-height:1.1;text-decoration:none;white-space:nowrap;box-shadow:0 2px 0 #000;transition:transform .16s,box-shadow .16s}
+.ask-gpt-link:hover{transform:translateY(-1px);background:#000;color:#fff;box-shadow:0 3px 0 #000,0 7px 14px rgba(0,0,0,.16)}
+.ask-gpt-link:active{transform:translateY(0);background:#000;box-shadow:0 1px 0 #000}
 .ask-gpt-link:focus-visible{outline:3px solid rgba(36,111,132,.36);outline-offset:2px}
 .ask-gpt-icon{display:block;width:16px;height:16px;object-fit:contain;flex:0 0 16px}
 .important-question-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;justify-self:start}
