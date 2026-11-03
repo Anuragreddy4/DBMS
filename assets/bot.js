@@ -421,10 +421,11 @@
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.setAttribute("aria-label", "Open ChatGPT with a prepared DBMS prompt");
-    const icon = document.createElement("span");
+    const icon = document.createElement("img");
     icon.className = "ask-gpt-icon";
     icon.setAttribute("aria-hidden", "true");
-    icon.textContent = "✳";
+    icon.alt = "";
+    icon.src = rootPrefix + "assets/chatgpt-mark.png";
     const label = document.createElement("span");
     label.textContent = "Ask GPT";
     link.append(icon, label);
@@ -459,16 +460,6 @@
       topicList,
       "Teach this lesson and its subtopics in clear, beginner-friendly English. Define each term before using it, explain the ideas step by step, and include basic worked examples. Add a readable visual diagram or flowchart where it helps understanding. Keep the explanation connected to this DBMS syllabus.",
     ].filter(Boolean).join("\n");
-  }
-
-  function topicGptPrompt(unitNumber, unitTitle, lessonTitle, topicTitle) {
-    return [
-      "I am studying DBMS (Database Management Systems) for a university exam.",
-      "Unit " + unitNumber + ": " + unitTitle + ".",
-      "Lesson: " + lessonTitle + ".",
-      "Topic/subtopic: " + topicTitle + ".",
-      "Explain this exact topic in simple, student-friendly English. Start with a clear definition, then explain it step by step with a basic example. Add a small visual diagram or flowchart if it makes the idea easier to understand.",
-    ].join("\n");
   }
 
   function unitNumberOnPage() {
@@ -524,19 +515,6 @@
       wrapper.append(makeAskGptLink(prompt), card);
     });
 
-    document.querySelectorAll(".syllabus-topic-group").forEach((group) => {
-      const heading = group.querySelector(".syllabus-topic-heading");
-      const openLesson = heading?.querySelector("a[href]");
-      if (!heading || !openLesson || heading.querySelector(".syllabus-topic-actions")) return;
-      const lessonTitle = heading.querySelector("h3")?.textContent.trim() || "DBMS lesson";
-      const lessonNo = heading.querySelector(":scope > span")?.textContent.match(/\d+/)?.[0] || "";
-      const promptTitle = (lessonNo ? "Lesson " + Number(lessonNo) + ": " : "") + lessonTitle;
-      const prompt = lessonGptPrompt(unitNumber, unitTitle, promptTitle, lessonSubtopics(group));
-      const actions = document.createElement("div");
-      actions.className = "syllabus-topic-actions";
-      heading.replaceChild(actions, openLesson);
-      actions.append(openLesson, makeAskGptLink(prompt));
-    });
   }
 
   function enhanceLessonTopics() {
@@ -558,12 +536,6 @@
       cta.append(makeAskGptLink(lessonGptPrompt(unitNumber, unitTitle, promptTitle, topicRows)));
       introTitle.insertAdjacentElement("afterend", cta);
     }
-    document.querySelectorAll(".concept-panel").forEach((panel) => {
-      const topicTitle = panel.querySelector("h2")?.textContent.trim();
-      const topicHeading = panel.querySelector("h2");
-      if (!topicTitle || !topicHeading || panel.querySelector(".topic-gpt-link")) return;
-      topicHeading.insertAdjacentElement("afterend", makeAskGptLink(topicGptPrompt(unitNumber, unitTitle, lessonTitle, topicTitle), "topic-gpt-link"));
-    });
   }
 
   function getLesson(topic) {
