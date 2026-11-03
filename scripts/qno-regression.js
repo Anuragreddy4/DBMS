@@ -4,6 +4,7 @@ const { performance } = require("node:perf_hooks");
 
 const BASE_URL = process.env.QNO_URL || "http://127.0.0.1:5173";
 const timingSamples = [];
+let testSession = null;
 const sandbox = { window: {} };
 vm.runInNewContext(fs.readFileSync("assets/bot-knowledge.js", "utf8"), sandbox);
 const questionBank = sandbox.window.QNO_DBMS_KNOWLEDGE?.questionBank;
@@ -25,6 +26,15 @@ function verifyLocalQuestionLists() {
 }
 
 async function ask(question, history, options = {}) {
+  if (!testSession) {
+    const sessionResponse = await fetch(`${BASE_URL}/api/qno`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ action: "session-create" }),
+    });
+    testSession = await sessionResponse.json().catch(() => null);
+    if (!sessionResponse.ok || !testSession?.sessionId || !testSession?.sessionToken) throw new Error("Qno could not create a secure test session.");
+  }
   const startedAt = performance.now();
   let firstTextAt = null;
   let textChunks = 0;
@@ -33,7 +43,12 @@ async function ask(question, history, options = {}) {
   let streamError = "";
   const response = await fetch(`${BASE_URL}/api/qno`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "text/event-stream",
+      "X-Qno-Session-ID": testSession.sessionId,
+      "X-Qno-Session-Token": testSession.sessionToken,
+    },
     body: JSON.stringify({
       question,
       intent: options.followup ? "followup" : "answer",
@@ -41,6 +56,8 @@ async function ask(question, history, options = {}) {
       questionContext: options.questionContext || null,
     }),
   });
+  const refreshedToken = response.headers.get("X-Qno-Session-Token");
+  if (refreshedToken) testSession.sessionToken = refreshedToken;
   if (!response.ok) throw new Error(`Qno API returned HTTP ${response.status}: ${await response.text()}`);
 
   const reader = response.body.getReader();

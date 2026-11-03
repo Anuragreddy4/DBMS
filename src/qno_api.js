@@ -1,6 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { performance } = require("node:perf_hooks");
+const crypto = require("node:crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const KNOWLEDGE = path.join(ROOT, "knowledge", "dbms");
@@ -10,6 +11,15 @@ const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 18;
 const MAX_REQUEST_BYTES = 48_000;
 const HISTORY_LIMIT = 10;
+const SESSION_IDLE_MS = 6 * 60 * 60 * 1000;
+const configuredSessionSecret = typeof process.env.QNO_SESSION_SECRET === "string" ? process.env.QNO_SESSION_SECRET.trim() : "";
+const geminiKeyForSession = typeof process.env.GEMINI_API_KEY === "string" ? process.env.GEMINI_API_KEY.trim() : "";
+const SESSION_TOKEN_SECRET = configuredSessionSecret
+  ? (Buffer.byteLength(configuredSessionSecret) >= 32 ? configuredSessionSecret : "")
+  : (Buffer.byteLength(geminiKeyForSession) >= 32 ? geminiKeyForSession : "");
+const SESSION_SIGNING_KEY = SESSION_TOKEN_SECRET
+  ? crypto.createHmac("sha256", SESSION_TOKEN_SECRET).update("qno-chat-session-v1").digest()
+  : null;
 
 let cachedKnowledge = null;
 
@@ -26,6 +36,46 @@ function sendJson(response, status, payload) {
 
 function safeText(value, maximumLength) {
   return typeof value === "string" ? value.trim().slice(0, maximumLength) : "";
+}
+
+function signSessionPayload(payload) {
+  if (!SESSION_SIGNING_KEY) return "";
+  const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const signature = crypto.createHmac("sha256", SESSION_SIGNING_KEY).update(encoded).digest("base64url");
+  return `${encoded}.${signature}`;
+}
+
+function createSession() {
+  const now = Date.now();
+  const sessionId = crypto.randomUUID();
+  return createSessionToken(sessionId, now);
+}
+
+function createSessionToken(sessionId, lastActivity = Date.now()) {
+  return {
+    sessionId,
+    sessionToken: signSessionPayload({ sessionId, lastActivity }),
+    expiresIn: SESSION_IDLE_MS / 1000,
+  };
+}
+
+function verifySession(sessionId, sessionToken) {
+  if (!SESSION_SIGNING_KEY || typeof sessionId !== "string" || !/^[0-9a-f-]{36}$/i.test(sessionId) || typeof sessionToken !== "string") return null;
+  const parts = sessionToken.split(".");
+  if (parts.length !== 2 || parts[0].length > 1_024 || parts[1].length > 128) return null;
+  const expected = crypto.createHmac("sha256", SESSION_SIGNING_KEY).update(parts[0]).digest();
+  let provided;
+  try { provided = Buffer.from(parts[1], "base64url"); } catch { return null; }
+  if (provided.length !== expected.length || !crypto.timingSafeEqual(provided, expected)) return null;
+  let claims;
+  try { claims = JSON.parse(Buffer.from(parts[0], "base64url").toString("utf8")); } catch { return null; }
+  const now = Date.now();
+  if (claims?.sessionId !== sessionId || !Number.isFinite(claims.lastActivity) || claims.lastActivity > now + 60_000 || now - claims.lastActivity >= SESSION_IDLE_MS) return null;
+  return { sessionId, lastActivity: now };
+}
+
+function requestSession(request) {
+  return verifySession(request.headers["x-qno-session-id"], request.headers["x-qno-session-token"]);
 }
 
 function readJson(request) {
@@ -274,11 +324,33 @@ async function handleQno(request, response) {
     sendJson(response, error.message === "Request is too large." ? 413 : 400, { error: error.message });
     return;
   }
+  if (body.action === "session-create") {
+    if (!SESSION_SIGNING_KEY) {
+      sendJson(response, 503, { error: "Secure chat sessions need a server-side QNO_SESSION_SECRET with at least 32 characters, or a valid Gemini key." });
+      return;
+    }
+    sendJson(response, 201, createSession());
+    return;
+  }
+  if (body.action === "session-resume") {
+    const verified = requestSession(request);
+    if (!verified) {
+      sendJson(response, 401, { code: "SESSION_EXPIRED", error: "This chat session expired or is invalid. A fresh chat has been started." });
+      return;
+    }
+    sendJson(response, 200, createSessionToken(verified.sessionId, verified.lastActivity));
+    return;
+  }
   const lessonRegeneration = body.intent === "lesson-regenerate";
   const lessonContext = lessonRegeneration ? safeText(body.lessonContext, 14_000) : "";
   const question = safeText(body.question, 2_000);
   if (!question) {
     sendJson(response, 400, { error: "Write a question for Qno first." });
+    return;
+  }
+  const verifiedSession = requestSession(request);
+  if (!verifiedSession) {
+    sendJson(response, 401, { code: "SESSION_EXPIRED", error: "This chat session expired or is invalid. Start a new chat and send your question again." });
     return;
   }
   if (lessonRegeneration && !lessonContext) {
@@ -412,11 +484,12 @@ async function handleQno(request, response) {
 
       if (!streamStarted) {
         response.writeHead(200, {
-          "Cache-Control": "no-cache, no-transform",
+          "Cache-Control": "no-store, no-cache, no-transform",
           "Connection": "keep-alive",
           "Content-Type": "text/event-stream; charset=utf-8",
           "X-Accel-Buffering": "no",
           "X-Content-Type-Options": "nosniff",
+          "X-Qno-Session-Token": signSessionPayload({ sessionId: verifiedSession.sessionId, lastActivity: Date.now() }),
         });
         response.socket?.setNoDelay?.(true);
         response.flushHeaders?.();

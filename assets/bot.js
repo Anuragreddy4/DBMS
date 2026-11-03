@@ -11,7 +11,6 @@
   const scope = overlay.querySelector("#qno-scope");
   const sendButton = overlay.querySelector(".qno-send");
   const statusLabel = overlay.querySelector("[data-qno-status]");
-  const privacyNote = overlay.querySelector("[data-qno-privacy]");
   const welcome = overlay.querySelector("#qno-welcome");
   const messages = overlay.querySelector("#qno-messages");
   const scrollArea = overlay.querySelector("#qno-scroll");
@@ -27,6 +26,178 @@
   let activeQuestionSet = null;
   let lastAnswerQuery = "";
   let queuedQuestion = null;
+  let qnoSession = null;
+  let sessionPromise = null;
+  let sessionGeneration = 0;
+  let conversationHistory = [];
+  let lastSessionValidatedAt = 0;
+  let restoredSessionId = "";
+  let expiryNotifiedForSession = "";
+  let restoringConversation = false;
+
+  const SESSION_STORAGE_KEY = "qno.active-session.v1";
+  const SESSION_HISTORY_PREFIX = "qno.conversation.v1:";
+  const MAX_LOCAL_TURNS = 40;
+
+  function sessionHistoryKey(sessionId) {
+    return SESSION_HISTORY_PREFIX + sessionId;
+  }
+
+  function readStoredSession() {
+    try {
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY) || "null");
+      return session && typeof session.sessionId === "string" && typeof session.sessionToken === "string" ? session : null;
+    } catch { return null; }
+  }
+
+  function saveActiveSession() {
+    if (!qnoSession) return;
+    try { sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(qnoSession)); } catch { /* storage may be unavailable */ }
+  }
+
+  function saveConversation() {
+    if (!qnoSession) return;
+    try { sessionStorage.setItem(sessionHistoryKey(qnoSession.sessionId), JSON.stringify(conversationHistory.slice(-MAX_LOCAL_TURNS))); } catch { /* keep the live chat usable if storage is full */ }
+  }
+
+  function appendConversationTurn(role, value) {
+    const text = String(value || "").trim().slice(0, 5_000);
+    if (!text || restoringConversation) return;
+    conversationHistory.push({ role: role === "assistant" ? "assistant" : "user", text });
+    conversationHistory = conversationHistory.slice(-MAX_LOCAL_TURNS);
+    saveConversation();
+  }
+
+  function announceExpiredSession(result, message) {
+    const sessionId = result?.session?.sessionId;
+    if (!result?.expired || !sessionId || expiryNotifiedForSession === sessionId) return;
+    expiryNotifiedForSession = sessionId;
+    botText(message);
+  }
+
+  function sessionHeaders(session = qnoSession) {
+    if (!session) throw new Error("The secure chat session is not ready. Reopen Qno and try again.");
+    return {
+      "X-Qno-Session-ID": session.sessionId,
+      "X-Qno-Session-Token": session.sessionToken,
+    };
+  }
+
+  function updateSessionFromResponse(response, sessionId = qnoSession?.sessionId) {
+    const refreshedToken = response.headers.get("X-Qno-Session-Token");
+    if (qnoSession && qnoSession.sessionId === sessionId && refreshedToken) {
+      qnoSession.sessionToken = refreshedToken;
+      saveActiveSession();
+      lastSessionValidatedAt = Date.now();
+    }
+  }
+
+  function clearStoredSession(sessionId = qnoSession?.sessionId) {
+    try {
+      if (sessionId) sessionStorage.removeItem(sessionHistoryKey(sessionId));
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch { /* storage may be unavailable */ }
+  }
+
+  function restoreConversation() {
+    if (!conversationHistory.length || restoredSessionId === qnoSession?.sessionId) return;
+    restoringConversation = true;
+    welcome.hidden = true;
+    messages.replaceChildren();
+    conversationHistory.forEach((turn) => {
+      if (turn.role === "user") addMessage("user", turn.text);
+      else addMessage("bot", geminiAnswerContent(turn.text));
+    });
+    restoringConversation = false;
+    restoredSessionId = qnoSession?.sessionId || "";
+    requestAnimationFrame(() => { scrollArea.scrollTop = scrollArea.scrollHeight; });
+  }
+
+  async function createFreshSession(generation = sessionGeneration) {
+    const response = await fetch(`${rootPrefix}api/qno`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ action: "session-create" }),
+      cache: "no-store",
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.sessionId || !result.sessionToken) throw new Error(result.error || "Qno could not create a secure chat session.");
+    if (generation !== sessionGeneration) return null;
+    qnoSession = { sessionId: result.sessionId, sessionToken: result.sessionToken };
+    conversationHistory = [];
+    lastSessionValidatedAt = Date.now();
+    restoredSessionId = qnoSession.sessionId;
+    saveActiveSession();
+    saveConversation();
+    return qnoSession;
+  }
+
+  async function ensureSession({ forceNew = false, validate = false } = {}) {
+    if (sessionPromise && !forceNew) return sessionPromise;
+    const sessionAge = Date.now() - lastSessionValidatedAt;
+    if (!forceNew && qnoSession && (sessionAge < 5 * 60 * 60 * 1000 || (validate && sessionAge < 5_000))) return { session: qnoSession, expired: false };
+    const generation = sessionGeneration;
+    sessionPromise = (async () => {
+      let prior = qnoSession || readStoredSession();
+      let expired = false;
+      if (prior && !forceNew) {
+        const response = await fetch(`${rootPrefix}api/qno`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json", ...sessionHeaders(prior) },
+          body: JSON.stringify({ action: "session-resume" }),
+          cache: "no-store",
+        });
+        if (generation !== sessionGeneration) return { session: qnoSession, expired: false };
+        if (response.ok) {
+          const result = await response.json();
+          qnoSession = { sessionId: result.sessionId, sessionToken: result.sessionToken };
+          lastSessionValidatedAt = Date.now();
+          try {
+            const saved = JSON.parse(sessionStorage.getItem(sessionHistoryKey(qnoSession.sessionId)) || "[]");
+            conversationHistory = Array.isArray(saved)
+              ? saved.filter((turn) => (turn?.role === "user" || turn?.role === "assistant") && typeof turn.text === "string")
+                .slice(-MAX_LOCAL_TURNS).map((turn) => ({ role: turn.role, text: turn.text.trim().slice(0, 5_000) })).filter((turn) => turn.text)
+              : [];
+          } catch { conversationHistory = []; }
+          saveActiveSession();
+          restoreConversation();
+          return { session: qnoSession, expired: false };
+        }
+        if (response.status !== 401) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "Qno could not validate this chat session. Try again.");
+        }
+        expired = true;
+        clearStoredSession(prior.sessionId);
+        qnoSession = null;
+        conversationHistory = [];
+        messages.replaceChildren();
+        welcome.hidden = false;
+      } else if (forceNew) {
+        clearStoredSession(prior?.sessionId);
+        qnoSession = null;
+        conversationHistory = [];
+      }
+      const session = await createFreshSession(generation);
+      if (generation !== sessionGeneration) return { session: qnoSession, expired: false };
+      return { session, expired };
+    })().finally(() => { if (generation === sessionGeneration) sessionPromise = null; });
+    return sessionPromise;
+  }
+
+  async function replaceExpiredSession(expiredSessionId) {
+    if (qnoSession?.sessionId !== expiredSessionId) return;
+    sessionGeneration += 1;
+    clearStoredSession(expiredSessionId);
+    qnoSession = null;
+    conversationHistory = [];
+    restoredSessionId = "";
+    messages.replaceChildren();
+    welcome.hidden = false;
+    lastSessionValidatedAt = 0;
+    sessionPromise = null;
+    await ensureSession({ forceNew: true });
+  }
 
   const stopWords = new Set([
     "a", "an", "and", "are", "as", "at", "be", "can", "could", "do", "does", "explain", "for", "from",
@@ -190,6 +361,9 @@
     }
     row.append(avatar, body);
     messages.append(row);
+    if (role !== "user" && !restoringConversation && !content?.classList?.contains("qno-generation-card") && !content?.classList?.contains("qno-retry-notice")) {
+      appendConversationTurn("assistant", content?.textContent || "");
+    }
     requestAnimationFrame(() => {
       if (content?.classList?.contains("qno-question-list-card")) {
         row.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -645,14 +819,22 @@
         }
       };
       try {
+        const sessionResult = await ensureSession();
+        const requestSession = sessionResult.session;
+        if (sessionResult.expired) status.textContent = "The old chat expired. Gemini is starting this lesson request in a fresh session…";
         const response = await fetch(`${rootPrefix}api/qno`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "text/event-stream, application/json" },
+          headers: { "Content-Type": "application/json", Accept: "text/event-stream, application/json", ...sessionHeaders(requestSession) },
           body: JSON.stringify({ question, intent: "lesson-regenerate", unit: unitNumber, history: [], lessonContext }),
           signal: controller.signal,
         });
+        updateSessionFromResponse(response, requestSession.sessionId);
         if (!response.ok) {
           const result = await response.json().catch(() => ({}));
+          if (result.code === "SESSION_EXPIRED") {
+            await replaceExpiredSession(requestSession.sessionId);
+            throw new Error("The previous chat expired after six hours. A fresh session is ready; select Regenerate with Q&A again.");
+          }
           throw new Error(result.error || "Gemini could not regenerate this lesson.");
         }
         const reader = response.body?.getReader();
@@ -947,23 +1129,18 @@
   }
 
   function recentConversation(turnCount = 6) {
-    const rows = [...messages.children];
-    let currentQuestionIndex = rows.length;
-    for (let index = rows.length - 1; index >= 0; index -= 1) {
-      if (rows[index].classList.contains("qno-message-user")) {
-        currentQuestionIndex = index;
-        break;
-      }
-    }
-    return rows.slice(0, currentQuestionIndex).slice(-turnCount).map((row) => {
-      const userBubble = row.querySelector(".qno-user-bubble");
-      const content = userBubble || row.querySelector(".qno-message-body");
-      const fullText = content?.textContent?.trim() || "";
-      const text = fullText.length > 1_100
-        ? fullText.slice(0, 680) + "\n[…middle omitted…]\n" + fullText.slice(-400)
-        : fullText;
-      return { role: userBubble ? "user" : "assistant", text };
-    }).filter((turn) => turn.text);
+    return conversationHistory.slice(-turnCount).map((turn) => ({
+      role: turn.role,
+      text: turn.text.length > 1_100 ? turn.text.slice(0, 680) + "\n[…middle omitted…]\n" + turn.text.slice(-400) : turn.text,
+    }));
+  }
+
+  function historyForCurrentQuestion() {
+    const turns = conversationHistory.at(-1)?.role === "user" ? conversationHistory.slice(0, -1) : conversationHistory;
+    return turns.slice(-8).map((turn) => ({
+      role: turn.role,
+      text: turn.text.length > 1_100 ? turn.text.slice(0, 680) + "\n[…middle omitted…]\n" + turn.text.slice(-400) : turn.text,
+    }));
   }
 
   function setRequestPending(pending) {
@@ -992,6 +1169,10 @@
       if (requestPending || version !== conversationVersion) return;
       partialRow?.remove();
       noticeRow?.remove();
+      if (conversationHistory.at(-1)?.role === "assistant" && conversationHistory.at(-2)?.role === "user" && conversationHistory.at(-2).text === query) {
+        conversationHistory.pop();
+        saveConversation();
+      }
       setRequestPending(true);
       try {
         await replyTo(query);
@@ -1134,6 +1315,8 @@
 
   async function askGemini(query, matches, followUp = false) {
     if (!geminiConfigured) return false;
+    const requestSession = qnoSession;
+    if (!requestSession) throw new Error("The secure chat session is not ready. Reopen Qno and try again.");
     const controller = new AbortController();
     const runVersion = conversationVersion;
     const clientStartedAt = performance.now();
@@ -1180,19 +1363,22 @@
       const requestStartedAt = performance.now();
       const response = await fetch(`${rootPrefix}api/qno`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "text/event-stream, application/json" },
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream, application/json", ...sessionHeaders(requestSession) },
         body: JSON.stringify({
           question: query,
           intent: followUp ? "followup" : "answer",
-          history: recentConversation(8),
+          history: historyForCurrentQuestion(),
           unit: currentUnit || Number(scope.value) || null,
           questionContext: activeQuestionContext ? { id: activeQuestionContext.id, unit: activeQuestionContext.unit, part: activeQuestionContext.part, number: activeQuestionContext.number, text: activeQuestionContext.text, source: activeQuestionContext.source, page: activeQuestionContext.page } : null,
         }),
         signal: controller.signal,
       });
+      updateSessionFromResponse(response, requestSession.sessionId);
       if (!response.ok) {
         const result = await response.json().catch(() => ({}));
-        throw new Error(result.error || "Gemini could not answer right now.");
+        const error = new Error(result.error || "Gemini could not answer right now.");
+        error.code = result.code || "";
+        throw error;
       }
       const reader = response.body?.getReader();
       if (!reader) throw new Error("This browser cannot stream the answer.");
@@ -1241,6 +1427,7 @@
       if (buffer.trim()) consumeEvent(buffer);
       if (streamError) throw new Error(streamError);
       if (!answer.trim()) throw new Error("Gemini returned an empty answer.");
+      if (qnoSession?.sessionId === requestSession.sessionId) appendConversationTurn("assistant", answer);
       streamNode.replaceWith(geminiAnswerContent(answer));
       responseCard.classList.remove("qno-generation-active", "qno-generation-waiting");
       responseCard.classList.add("qno-generation-complete");
@@ -1276,6 +1463,7 @@
         error: error.name,
       });
       if (answer.trim()) {
+        if (qnoSession?.sessionId === requestSession.sessionId) appendConversationTurn("assistant", answer);
         streamNode.replaceWith(geminiAnswerContent(answer));
         responseCard.classList.remove("qno-generation-waiting", "qno-generation-active");
         responseCard.classList.add("qno-generation-complete");
@@ -1285,6 +1473,16 @@
       }
       if (error.name === "AbortError" || controller.signal.aborted) {
         if (runVersion === conversationVersion) retryNotice(query, answer.trim() ? responseRow : null, runVersion);
+        return true;
+      }
+      if (error.code === "SESSION_EXPIRED" && qnoSession?.sessionId === requestSession.sessionId) {
+        responseRow.remove();
+        try {
+          await replaceExpiredSession(requestSession.sessionId);
+          if (runVersion === conversationVersion) botText("This chat was inactive for six hours, so I started a fresh session. Please send your question again.");
+        } catch {
+          if (runVersion === conversationVersion) botText("This chat expired. Select New chat to start a secure session, then send your question again.");
+        }
         return true;
       }
       if (runVersion === conversationVersion) retryNotice(query, answer.trim() ? responseRow : null, runVersion, error.message || "Qno couldn’t finish this reply. Your question is saved.");
@@ -1399,9 +1597,6 @@
   function setGeminiStatus(configured, model = "") {
     geminiConfigured = configured;
     statusLabel.textContent = configured ? `Gemini AI · ${model || "ready"}` : "Local guide · Gemini not set up";
-    privacyNote.textContent = configured
-      ? "Gemini receives your question, the selected important question when relevant, and recent chat turns. The API key stays server-side."
-      : "The indexed question lists work locally. Add GEMINI_API_KEY as a server-side secret to enable AI explanations.";
     overlay.classList.toggle("qno-gemini-ready", configured);
   }
 
@@ -1803,11 +1998,16 @@
     if (!query) return;
     if (questionContext) activeQuestionContext = questionContext;
     setRequestPending(true);
-    addMessage("user", query);
-    input.value = "";
-    input.style.height = "auto";
     try {
+      const sessionResult = await ensureSession();
+      announceExpiredSession(sessionResult, "This chat was inactive for six hours, so I started a fresh conversation. I’ll answer this question without the old chat history.");
+      appendConversationTurn("user", query);
+      addMessage("user", query);
+      input.value = "";
+      input.style.height = "auto";
       await replyTo(query);
+    } catch (error) {
+      botText(error.message || "Qno could not start a secure session. Please try again.");
     } finally {
       activeController = null;
       setRequestPending(false);
@@ -1824,7 +2024,13 @@
     lastFocus = document.activeElement;
     overlay.hidden = false;
     document.body.classList.add("qno-open");
-    input.focus();
+    ensureSession({ validate: true }).then(({ expired }) => {
+      announceExpiredSession({ session: qnoSession, expired }, "This chat was inactive for six hours, so I started a fresh conversation.");
+      input.focus();
+    }).catch((error) => {
+      botText(error.message || "Qno could not start a secure chat. Check the connection and try again.");
+      input.focus();
+    });
   }
 
   function closeBot() {
@@ -1835,7 +2041,15 @@
 
   function resetConversation() {
     conversationVersion += 1;
+    sessionGeneration += 1;
     activeController?.abort();
+    const oldSessionId = qnoSession?.sessionId || readStoredSession()?.sessionId;
+    clearStoredSession(oldSessionId);
+    qnoSession = null;
+    sessionPromise = null;
+    conversationHistory = [];
+    restoredSessionId = "";
+    lastSessionValidatedAt = 0;
     messages.replaceChildren();
     welcome.hidden = false;
     activeQuiz = null;
@@ -1850,6 +2064,9 @@
     input.value = "";
     input.focus();
     scrollArea.scrollTop = 0;
+    ensureSession({ forceNew: true }).catch((error) => {
+      botText(error.message || "Qno could not start a new secure chat. Please try again.");
+    });
   }
 
   function chooseUnit(number) {
