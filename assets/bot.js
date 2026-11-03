@@ -414,6 +414,158 @@
     return link;
   }
 
+  function makeAskGptLink(prompt, className = "") {
+    const link = document.createElement("a");
+    link.className = "ask-gpt-link" + (className ? " " + className : "");
+    link.href = "https://chatgpt.com/?q=" + encodeURIComponent(prompt);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", "Open ChatGPT with a prepared DBMS prompt");
+    const icon = document.createElement("span");
+    icon.className = "ask-gpt-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = "✳";
+    const label = document.createElement("span");
+    label.textContent = "Ask GPT";
+    link.append(icon, label);
+    return link;
+  }
+
+  function questionGptPrompt(question) {
+    const unit = knowledge.units.find((item) => item.number === Number(question.unit));
+    const partLabel = question.part === "A"
+      ? "Part A · Question " + question.number + " · 2 marks"
+      : "Part " + (question.part || "B") + " · Question " + question.number + " · long-answer question";
+    const answerGuidance = question.part === "A"
+      ? "Give a compact 2-mark answer in simple English. Define the key idea directly and add one tiny example only if it helps."
+      : "Give a complete, well-structured exam answer in simple English. Use clear headings, explain each step, and add a basic example plus a simple visual diagram or flowchart when useful.";
+    return [
+      "I am studying DBMS (Database Management Systems) for a university exam.",
+      "Unit " + question.unit + ": " + (unit?.title || "DBMS") + ".",
+      partLabel + ".",
+      "Exact question: " + question.text,
+      answerGuidance + " Stay focused on this question and explain unfamiliar terms.",
+    ].join("\n");
+  }
+
+  function lessonGptPrompt(unitNumber, unitTitle, lessonTitle, subtopics = []) {
+    const topicList = subtopics.length
+      ? "Subtopics in this lesson:\n" + subtopics.map((item) => "- " + item.title + (item.description ? ": " + item.description : "")).join("\n")
+      : "";
+    return [
+      "I am studying DBMS (Database Management Systems) for a university exam.",
+      "Unit " + unitNumber + ": " + unitTitle + ".",
+      "Lesson: " + lessonTitle + ".",
+      topicList,
+      "Teach this lesson and its subtopics in clear, beginner-friendly English. Define each term before using it, explain the ideas step by step, and include basic worked examples. Add a readable visual diagram or flowchart where it helps understanding. Keep the explanation connected to this DBMS syllabus.",
+    ].filter(Boolean).join("\n");
+  }
+
+  function topicGptPrompt(unitNumber, unitTitle, lessonTitle, topicTitle) {
+    return [
+      "I am studying DBMS (Database Management Systems) for a university exam.",
+      "Unit " + unitNumber + ": " + unitTitle + ".",
+      "Lesson: " + lessonTitle + ".",
+      "Topic/subtopic: " + topicTitle + ".",
+      "Explain this exact topic in simple, student-friendly English. Start with a clear definition, then explain it step by step with a basic example. Add a small visual diagram or flowchart if it makes the idea easier to understand.",
+    ].join("\n");
+  }
+
+  function unitNumberOnPage() {
+    const pathMatch = window.location.pathname.match(/unit-(0?[1-6])(?:-lesson-\d+)?\.html$/i);
+    if (pathMatch) return Number(pathMatch[1]);
+    const breadcrumbMatch = document.querySelector(".breadcrumb")?.textContent.match(/\bUnit\s*0?([1-6])\b/i);
+    return breadcrumbMatch ? Number(breadcrumbMatch[1]) : 0;
+  }
+
+  function lessonSubtopics(group) {
+    return [...(group?.querySelectorAll(".syllabus-topic-card") || [])].map((card) => ({
+      title: card.querySelector(".syllabus-topic-copy strong")?.textContent.trim() || "",
+      description: card.querySelector(".syllabus-topic-copy small")?.textContent.trim() || "",
+    })).filter((item) => item.title);
+  }
+
+  function matchingLessonGroup(href) {
+    if (!href) return null;
+    const target = new URL(href, window.location.href).pathname;
+    return [...document.querySelectorAll(".syllabus-topic-group")].find((group) => {
+      const lessonHref = group.querySelector(".syllabus-topic-heading a[href]")?.getAttribute("href");
+      return lessonHref && new URL(lessonHref, window.location.href).pathname === target;
+    }) || null;
+  }
+
+  function enhanceImportantQuestionButtons() {
+    document.querySelectorAll(".important-ask-button[data-qno-question-id]").forEach((button) => {
+      if (button.parentElement?.classList.contains("important-question-actions")) return;
+      const question = knowledge.questionBank?.items?.find((item) => item.id === button.dataset.qnoQuestionId);
+      if (!question) return;
+      const actions = document.createElement("div");
+      actions.className = "important-question-actions";
+      button.parentNode.insertBefore(actions, button);
+      actions.append(button, makeAskGptLink(questionGptPrompt(question)));
+    });
+  }
+
+  function enhanceUnitLessons() {
+    const unitNumber = unitNumberOnPage();
+    if (!unitNumber) return;
+    const unitTitle = knowledge.units.find((item) => item.number === unitNumber)?.title
+      || document.querySelector(".unit-intro h1")?.textContent.trim() || "DBMS";
+    document.querySelectorAll(".lesson-choice").forEach((card) => {
+      if (card.parentElement?.classList.contains("lesson-choice-wrap")) return;
+      const group = matchingLessonGroup(card.getAttribute("href"));
+      const lessonTitle = card.querySelector("h2")?.textContent.trim() || "DBMS lesson";
+      const lessonNo = group?.querySelector(".syllabus-topic-heading > span")?.textContent.match(/\d+/)?.[0] || "";
+      const promptTitle = (lessonNo ? "Lesson " + Number(lessonNo) + ": " : "") + lessonTitle;
+      const prompt = lessonGptPrompt(unitNumber, unitTitle, promptTitle, lessonSubtopics(group));
+      const wrapper = document.createElement("div");
+      wrapper.className = "lesson-choice-wrap";
+      card.parentNode.replaceChild(wrapper, card);
+      wrapper.append(makeAskGptLink(prompt), card);
+    });
+
+    document.querySelectorAll(".syllabus-topic-group").forEach((group) => {
+      const heading = group.querySelector(".syllabus-topic-heading");
+      const openLesson = heading?.querySelector("a[href]");
+      if (!heading || !openLesson || heading.querySelector(".syllabus-topic-actions")) return;
+      const lessonTitle = heading.querySelector("h3")?.textContent.trim() || "DBMS lesson";
+      const lessonNo = heading.querySelector(":scope > span")?.textContent.match(/\d+/)?.[0] || "";
+      const promptTitle = (lessonNo ? "Lesson " + Number(lessonNo) + ": " : "") + lessonTitle;
+      const prompt = lessonGptPrompt(unitNumber, unitTitle, promptTitle, lessonSubtopics(group));
+      const actions = document.createElement("div");
+      actions.className = "syllabus-topic-actions";
+      heading.replaceChild(actions, openLesson);
+      actions.append(openLesson, makeAskGptLink(prompt));
+    });
+  }
+
+  function enhanceLessonTopics() {
+    if (!document.body.classList.contains("lesson-page")) return;
+    const unitNumber = unitNumberOnPage();
+    if (!unitNumber) return;
+    const unitTitle = knowledge.units.find((item) => item.number === unitNumber)?.title
+      || document.querySelector(".breadcrumb a[href*='unit-']")?.textContent.replace(/^Unit\s*0?\d+:\s*/i, "").trim()
+      || "DBMS";
+    const lessonTitle = document.querySelector(".lesson-intro h1")?.textContent.trim() || "DBMS lesson";
+    const lessonNumber = document.querySelector(".breadcrumb")?.textContent.match(/\bLesson\s*0?(\d+)\b/i)?.[1] || "";
+    const subtopics = [...document.querySelectorAll(".subtopic-grid .subtopic-card strong")].map((item) => item.textContent.trim());
+    const introTitle = document.querySelector(".lesson-intro h1");
+    if (introTitle && !document.querySelector(".lesson-gpt-cta")) {
+      const cta = document.createElement("div");
+      cta.className = "lesson-gpt-cta";
+      const promptTitle = (lessonNumber ? "Lesson " + Number(lessonNumber) + ": " : "") + lessonTitle;
+      const topicRows = subtopics.map((title) => ({ title }));
+      cta.append(makeAskGptLink(lessonGptPrompt(unitNumber, unitTitle, promptTitle, topicRows)));
+      introTitle.insertAdjacentElement("afterend", cta);
+    }
+    document.querySelectorAll(".concept-panel").forEach((panel) => {
+      const topicTitle = panel.querySelector("h2")?.textContent.trim();
+      const topicHeading = panel.querySelector("h2");
+      if (!topicTitle || !topicHeading || panel.querySelector(".topic-gpt-link")) return;
+      topicHeading.insertAdjacentElement("afterend", makeAskGptLink(topicGptPrompt(unitNumber, unitTitle, lessonTitle, topicTitle), "topic-gpt-link"));
+    });
+  }
+
   function getLesson(topic) {
     const unit = knowledge.units.find((item) => item.number === topic.unit);
     return unit?.lessons.find((item) => item.number === topic.lessonNo);
@@ -1070,7 +1222,10 @@
           activeQuestionContext = item;
           sendQuestion(`Explain this exact DBMS exam question: ${item.text}`, item);
         });
-        list.append(question);
+        const row = document.createElement("div");
+        row.className = "qno-source-question-row";
+        row.append(question, makeAskGptLink(questionGptPrompt(item), "qno-source-question-gpt"));
+        list.append(row);
       });
     }
     const addFilter = (label, callback, active = false) => {
@@ -1676,5 +1831,9 @@
     openBot();
     sendQuestion(`Explain Question ${question.number}${question.part}: ${question.text}`, question);
   });
+
+  enhanceImportantQuestionButtons();
+  enhanceUnitLessons();
+  enhanceLessonTopics();
 
 })();

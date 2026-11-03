@@ -161,3 +161,18 @@ body>header,body>main,body>footer{position:relative;z-index:2}
 @media(max-width:640px){.important-section{padding:45px 0 55px}.important-unit-grid{grid-template-columns:1fr;gap:11px}.important-unit-card{min-height:146px}.important-dialog{width:calc(100vw - 16px);max-height:91dvh;border-radius:13px}.important-dialog-frame{max-height:91dvh}.important-dialog-header{padding:15px}.important-dialog-content{grid-template-columns:1fr;gap:11px;padding:10px}.important-part{padding:12px}.important-part h3{top:-12px;margin:-12px -12px 10px;padding:12px}.important-question-list li{font-size:12px}.lesson-navigation{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:10px}.lesson-nav-link,.lesson-nav-edge{min-height:84px;padding:9px}.lesson-nav-link>em{font-size:11px}.lesson-nav-unit{grid-column:1/-1;justify-self:center;grid-row:2}}
 @media(max-width:440px){.important-question-list li{grid-template-columns:minmax(0,1fr);gap:8px}.important-ask-button{justify-self:start}}
 @media(prefers-reduced-motion:reduce){.important-dialog[open]{animation:none}.important-unit-card,.lesson-nav-link{transition:none}}
+
+/* Direct ChatGPT launch links for questions and lesson context. */
+.ask-gpt-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid #161b1d;border-radius:8px;background:#181d1f;color:#fff;font-family:inherit;font-size:10px;font-weight:800;line-height:1.1;text-decoration:none;white-space:nowrap;box-shadow:0 2px 0 #080b0c;transition:transform .16s,background .16s,box-shadow .16s}
+.ask-gpt-link:hover{transform:translateY(-1px);background:#2b3234;color:#fff;box-shadow:0 3px 0 #080b0c,0 7px 14px rgba(14,19,20,.13)}
+.ask-gpt-link:focus-visible{outline:3px solid rgba(36,111,132,.36);outline-offset:2px}
+.ask-gpt-icon{font-size:14px;line-height:1}
+.important-question-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;justify-self:start}
+.lesson-choice-wrap{display:grid;grid-template-rows:auto 1fr;align-content:stretch;gap:8px;min-width:0}
+.lesson-choice-wrap>.ask-gpt-link{justify-self:start}
+.lesson-choice-wrap>.lesson-choice{height:100%}
+.syllabus-topic-actions{display:flex;align-items:center;justify-self:end;gap:9px}
+.syllabus-topic-actions>a:first-child{color:var(--blue);font-size:10px;font-weight:800;text-decoration:none;white-space:nowrap}
+.lesson-gpt-cta{display:flex;align-items:center;gap:8px;margin:12px 0 14px}
+.topic-gpt-link{margin:0 0 12px}
+@media(max-width:640px){.syllabus-topic-actions{grid-column:2;justify-self:start;flex-wrap:wrap}.syllabus-topic-actions .ask-gpt-link{min-height:30px}.lesson-choice-wrap>.ask-gpt-link{min-height:34px}}
