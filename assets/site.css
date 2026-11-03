@@ -168,8 +168,4 @@ body>header,body>main,body>footer{position:relative;z-index:2}
 .ask-gpt-link:focus-visible{outline:3px solid rgba(36,111,132,.36);outline-offset:2px}
 .ask-gpt-icon{display:block;width:16px;height:16px;object-fit:contain;flex:0 0 16px}
 .important-question-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;justify-self:start}
-.lesson-choice-wrap{display:grid;grid-template-rows:auto 1fr;align-content:stretch;gap:8px;min-width:0}
-.lesson-choice-wrap>.ask-gpt-link{justify-self:start}
-.lesson-choice-wrap>.lesson-choice{height:100%}
 .lesson-gpt-cta{display:flex;align-items:center;gap:8px;margin:12px 0 14px}
-@media(max-width:640px){.lesson-choice-wrap>.ask-gpt-link{min-height:34px}}

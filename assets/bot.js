@@ -469,22 +469,6 @@
     return breadcrumbMatch ? Number(breadcrumbMatch[1]) : 0;
   }
 
-  function lessonSubtopics(group) {
-    return [...(group?.querySelectorAll(".syllabus-topic-card") || [])].map((card) => ({
-      title: card.querySelector(".syllabus-topic-copy strong")?.textContent.trim() || "",
-      description: card.querySelector(".syllabus-topic-copy small")?.textContent.trim() || "",
-    })).filter((item) => item.title);
-  }
-
-  function matchingLessonGroup(href) {
-    if (!href) return null;
-    const target = new URL(href, window.location.href).pathname;
-    return [...document.querySelectorAll(".syllabus-topic-group")].find((group) => {
-      const lessonHref = group.querySelector(".syllabus-topic-heading a[href]")?.getAttribute("href");
-      return lessonHref && new URL(lessonHref, window.location.href).pathname === target;
-    }) || null;
-  }
-
   function enhanceImportantQuestionButtons() {
     document.querySelectorAll(".important-ask-button[data-qno-question-id]").forEach((button) => {
       if (button.parentElement?.classList.contains("important-question-actions")) return;
@@ -495,26 +479,6 @@
       button.parentNode.insertBefore(actions, button);
       actions.append(button, makeAskGptLink(questionGptPrompt(question)));
     });
-  }
-
-  function enhanceUnitLessons() {
-    const unitNumber = unitNumberOnPage();
-    if (!unitNumber) return;
-    const unitTitle = knowledge.units.find((item) => item.number === unitNumber)?.title
-      || document.querySelector(".unit-intro h1")?.textContent.trim() || "DBMS";
-    document.querySelectorAll(".lesson-choice").forEach((card) => {
-      if (card.parentElement?.classList.contains("lesson-choice-wrap")) return;
-      const group = matchingLessonGroup(card.getAttribute("href"));
-      const lessonTitle = card.querySelector("h2")?.textContent.trim() || "DBMS lesson";
-      const lessonNo = group?.querySelector(".syllabus-topic-heading > span")?.textContent.match(/\d+/)?.[0] || "";
-      const promptTitle = (lessonNo ? "Lesson " + Number(lessonNo) + ": " : "") + lessonTitle;
-      const prompt = lessonGptPrompt(unitNumber, unitTitle, promptTitle, lessonSubtopics(group));
-      const wrapper = document.createElement("div");
-      wrapper.className = "lesson-choice-wrap";
-      card.parentNode.replaceChild(wrapper, card);
-      wrapper.append(makeAskGptLink(prompt), card);
-    });
-
   }
 
   function enhanceLessonTopics() {
@@ -1805,7 +1769,6 @@
   });
 
   enhanceImportantQuestionButtons();
-  enhanceUnitLessons();
   enhanceLessonTopics();
 
 })();
